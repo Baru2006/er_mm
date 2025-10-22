@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyRecharge MM - Live Status</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <style>
+        /* CSS Reset and Base Styles */
+        :root {
+            --radius: 12px;
+            --shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
+            --status-pending: #9aa0a6;
+            --status-success: #28a745;
+            --status-cancelled: #e53935;
+        }
+
+        html[data-theme='light'] {
+            --bg: #ffffff;
+            --text: #222222;
+            --accent: #ff7b00;
+            --border: #e5e5e5;
+            --card-bg: #ffffff;
+            --input-bg: #f9f9f9;
+        }
+
+        html[data-theme='dark'] {
+            --bg: #111111;
+            --text: #f1f1f1;
+            --accent: #ff7b00;
+            --border: #333333;
+            --card-bg: #1a1a1a;
+            --input-bg: #222222;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: var(--transition);
+        }
+
+        main {
+            flex-grow: 1;
+        }
+
+        .container {
+            max-width: 1200px; /* Wider container for tables */
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        /* Shared Header */
+        header {
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 0;
+            background-color: var(--bg);
+            transition: var(--transition);
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-svg {
+            width: 32px;
+            height: 32px;
+            fill: var(--accent);
+        }
+
+        .brand-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        #themeToggle {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        #themeToggle:hover {
+            background-color: var(--input-bg);
+            border-color: var(--accent);
+        }
+
+        #userId {
+            background-color: var(--input-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: var(--radius);
+            padding: 0.5rem 0.75rem;
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            max-width: 150px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            opacity: 0.2;
+        }
+
+        /* Page Title */
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        /* Realtime Indicator */
+        #realtimeIndicator {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background-color: var(--status-pending);
+            transition: background-color 0.5s ease;
+        }
+        #realtimeIndicator.connected {
+            background-color: var(--status-success);
+        }
+        #realtimeIndicator.reconnecting {
+            background-color: var(--accent);
+        }
+        #realtimeIndicator.offline {
+            background-color: var(--status-cancelled);
+        }
+
+        /* Controls */
+        .controls-bar {
+            display: grid;
+            grid-template-columns: auto 1fr auto auto auto;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            background-color: var(--card-bg);
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+        
+        .controls-bar input,
+        .controls-bar select,
+        .controls-bar button {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+        
+        .controls-bar input:focus,
+        .controls-bar select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(255, 123, 0, 0.2);
+        }
+
+        .controls-bar button {
+            cursor: pointer;
+            font-weight: 600;
+            width: auto;
+        }
+        .controls-bar button:hover {
+            border-color: var(--accent);
+        }
+        
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+        
+        .toggle-group input[type="checkbox"] {
+            width: auto;
+        }
+        .toggle-group label {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 1.5rem;
+        }
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: var(--text);
+            opacity: 0.6;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+        }
+        .tab-button.active {
+            opacity: 1;
+            border-bottom-color: var(--accent);
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Table Styles */
+        .table-wrapper {
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background-color: var(--card-bg);
+            box-shadow: var(--shadow);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        th, td {
+            padding: 0.85rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+        th {
+            font-weight: 600;
+            background-color: var(--input-bg);
+        }
+        tbody tr {
+            transition: background-color 0.2s ease;
+            cursor: pointer;
+        }
+        tbody tr:hover {
+            background-color: var(--input-bg);
+        }
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        /* Status Badges */
+        .status-badge {
+            padding: 0.25rem 0.6rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #fff;
+        }
+        .status-badge.pending { background-color: var(--status-pending); }
+        .status-badge.success { background-color: var(--status-success); }
+        .status-badge.cancelled { background-color: var(--status-cancelled); }
+
+        /* Mobile Card View */
+        .card-view {
+            display: none; /* Hidden by default */
+            gap: 1rem;
+        }
+        .status-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .status-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .status-card-header strong {
+            font-size: 1.1rem;
+            color: var(--accent);
+        }
+        .status-card-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+        }
+        .status-card-row span:first-child {
+            font-weight: 600;
+            opacity: 0.7;
+        }
+        .status-card-row span:last-child {
+            font-weight: 600;
+            text-align: right;
+        }
+        
+        /* Shared Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 2rem 1.5rem;
+            text-align: center;
+            color: var(--text);
+            opacity: 0.6;
+            font-size: 0.9rem;
+            margin-top: 2rem;
+            background-color: var(--bg);
+            transition: var(--transition);
+        }
+
+        footer a {
+            font-weight: 600;
+            margin: 0 0.5rem;
+        }
+        
+        /* Dynamic Toast */
+        .toast {
+            position: fixed;
+            bottom: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: #fff;
+            padding: 1rem 2rem;
+            border-radius: var(--radius);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: bottom 0.5s ease-in-out;
+            z-index: 1000;
+            font-weight: 600;
+        }
+
+        .toast.show {
+            bottom: 30px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 900px) {
+            .table-wrapper {
+                display: none; /* Hide table on mobile */
+            }
+            .card-view {
+                display: grid; /* Show cards on mobile */
+            }
+            .controls-bar {
+                grid-template-columns: 1fr; /* Stack controls */
+            }
+        }
+        
+        @media (max-width: 640px) {
+            header .container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+            #userId {
+                max-width: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <a href="index.html" class="logo-container" style="text-decoration: none;">
+                <svg class="logo-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.243 13.071H7.757c-.414 0-.75-.336-.75-.75s.336-.75.75-.75h8.486c.414 0 .75.336.75.75s-.336.75-.75.75zm0-3.142H7.757c-.414 0-.75-.336-.75-.75s.336-.75.75-.75h8.486c.414 0 .75.336.75.75s-.336.75-.75.75zm0-3.143H7.757c-.414 0-.75-.336-.75-.75s.336-.75.75-.75h8.486c.414 0 .75.336.75.75s-.336.75-.75.75z" fill="currentColor"/></svg>
+                <span class="brand-name">EasyRecharge MM</span>
+            </a>
+            <div class="header-right">
+                <button id="themeToggle" title="Toggle theme">☀️</button>
+                <input type="text" id="userId" value="Loading..." readonly title="Your User ID">
+                <div class="avatar" title="User"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <h1>
+                <span id="realtimeIndicator" title="Connection Status"></span>
+                Live Status Dashboard
+            </h1>
+
+            <!-- Controls -->
+            <div class="controls-bar" role="toolbar" aria-label="Data controls">
+                <button id="refreshButton" title="Manual Refresh">🔄</button>
+                <input type="search" id="searchInput" placeholder="Search by Order ID, User ID, TxID...">
+                <select id="filterStatus" aria-label="Filter by status">
+                    <option value="All">All</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Success">Success</option>
+                    <option value="Cancelled">Cancelled</option>
+                </select>
+                <div class="toggle-group">
+                    <input type="checkbox" id="myOrdersToggle">
+                    <label for="myOrdersToggle">My Orders</label>
+                </div>
+                <select id="limitSelector" aria-label="Show entries">
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                    <option value="200" selected>200</option>
+                    <option value="500">500</option>
+                </select>
+            </div>
+            
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab-button active" data-tab="orders">Orders</button>
+                <button class="tab-button" data-tab="p2p">P2P</button>
+            </div>
+
+            <!-- Orders Content -->
+            <div id="ordersContent" class="tab-content active" role="region" aria-live="polite">
+                <div class="table-wrapper">
+                    <table id="ordersTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Order ID</th>
+                                <th>User ID</th>
+                                <th>Category</th>
+                                <th>Service</th>
+                                <th>Extra</th>
+                                <th>Total</th>
+                                <th>Payment</th>
+                                <th>TxID</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Rows injected by JS -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="ordersCardView" class="card-view">
+                    <!-- Cards injected by JS -->
+                </div>
+            </div>
+
+            <!-- P2P Content -->
+            <div id="p2pContent" class="tab-content" role="region" aria-live="polite">
+                <div class="table-wrapper">
+                    <table id="p2pTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Record ID</th>
+                                <th>User ID</th>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Sent</th>
+                                <th>Receive</th>
+                                <th>TxID</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Rows injected by JS -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="p2pCardView" class="card-view">
+                    <!-- Cards injected by JS -->
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>
+            © EasyRecharge MM 2025 | 
+            <a href="index.html">Home</a> | 
+            <a href="faq.html">FAQ</a> | 
+            <a href="privacy.html">Privacy Policy</a>
+        </p>
+    </footer>
+
+    <script>
+        // --- GLOBAL SCRIPT SNIPPET ---
+        const uid = localStorage.getItem('easyRechargeUserId') || generateUserId();
+        const GAS_URL = 'YOUR_GAS_DEPLOYMENT_URL'; // IMPORTANT: Replace
+        
+        // --- IMPORTANT: REPLACE WITH YOUR FIREBASE CONFIG ---
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        // --- END FIREBASE CONFIG ---
+
+
+        function generateUserId() {
+            const id = Math.floor(100000000 + Math.random() * 900000000);
+            localStorage.setItem('easyRechargeUserId', id);
+            return id;
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            const toggle = document.getElementById('themeToggle');
+            
+            if (toggle) {
+                toggle.textContent = currentTheme === 'light' ? '🌙' : '☀️';
+                toggle.onclick = () => {
+                    const newTheme = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+                    document.documentElement.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                    toggle.textContent = newTheme === 'light' ? '🌙' : '☀️';
+                };
+            }
+        });
+        // --- END GLOBAL SCRIPT SNIPPET ---
+
+
+        // --- STATUS.HTML SCRIPT ---
+
+        // In-memory data maps
+        let ordersData = new Map();
+        let p2pData = new Map();
+
+        // DOM Elements
+        const ordersTableBody = document.querySelector('#ordersTable tbody');
+        const ordersCardView = document.getElementById('ordersCardView');
+        const p2pTableBody = document.querySelector('#p2pTable tbody');
+        const p2pCardView = document.getElementById('p2pCardView');
+        const indicator = document.getElementById('realtimeIndicator');
+        
+        // Controls
+        const searchInput = document.getElementById('searchInput');
+        const filterStatus = document.getElementById('filterStatus');
+        const myOrdersToggle = document.getElementById('myOrdersToggle');
+        const limitSelector = document.getElementById('limitSelector');
+        const refreshButton = document.getElementById('refreshButton');
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // Set User ID in header
+            document.getElementById('userId').value = uid;
+
+            // Initialize Firebase
+            try {
+                firebase.initializeApp(firebaseConfig);
+                const db = firebase.database();
+                
+                // --- Firebase Connection Status ---
+                const connectedRef = db.ref(".info/connected");
+                connectedRef.on("value", (snap) => {
+                    if (snap.val() === true) {
+                        indicator.className = 'connected';
+                        indicator.title = 'Connected';
+                    } else {
+                        indicator.className = 'offline';
+                        indicator.title = 'Offline';
+                    }
+                });
+                
+                // --- Firebase Listeners ---
+                const ordersRef = db.ref('orders').limitToLast(parseInt(limitSelector.value));
+                const p2pRef = db.ref('p2p').limitToLast(parseInt(limitSelector.value));
+
+                // Orders Listeners
+                ordersRef.on('child_added', (snapshot) => {
+                    const data = snapshot.val();
+                    const id = snapshot.key;
+                    ordersData.set(id, data);
+                    renderRow(id, data, 'order');
+                    applyFilters();
+                });
+                ordersRef.on('child_changed', (snapshot) => {
+                    const data = snapshot.val();
+                    const id = snapshot.key;
+                    ordersData.set(id, data);
+                    updateRow(id, data, 'order');
+                    applyFilters();
+                    showToast(`✅ Order ${id} updated!`);
+                });
+                ordersRef.on('child_removed', (snapshot) => {
+                    const id = snapshot.key;
+                    ordersData.delete(id);
+                    removeRow(id, 'order');
+                });
+
+                // P2P Listeners
+                p2pRef.on('child_added', (snapshot) => {
+                    const data = snapshot.val();
+                    const id = snapshot.key;
+                    p2pData.set(id, data);
+                    renderRow(id, data, 'p2p');
+                    applyFilters();
+                });
+                p2pRef.on('child_changed', (snapshot) => {
+                    const data = snapshot.val();
+                    const id = snapshot.key;
+                    p2pData.set(id, data);
+                    updateRow(id, data, 'p2p');
+                    applyFilters();
+                    showToast(`✅ P2P ${id} updated!`);
+                });
+                p2pRef.on('child_removed', (snapshot) => {
+                    const id = snapshot.key;
+                    p2pData.delete(id);
+                    removeRow(id, 'p2p');
+                });
+                
+            } catch (e) {
+                console.error("Firebase initialization failed:", e);
+                indicator.className = 'offline';
+                indicator.title = 'Firebase Config Error';
+                showToast("❌ Could not connect to live server.");
+            }
+            
+            // --- Tab Controls ---
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabName = button.dataset.tab;
+                    document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                    
+                    button.classList.add('active');
+                    document.getElementById(`${tabName}Content`).classList.add('active');
+                });
+            });
+
+            // --- Filter Controls ---
+            searchInput.addEventListener('keyup', debounce(applyFilters, 300));
+            filterStatus.addEventListener('change', applyFilters);
+            myOrdersToggle.addEventListener('change', applyFilters);
+            // We'd need to detach and re-attach listeners on limit change, or just refresh.
+            refreshButton.addEventListener('click', () => window.location.reload());
+        });
+
+        // --- Core Functions ---
+        
+        function renderRow(id, data, type) {
+            const status = data.status ? data.status.toLowerCase() : 'pending';
+            
+            if (type === 'order') {
+                // 1. Create Table Row
+                const tr = document.createElement('tr');
+                tr.dataset.id = id;
+                tr.innerHTML = `
+                    <td>${new Date(data.timestamp || Date.now()).toLocaleDateString()}</td>
+                    <td>${id}</td>
+                    <td>${data.userId}</td>
+                    <td>${data.category}</td>
+                    <td>${data.service}</td>
+                    <td>${data.extra}</td>
+                    <td>${data.totalPrice}</td>
+                    <td>${data.paymentMethod}</td>
+                    <td>${data.transactionId}</td>
+                    <td><span class="status-badge ${status}">${data.status || 'Pending'}</span></td>
+                `;
+                ordersTableBody.prepend(tr); // Add new rows to the top
+                
+                // 2. Create Card View
+                const card = document.createElement('div');
+                card.className = 'status-card';
+                card.dataset.id = id;
+                card.innerHTML = `
+                    <div class="status-card-header">
+                        <strong>${data.service}</strong>
+                        <span class="status-badge ${status}">${data.status || 'Pending'}</span>
+                    </div>
+                    <div class="status-card-row">
+                        <span>Order ID:</span>
+                        <span>${id}</span>
+                    </div>
+                    <div class="status-card-row">
+                        <span>User ID:</span>
+                        <span>${data.userId}</span>
+                    </div>
+                    <div class="status-card-row">
+                        <span>Details:</span>
+                        <span>${data.extra}</span>
+                    </div>
+                    <div class="status-card-row">
+                        <span>Total:</span>
+                        <span>${data.totalPrice}</span>
+                    </div>
+                `;
+                ordersCardView.prepend(card);
+                
+            } else if (type === 'p2p') {
+                // 1. Create Table Row
+                const tr = document.createElement('tr');
+                tr.dataset.id = id;
+                tr.innerHTML = `
+                    <td>${new Date(data.timestamp || Date.now()).toLocaleDateString()}</td>
+                    <td>${id}</td>
+                    <td>${data.userId}</td>
+                    <td>${data.fromPayment}</td>
+                    <td>${data.toPayment}</td>
+                    <td>${data.amountSent}</td>
+                    <td>${data.amountReceive}</td>
+                    <td>${data.transactionId}</td>
+                    <td><span class="status-badge ${status}">${data.status || 'Pending'}</span></td>
+                `;
+                p2pTableBody.prepend(tr);
+                
+                // 2. Create Card View
+                const card = document.createElement('div');
+                card.className = 'status-card';
+                card.dataset.id = id;
+                card.innerHTML = `
+                    <div class="status-card-header">
+                        <strong>P2P: ${data.fromPayment} → ${data.toPayment}</strong>
+                        <span class="status-badge ${status}">${data.status || 'Pending'}</span>
+                    </div>
+                    <div class="status-card-row">
+                        <span>Record ID:</span>
+                        <span>${id}</span>
+                    </div>
+                    <div class="status-card-row">
+                        <span>User ID:</span>
+                        <span>${data.userId}</span>
+                    </div>
+                    <div class="status-card-row">
+                        <span>Amount Sent:</span>
+                        <span>${data.amountSent}</span>
+                    </div>
+                    <div class="status-card-row">
+                        <span>Amount Receive:</span>
+                        <span>${data.amountReceive}</span>
+                    </div>
+                `;
+                p2pCardView.prepend(card);
+            }
+        }
+        
+        function updateRow(id, data, type) {
+            const status = data.status ? data.status.toLowerCase() : 'pending';
+            const statusHtml = `<span class="status-badge ${status}">${data.status || 'Pending'}</span>`;
+            
+            // 1. Update Table Row
+            const tr = document.querySelector(`tbody tr[data-id="${id}"]`);
+            if (tr) {
+                // Just update the status cell
+                tr.querySelector('td:last-child').innerHTML = statusHtml;
+                // Could update other cells too if needed
+            }
+            
+            // 2. Update Card View
+            const card = document.querySelector(`.status-card[data-id="${id}"]`);
+            if (card) {
+                card.querySelector('.status-card-header .status-badge').outerHTML = statusHtml;
+            }
+        }
+        
+        function removeRow(id) {
+            document.querySelectorAll(`[data-id="${id}"]`).forEach(el => el.remove());
+        }
+        
+        function applyFilters() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const statusFilter = filterStatus.value.toLowerCase();
+            const onlyMyOrders = myOrdersToggle.checked;
+            
+            // Filter Orders
+            ordersData.forEach((data, id) => {
+                const el = document.querySelectorAll(`[data-id="${id}"]`);
+                if (!el) return;
+                
+                const dataString = `${id} ${data.userId} ${data.extra} ${data.transactionId}`.toLowerCase();
+                const status = data.status ? data.status.toLowerCase() : 'pending';
+
+                const matchesSearch = dataString.includes(searchTerm);
+                const matchesStatus = (statusFilter === 'all' || status === statusFilter);
+                const matchesUser = (!onlyMyOrders || data.userId == uid); // Use == for type coercion
+                
+                const shouldShow = matchesSearch && matchesStatus && matchesUser;
+                el.forEach(e => e.style.display = shouldShow ? '' : 'none');
+            });
+            
+            // Filter P2P
+            p2pData.forEach((data, id) => {
+                const el = document.querySelectorAll(`[data-id="${id}"]`);
+                if (!el) return;
+                
+                const dataString = `${id} ${data.userId} ${data.transactionId}`.toLowerCase();
+                const status = data.status ? data.status.toLowerCase() : 'pending';
+                
+                const matchesSearch = dataString.includes(searchTerm);
+                const matchesStatus = (statusFilter === 'all' || status === statusFilter);
+                const matchesUser = (!onlyMyOrders || data.userId == uid);
+                
+                const shouldShow = matchesSearch && matchesStatus && matchesUser;
+                el.forEach(e => e.style.display = shouldShow ? '' : 'none');
+            });
+        }
+        
+        // --- Utilities ---
+        function debounce(func, delay) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), delay);
+            };
+        }
+        
+        function showToast(msg) {
+            let t = document.querySelector('.toast');
+            if (!t) {
+                t = document.createElement('div');
+                t.className = 'toast';
+                document.body.appendChild(t);
+            }
+            t.textContent = msg;
+            t.classList.add('show');
+            
+            setTimeout(() => {
+                t.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+
+</body>
+</html>
