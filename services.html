@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyRecharge MM - Services</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Reset and Base Styles */
+        :root {
+            --radius: 12px;
+            --shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
+        }
+
+        html[data-theme='light'] {
+            --bg: #ffffff;
+            --text: #222222;
+            --accent: #ff7b00;
+            --border: #e5e5e5;
+            --card-bg: #ffffff;
+            --input-bg: #f9f9f9;
+        }
+
+        html[data-theme='dark'] {
+            --bg: #111111;
+            --text: #f1f1f1;
+            --accent: #ff7b00;
+            --border: #333333;
+            --card-bg: #1a1a1a;
+            --input-bg: #222222;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: var(--transition);
+        }
+
+        main {
+            flex-grow: 1;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        /* Shared Header */
+        header {
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 0;
+            background-color: var(--bg);
+            transition: var(--transition);
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-svg {
+            width: 32px;
+            height: 32px;
+            fill: var(--accent);
+        }
+
+        .brand-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        #themeToggle {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        #themeToggle:hover {
+            background-color: var(--input-bg);
+            border-color: var(--accent);
+        }
+
+        #userId {
+            background-color: var(--input-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: var(--radius);
+            padding: 0.5rem 0.75rem;
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            max-width: 150px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            opacity: 0.2;
+        }
+        
+        /* Breadcrumbs */
+        .breadcrumbs {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text);
+            opacity: 0.6;
+            margin-bottom: 2rem;
+        }
+        .breadcrumbs a {
+            color: var(--accent);
+        }
+        
+        /* Hero */
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .hero p {
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+        
+        /* Service Grid */
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+        
+        .service-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            text-decoration: none;
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
+            border-color: var(--accent);
+        }
+        
+        .service-card .icon-svg {
+            width: 48px;
+            height: 48px;
+            fill: var(--accent);
+            margin-bottom: 1.5rem;
+        }
+        
+        .service-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .service-card p {
+            font-size: 1rem;
+            opacity: 0.8;
+            flex-grow: 1;
+            margin-bottom: 1rem;
+        }
+        
+        .service-card .price {
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+        }
+        
+        .btn-primary {
+            display: block;
+            background-color: var(--accent);
+            color: #ffffff;
+            width: 100%;
+            padding: 0.85rem 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+            text-align: center;
+            border-radius: var(--radius);
+            transition: var(--transition);
+        }
+        
+        .btn-primary:hover {
+            opacity: 0.85;
+        }
+
+        /* Shared Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 2rem 1.5rem;
+            text-align: center;
+            color: var(--text);
+            opacity: 0.6;
+            font-size: 0.9rem;
+            margin-top: 2rem;
+            background-color: var(--bg);
+            transition: var(--transition);
+        }
+
+        footer a {
+            font-weight: 600;
+            margin: 0 0.5rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 900px) {
+            .service-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 640px) {
+            header .container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+            #userId {
+                max-width: 120px;
+            }
+            .service-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <a href="index.html" class="logo-container" style="text-decoration: none;">
+                <svg class="logo-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.243 13.071H7.757c-.414 0-.75-.336-.75-.75s.336-.75.75-.75h8.486c.414 0 .75.336.75.75s-.336.75-.75.75zm0-3.142H7.757c-.414 0-.75-.336-.75-.75s.336-.75.75-.75h8.486c.414 0 .75.336.75.75s-.336.75-.75.75zm0-3.143H7.757c-.414 0-.75-.336-.75-.75s.336-.75.75-.75h8.486c.414 0 .75.336.75.75s-.336.75-.75.75z" fill="currentColor"/></svg>
+                <span class="brand-name">EasyRecharge MM</span>
+            </a>
+            <div class="header-right">
+                <button id="themeToggle" title="Toggle theme">☀️</button>
+                <input type="text" id="userId" value="Loading..." readonly title="Your User ID">
+                <div class="avatar" title="User"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <div class="breadcrumbs">
+                <a href="index.html">Home</a> / Services
+            </div>
+            
+            <div class="hero">
+                <h1>Our Services</h1>
+                <p>Fast, reliable, and secure recharges and exchanges.</p>
+            </div>
+            
+            <div class="service-grid">
+                
+                <!-- SIM/Data Card -->
+                <div class="service-card">
+                    <svg class="icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17 1H7C5.89543 1 5 1.89543 5 3V21C5 22.1046 5.89543 23 7 23H17C18.1046 23 19 22.1046 19 21V3C19 1.89543 18.1046 1 17 1ZM17 19H7V5H17V19ZM12 10H15V11H12V10ZM12 13H15V14H12V13ZM9 10H11V11H9V10ZM9 13H11V14H9V13Z"/></svg>
+                    <h3>SIM/Data</h3>
+                    <p>Quick mobile topups and data packages for MPT, Ooredoo, MyTel, and more.</p>
+                    <span class="price">Starting from 300 Ks</span>
+                    <a href="order.html?category=SIM/Data" class="btn-primary">Order Now</a>
+                </div>
+                
+                <!-- Game TopUp Card -->
+                <div class="service-card">
+                    <svg class="icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M21 6H3C2.44772 6 2 6.44772 2 7V17C2 17.5523 2.44772 18 3 18H21C21.5523 18 22 17.5523 22 17V7C22 6.44772 21.5523 6 21 6ZM20 16H4V8H20V16ZM8 15V9L13 12L8 15ZM14 10H18V11H14V10ZM14 13H17V14H14V13Z"/></svg>
+                    <h3>Game TopUp</h3>
+                    <p>In-game currency for all your favorite games, including MLBB, PUBG, and Free Fire.</p>
+                    <span class="price">Starting from 500 Ks</span>
+                    <a href="order.html?category=Game TopUp" class="btn-primary">Order Now</a>
+                </div>
+                
+                <!-- SMM Services Card -->
+                <div class="service-card">
+                    <svg class="icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 6C17.8807 6 19 7.11929 19 8.5C19 9.88071 17.8807 11 16.5 11C15.1193 11 14 9.88071 14 8.5C14 7.11929 15.1193 6 16.5 6ZM12 4C14.2091 4 16 5.79086 16 8C16 10.2091 14.2091 12 12 12C9.79086 12 8 10.2091 8 8C8 5.79086 9.79086 4 12 4ZM12 14C16.4183 14 20 15.7909 20 18V20H4V18C4 15.7909 7.58172 14 12 14Z"/></svg>
+                    <h3>SMM Services</h3>
+                    <p>Social media growth packages. Get more followers, likes, and views instantly.</p>
+                    <span class="price">Starting from 2,000 Ks</span>
+                    <a href="order.html?category=SMM" class="btn-primary">Order Now</a>
+                </div>
+
+            </div>
+            
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>
+            © EasyRecharge MM 2025 | 
+            <a href="index.html">Home</a> | 
+            <a href="faq.html">FAQ</a> | 
+            <a href="privacy.html">Privacy Policy</a>
+        </p>
+    </footer>
+
+    <script>
+        // --- GLOBAL SCRIPT SNIPPET ---
+        const uid = localStorage.getItem('easyRechargeUserId') || generateUserId();
+        const GAS_URL = 'YOUR_GAS_DEPLOYMENT_URL'; // IMPORTANT: Replace
+        
+        function generateUserId() {
+            const id = Math.floor(100000000 + Math.random() * 900000000);
+            localStorage.setItem('easyRechargeUserId', id);
+            return id;
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // Set User ID
+            const idEl = document.getElementById('userId');
+            if (idEl) idEl.value = uid;
+            
+            // Theme toggle
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            const toggle = document.getElementById('themeToggle');
+            
+            if (toggle) {
+                toggle.textContent = currentTheme === 'light' ? '🌙' : '☀️';
+                toggle.onclick = () => {
+                    const newTheme = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+                    document.documentElement.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                    toggle.textContent = newTheme === 'light' ? '🌙' : '☀️';
+                };
+            }
+        });
+        // --- END GLOBAL SCRIPT SNIPPET ---
+    </script>
+
+</body>
+</html>
+
