@@ -3,96 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EasyRecharge MM - Fast, Safe, Easy Top-up</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <title>Dashboard | EasyRecharge MM</title>
     <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 </head>
 <body data-theme="light">
-
-    <!-- Header & Navigation -->
     <header class="header">
-        <nav class="nav">
-            <a href="index.html" class="logo">
-                <div class="mark"></div>
-                <span class="text">EasyRecharge MM</span>
-            </a>
-            <button class="hamburger" aria-label="Toggle Navigation">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <div class="nav-links">
-                <a href="index.html" class="active">Home</a>
-                <a href="order.html">Order Top-up</a>
-                <a href="order_smm.html">Order SMM</a>
-                <a href="status.html">Status</a>
-                <a href="services.html">Services</a>
-                <a href="pay.html" class="btn btn-secondary">Pay Now</a>
-            </div>
-        </nav>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo"><span></span>EasyRecharge MM</div>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="order.html">Order</a></li>
+                    <li><a href="order_smm.html">SMM Order</a></li>
+                    <li><a href="pay.html">Pay</a></li>
+                    <li><a href="status.html">Status</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="privacy.html">Privacy</a></li>
+                </ul>
+                <button id="modeToggle" class="theme-toggle" title="Toggle theme"><i class="fas fa-moon"></i></button>
+                <button class="hamburger"><i class="fas fa-bars"></i></button>
+            </nav>
+        </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="container">
-        <!-- Hero Section -->
-        <section class="hero">
-            <h1>Fast, Safe, Easy Recharge in Myanmar</h1>
-            <p>Top up your SIM, Data, favorite Games, and SMM services instantly with our streamlined system. Secure payments and real-time status tracking.</p>
-            <a href="order.html" class="btn" style="padding: 14px 30px; font-size: 1.1rem; margin-top: 15px;">Order Now</a>
-        </section>
+    <main>
+        <div class="container">
+            <h1>Welcome Back, User!</h1>
 
-        <!-- Stats Section -->
-        <section class="stats">
-            <h2 class="section-title">Why Choose EasyRecharge MM?</h2>
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-value">5,200+</div>
-                    <div class="stat-label">Orders Completed</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value">1,500+</div>
-                    <div class="stat-label">Active Users</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value">99.9%</div>
-                    <div class="stat-label">Success Rate</div>
+            <div class="card" style="margin-bottom: 30px;">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <i class="fas fa-user-circle fa-3x" style="color: var(--primary);"></i>
+                    <div>
+                        <p style="font-weight: 600;">Your ID (Read-only)</p>
+                        <div class="input-with-copy">
+                            <input type="text" id="userIdDisplay" value="Loading..." readonly style="font-weight: 700;">
+                            <button type="button" class="btn btn-secondary btn-icon" data-copy-id="userIdDisplay" title="Copy ID"><i class="fas fa-copy"></i></button>
+                        </div>
+                        <p class="helper-text">This is your unique client ID for all transactions.</p>
+                    </div>
                 </div>
             </div>
-        </section>
-        
-        <!-- Quick Links -->
-        <section class="quick-links" style="margin-top: 40px;">
-            <div class="stats-grid">
-                <a href="pay.html" class="card" style="text-align: center; text-decoration: none; color: inherit;">
-                    <h3>💳 Payment Options</h3>
-                    <p>View all KBZ, Wave, and AYA payment accounts.</p>
-                </a>
-                <a href="faq.html" class="card" style="text-align: center; text-decoration: none; color: inherit;">
-                    <h3>❓ FAQ & Help</h3>
-                    <p>Find quick answers to common questions about our service.</p>
-                </a>
-                <a href="status.html" class="card" style="text-align: center; text-decoration: none; color: inherit;">
-                    <h3>⏳ Track Your Order</h3>
-                    <p>Check the live status of your recent top-up or SMM order.</p>
-                </a>
-            </div>
-        </section>
 
+            <h2 style="margin-top: 2rem;">Statistics</h2>
+            <div class="grid-2 stats-grid" id="statsGrid">
+                <div class="card stat-card">
+                    <div class="value" id="totalOrders">0</div>
+                    <div class="label">Total Orders</div>
+                </div>
+                <div class="card stat-card">
+                    <div class="value" id="totalExchanges">0</div>
+                    <div class="label">Total Exchanges (P2P)</div>
+                </div>
+            </div>
+            [span_26](start_span)[span_27](start_span)<p class="helper-text" style="text-align: center; margin-top: 10px;">Data fetched from Firebase/GAS[span_26](end_span)[span_27](end_span).</p>
+
+            <h2 style="margin-top: 2rem;">Quick Actions</h2>
+            <div class="grid-2" style="margin-bottom: 30px;">
+                <a href="order.html" class="btn btn-primary btn-full"><i class="fas fa-shopping-cart"></i> Place New Order (TopUp)</a>
+                <a href="pay.html" class="btn btn-secondary btn-full"><i class="fas fa-exchange-alt"></i> Exchange Money (P2P)</a>
+            </div>
+
+            <div class="card">
+                <p style="font-weight: 600; margin-bottom: 10px;">Last Submitted Order ID</p>
+                <p id="lastOrderIdDisplay" style="font-size: 1.2rem; color: var(--primary);">N/A</p>
+                <div style="margin-top: 20px;">
+                    <a href="status.html" class="btn btn-secondary"><i class="fas fa-history"></i> Status Live</a>
+                    <a href="services.html" class="btn btn-secondary" style="margin-left: 10px;"><i class="fas fa-list"></i> Services</a>
+                </div>
+            </div>
+
+        </div>
     </main>
 
-    <!-- Footer -->
     <footer class="footer">
-        <p>&copy; EasyRecharge MM 2025 – All Rights Reserved</p>
-        <div style="margin-top: 5px;">
-            <a href="privacy.html" style="color: inherit; text-decoration: none; margin: 0 5px;">Privacy Policy</a>
-            |
-            <a href="faq.html" style="color: inherit; text-decoration: none; margin: 0 5px;">FAQ</a>
+        <div class="container">
+            <p>&copy; EasyRecharge MM 2025 | <a href="index.html">Home</a> | <a href="faq.html">FAQ</a> | <a href="privacy.html">Privacy Policy</a> | <a href="#">Other</a></p>
         </div>
     </footer>
 
-    <!-- Mode Toggle Button -->
-    <button id="modeToggle" aria-label="Toggle Light/Dark Mode">🌙</button>
-
+    <script src="script.js" defer></script>
+    <script>
+        // Dashboard specific script to fetch stats
+        async function fetchDashboardStats() {
+            // Using a simple GAS doGet fallback for demonstration
+            if (GAS_URL.includes("YOUR_GAS_DEPLOY_URL")) {
+                console.log("Using dummy data for stats because GAS_URL is a placeholder.");
+                document.getElementById('totalOrders').textContent = '12';
+                document.getElementById('totalExchanges').textContent = '5';
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${GAS_URL}?action=getStats&userId=${window.USER_ID}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('totalOrders').textContent = data.ordersCount || '0';
+                    document.getElementById('totalExchanges').textContent = data.p2pCount || '0';
+                } else {
+                    showToast('Failed to load stats: ' + data.error, 'error');
+                }
+            } catch (error) {
+                console.error('Stats fetch error:', error);
+                showToast('Failed to connect to GAS for statistics.', 'error');
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', fetchDashboardStats);
+    </script>
 </body>
-</html>
+    </html>
+                                                                          
