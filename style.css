@@ -1,559 +1,91 @@
-/*
- * File: style.css
- * EasyRecharge MM Global Stylesheet
- * Theme: Orange (#ff7b00) + Black (#000000), Font: Poppins
- */
-
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-
-/* --- 1. Variables & Global Reset --- */
-:root {
-    --primary: #ff7b00; /* Orange theme color */
-    --primary-hover: #e56d00;
-    --dark: #000000;
-    --light: #ffffff;
-    --text-dark: #222222;
-    --text-light: #eeeeee;
-    --border-light: #e5e5e5;
-    --border-dark: #333333;
-    --shadow-base: 0 4px 12px rgba(0,0,0,0.1); /* Shared box-shadow */
-    --radius: 12px; /* Shared rounded corners */
-    --transition: 0.3s ease;
-    --success: #28a745;
-    --danger: #dc3545;
-    --warning: #ffc107;
-    --info: #6c757d;
-}
-
-*, *::before, *::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: 'Poppins', sans-serif;
-    line-height: 1.6;
-    transition: background-color var(--transition), color var(--transition);
-}
-
-a {
-    text-decoration: none;
-    color: var(--primary);
-    transition: color var(--transition);
-}
-
-a:hover {
-    color: var(--primary-hover);
-}
-
-[span_0](start_span)[span_1](start_span)/* --- 2. Theme Switching (Light/Dark Mode)[span_0](end_span)[span_1](end_span) --- */
-
-/* Light Mode (Default) */
-body[data-theme='light'] {
-    background-color: var(--light);
-    color: var(--text-dark);
-    --bg-color: var(--light);
-    --card-bg: var(--light);
-    --text-color: var(--text-dark);
-    --input-bg: var(--light);
-    --border-color: var(--border-light);
-    --shadow-color: rgba(0,0,0,0.1);
-}
-
-/* Dark Mode */
-body[data-theme='dark'] {
-    background-color: #121212;
-    color: var(--text-light);
-    --bg-color: #121212;
-    --card-bg: #1e1e1e;
-    --text-color: var(--text-light);
-    --input-bg: #2d2d2d;
-    --border-color: var(--border-dark);
-    --shadow-color: rgba(0,0,0,0.4);
-}
-
-/* Apply theme variables to core elements */
-.container {
-    max-width: 1200px;
-    margin: auto;
-    padding: 0 15px;
-}
-
-[span_2](start_span)[span_3](start_span)/* --- 3. Header & Navigation[span_2](end_span)[span_3](end_span) --- */
-.header {
-    background-color: var(--card-bg);
-    border-bottom: 1px solid var(--border-color);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    box-shadow: 0 2px 4px var(--shadow-color);
-}
-
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 0;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--text-color);
-}
-
-.logo span {
-    width: 20px;
-    height: 20px;
-    background-color: var(--primary);
-    border-radius: 4px;
-    margin-right: 8px;
-    display: inline-block;
-}
-
-.nav-links {
-    list-style: none;
-    display: flex;
-    gap: 1.5rem;
-    transition: transform 0.3s ease-out;
-}
-
-.nav-links a {
-    color: var(--text-color);
-    font-weight: 600;
-}
-
-.nav-links a:hover {
-    color: var(--primary);
-}
-
-.theme-toggle, .hamburger {
-    background: none;
-    border: none;
-    color: var(--text-color);
-    cursor: pointer;
-    font-size: 1.2rem;
-    padding: 0.5rem;
-    border-radius: var(--radius);
-    transition: background-color var(--transition);
-}
-
-.theme-toggle:hover {
-    background-color: rgba(var(--primary), 0.1);
-}
-
-.hamburger {
-    display: none; /* Hidden on desktop */
-}
-
-/* --- 4. Main Content & Components --- */
-main {
-    padding: 2rem 0 4rem;
-    min-height: calc(100vh - 150px);
-}
-
-h1, h2, h3 {
-    margin-bottom: 1rem;
-    font-weight: 600;
-}
-
-[span_4](start_span)/* Cards & Grids[span_4](end_span) */
-.card {
-    background-color: var(--card-bg);
-    padding: 20px;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-base);
-    transition: box-shadow var(--transition);
-    border: 1px solid var(--border-color);
-}
-
-.card:hover {
-    box-shadow: 0 6px 16px var(--shadow-color);
-}
-
-.grid-2 {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-}
-
-.grid-3 {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-}
-
-/* Stats Cards */
-.stat-card {
-    text-align: center;
-}
-
-.stat-card .value {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--primary);
-}
-
-.stat-card .label {
-    font-weight: 400;
-    margin-top: 5px;
-    color: var(--text-color);
-}
-
-[span_5](start_span)/* --- 5. Forms & Inputs[span_5](end_span) --- */
-.form-group {
-    margin-bottom: 1.5rem;
-}
-
-label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-}
-
-input[type="text"],
-input[type="number"],
-input[type="email"],
-input[type="password"],
-textarea,
-select {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius);
-    background-color: var(--input-bg);
-    color: var(--text-color);
-    font-size: 1rem;
-    transition: border-color var(--transition), box-shadow var(--transition);
-}
-
-input:focus, select:focus, textarea:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 4px rgba(255,123,0,0.12); /* Focus glow */
-}
-
-.helper-text {
-    font-size: 0.85rem;
-    color: var(--info);
-    margin-top: 5px;
-    display: block;
-}
-
-.input-with-copy {
-    display: flex;
-    gap: 10px;
-}
-
-.input-with-copy input, .input-with-copy select {
-    flex-grow: 1;
-}
-
-/* Radio/Checkbox groups */
-.radio-group label {
-    display: inline-flex;
-    align-items: center;
-    margin-right: 15px;
-    cursor: pointer;
-    font-weight: 400;
-}
-
-[span_6](start_span)/* --- 6. Buttons[span_6](end_span) --- */
-.btn {
-    display: inline-block;
-    padding: 12px 25px;
-    font-size: 1rem;
-    font-weight: 600;
-    text-align: center;
-    border: none;
-    border-radius: var(--radius);
-    cursor: pointer;
-    transition: background-color var(--transition), box-shadow var(--transition), transform 0.1s;
-}
-
-.btn-primary {
-    background-color: var(--primary);
-    color: var(--light);
-    box-shadow: 0 4px 8px rgba(255,123,0,0.3);
-}
-
-.btn-primary:hover {
-    background-color: var(--primary-hover);
-    box-shadow: 0 6px 12px rgba(255,123,0,0.4);
-}
-
-.btn-primary:active {
-    transform: translateY(1px);
-}
-
-.btn-secondary {
-    background-color: var(--input-bg);
-    color: var(--text-color);
-    border: 1px solid var(--border-color);
-}
-
-.btn-secondary:hover {
-    background-color: var(--border-color);
-}
-
-.btn-icon {
-    width: 44px;
-    height: 44px;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.1rem;
-}
-
-.btn-full {
-    width: 100%;
-}
-
-[span_7](start_span)[span_8](start_span)/* --- 7. Tables & Status Badges[span_7](end_span)[span_8](end_span) --- */
-.table-responsive {
-    overflow-x: auto;
-    width: 100%;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 1rem;
-    min-width: 700px;
-}
-
-th, td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid var(--border-color);
-}
-
-th {
-    background-color: var(--border-color);
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-}
-
-/* Status Badges */
-.badge {
-    padding: 5px 10px;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    display: inline-block;
-    white-space: nowrap;
-}
-
-.badge.pending {
-    background-color: var(--info);
-    color: var(--light);
-} /* Gray */
-.badge.processing {
-    background-color: var(--primary);
-    color: var(--light);
-} /* Orange */
-.badge.success {
-    background-color: var(--success);
-    color: var(--light);
-} /* Green */
-.badge.cancelled {
-    background-color: var(--danger);
-    color: var(--light);
-} /* Red */
-
-/* --- 8. Tabbed Content (Status Page) --- */
-.tabs {
-    display: flex;
-    flex-wrap: wrap;
-    border-bottom: 2px solid var(--border-color);
-    margin-bottom: 20px;
-}
-
-.tab-btn {
-    padding: 10px 15px;
-    cursor: pointer;
-    border: none;
-    background: none;
-    color: var(--text-color);
-    font-weight: 600;
-    border-bottom: 3px solid transparent;
-    transition: border-color var(--transition), color var(--transition);
-}
-
-.tab-btn.active {
-    color: var(--primary);
-    border-bottom-color: var(--primary);
-}
-
-.tab-content {
-    display: none;
-}
-
-.tab-content.active {
-    display: block;
-}
-
-/* --- 9. Accordion (FAQ Page) --- */
-.accordion-item {
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius);
-    margin-bottom: 10px;
-    overflow: hidden;
-}
-
-.accordion-header {
-    background-color: var(--card-bg);
-    padding: 15px;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: 600;
-}
-
-.accordion-content {
-    padding: 0 15px;
-    background-color: var(--input-bg);
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height var(--transition);
-}
-
-.accordion-content p {
-    padding: 15px 0;
-}
-
-.accordion-header i {
-    transition: transform 0.3s;
-}
-
-.accordion-item.active .accordion-header i {
-    transform: rotate(180deg);
-}
-
-[span_9](start_span)/* --- 10. Toast Notification[span_9](end_span) --- */
-.toast-container {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10000;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.toast {
-    background-color: rgba(0, 0, 0, 0.85);
-    color: var(--light);
-    padding: 12px 20px;
-    border-radius: var(--radius);
-    margin-top: 10px;
-    box-shadow: var(--shadow-base);
-    opacity: 0;
-    transition: opacity 0.3s, transform 0.3s;
-    pointer-events: none;
-}
-
-.toast.show {
-    opacity: 1;
-    transform: translateY(-10px);
-}
-
-.toast.success { background-color: var(--success); }
-.toast.error { background-color: var(--danger); }
-.toast.info { background-color: var(--primary); }
-
-[span_10](start_span)/* --- 11. Footer[span_10](end_span) --- */
-.footer {
-    padding: 20px 0;
-    text-align: center;
-    border-top: 1px solid var(--border-color);
-    background-color: var(--card-bg);
-    font-size: 0.9rem;
-}
-
-.footer-links a {
-    margin: 0 8px;
-    color: var(--text-color);
-}
-
-[span_11](start_span)[span_12](start_span)/* --- 12. Responsive Adjustments (Mobile-First)[span_11](end_span)[span_12](end_span) --- */
-
-/* Tablet/Small Desktop (768px - 1024px) */
-@media (max-width: 1024px) {
-    .nav-links {
-        gap: 1rem;
-    }
-}
-
-/* Mobile (max 768px) */
-@media (max-width: 768px) {
-    .logo {
-        font-size: 1.3rem;
-    }
-
-    .hamburger {
-        display: block; /* Show hamburger */
-        order: 3;
-    }
-
-    .nav-links {
-        position: absolute;
-        top: 60px; /* Below the header */
-        left: 0;
-        right: 0;
-        flex-direction: column;
-        background-color: var(--card-bg);
-        border-top: 1px solid var(--border-color);
-        padding: 10px 0;
-        box-shadow: 0 4px 8px var(--shadow-color);
-        transform: translateY(-150%); /* Hidden state */
-    }
-
-    .nav-links.open {
-        transform: translateY(0); /* Open state */
-    }
-
-    .nav-links li {
-        width: 100%;
-        border-bottom: 1px solid var(--border-color);
-    }
-
-    .nav-links li:last-child {
-        border-bottom: none;
-    }
-
-    .nav-links a {
-        display: block;
-        padding: 10px 15px;
-    }
-
-    .theme-toggle {
-        margin-right: 15px; /* Separate from hamburger */
-    }
-
-    .grid-2, .grid-3 {
-        grid-template-columns: 1fr;
-    }
-
-    .tab-btn {
-        flex: 1 1 auto;
-        text-align: center;
-        margin-bottom: 5px;
-    }
-
-    .table-responsive table {
-        /* Allow scroll, but keep padding reasonable */
-        min-width: 500px;
-    }
-
-    main {
-        padding: 1rem 0 3rem;
-    }
+/* style.css */
+/* Root variables */
+:root{
+  --primary:#ff7b00;
+  --dark:#000000;
+  --light:#ffffff;
+  --text-dark:#222222;
+  --text-light:#eeeeee;
+  --border-light:#e5e5e5;
+  --border-dark:#333333;
+  --muted:#777;
+}
+
+/* Reset & base */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:'Poppins',sans-serif;background:var(--light);color:var(--text-dark);transition:background .25s,color .25s}
+body[data-theme="dark"]{background:var(--dark);color:var(--text-light)}
+
+/* Header / nav */
+.header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.95);border-bottom:1px solid var(--border-light);box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.header .nav{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:10px 16px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--primary)}
+.logo .mark{width:36px;height:36px;background:var(--primary);border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.12)}
+.nav-links{display:flex;gap:12px;align-items:center}
+.nav-links a{color:inherit;text-decoration:none;padding:8px 10px;border-radius:8px;transition:all .2s}
+.nav-links a:hover{color:var(--primary);background:rgba(255,123,0,0.06)}
+.nav-links .active{background:rgba(255,123,0,0.08);color:var(--primary)}
+.hamburger{display:none;border:none;background:transparent;font-size:20px}
+
+/* container */
+.container{max-width:1100px;margin:20px auto;padding:0 16px}
+
+/* cards */
+.card{background:inherit;border-radius:12px;padding:16px;box-shadow:0 4px 12px rgba(0,0,0,0.06);border:1px solid var(--border-light);margin-bottom:16px}
+body[data-theme="dark"] .card{border:1px solid var(--border-dark);background:#141414}
+
+/* grids */
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+
+/* buttons */
+.btn{background:var(--primary);color:#fff;border:none;padding:10px 16px;border-radius:12px;cursor:pointer;font-weight:600;transition:all .3s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(255,123,0,0.12)}
+
+/* forms */
+.form{display:block}
+.form-row{display:flex;gap:12px;margin-bottom:8px}
+.form-group{flex:1;display:flex;flex-direction:column;gap:6px;margin-bottom:8px}
+label{font-size:0.95rem;color:var(--muted)}
+input,select,textarea{padding:10px;border-radius:8px;border:1px solid var(--border-light);background:transparent;color:inherit}
+input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 4px rgba(255,123,0,0.12);border-color:var(--primary)}
+fieldset{border:0;padding:0;margin:8px 0}
+
+/* tables */
+.table{width:100%;border-collapse:collapse;display:block;overflow:auto}
+.table th,.table td{padding:10px;border-bottom:1px solid var(--border-light);text-align:left}
+
+/* badges */
+.badge{padding:6px 10px;border-radius:999px;font-weight:600;font-size:0.85rem;display:inline-block}
+.badge.pending{background:#f0f0f0;color:#555}
+.badge.processing{background:rgba(255,123,0,0.12);color:var(--primary)}
+.badge.success{background:rgba(0,200,100,0.12);color:green}
+.badge.cancel{background:rgba(255,0,0,0.08);color:#d00}
+
+/* links as cards */
+.link-card{display:block;padding:12px;border-radius:12px;text-decoration:none;color:inherit}
+
+/* toast */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--primary);color:#fff;padding:10px 16px;border-radius:8px;opacity:0;transition:opacity .25s}
+.toast.show{opacity:1}
+
+/* footer */
+.footer{padding:16px;text-align:center;border-top:1px solid var(--border-light);margin-top:24px;color:var(--muted)}
+body[data-theme="dark"] .footer{border-top:1px solid var(--border-dark)}
+
+/* accordion */
+.accordion-item{width:100%;padding:12px;border-radius:8px;text-align:left;border:1px solid var(--border-light);margin-top:8px;cursor:pointer;background:transparent}
+.panel{display:none;padding:12px;margin-bottom:6px;color:var(--muted);}
+
+/* small util */
+.small{font-size:0.9rem}
+
+/* responsive */
+@media(max-width:1024px){.container{padding:0 12px}}
+@media(max-width:768px){
+  .nav-links{display:none;position:absolute;left:0;right:0;top:64px;flex-direction:column;background:inherit;padding:12px;border-top:1px solid var(--border-light)}
+  .nav-links.open{display:flex}
+  .hamburger{display:block}
+  .form-row{flex-direction:column}
+  .logo .text{display:none}
 }
