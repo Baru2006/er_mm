@@ -1,120 +1,70 @@
-<!DOCTYPE>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | EasyRecharge MM</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>EasyRecharge MM — Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
-<body data-theme="light">
-    <header class="header">
-        <div class="container">
-            <nav class="navbar">
-                <div class="logo"><span></span>EasyRecharge MM</div>
-                <ul class="nav-links">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="order.html">Order</a></li>
-                    <li><a href="order_smm.html">SMM Order</a></li>
-                    <li><a href="pay.html">Pay</a></li>
-                    <li><a href="status.html">Status</a></li>
-                    <li><a href="services.html">Services</a></li>
-                    <li><a href="faq.html">FAQ</a></li>
-                    <li><a href="privacy.html">Privacy</a></li>
-                </ul>
-                <button id="modeToggle" class="theme-toggle" title="Toggle theme"><i class="fas fa-moon"></i></button>
-                <button class="hamburger"><i class="fas fa-bars"></i></button>
-            </nav>
-        </div>
-    </header>
+<body>
+  <header class="header">
+    <div class="nav">
+      <div class="logo"><span class="mark" aria-hidden="true"></span><span class="text">EasyRecharge MM</span></div>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="order.html">Order</a>
+        <a href="order_smm.html">SMM Order</a>
+        <a href="pay.html">Pay</a>
+        <a href="status.html">Status</a>
+        <a href="services.html">Services</a>
+        <a href="faq.html">FAQ</a>
+        <a href="privacy.html">Privacy</a>
+        <button id="modeToggle" class="mode-toggle" aria-label="Toggle theme">🌗</button>
+      </nav>
+      <button class="hamburger" aria-label="Open menu">☰</button>
+    </div>
+  </header>
 
-    <main>
-        <div class="container">
-            <h1>Welcome Back, User!</h1>
+  <main class="container">
+    <section class="card hero">
+      <h1>Fast, Safe, Easy Recharge in Myanmar</h1>
+      <p class="lead">Top up SIM, data, game credits — or place SMM orders powered by SocialFastMM.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;">
+        <a class="btn" href="order.html">➕ Place Order</a>
+        <a class="btn" href="pay.html">💱 Exchange Money</a>
+      </div>
+    </section>
 
-            <div class="card" style="margin-bottom: 30px;">
-                <div style="display: flex; align-items: center; gap: 15px;">
-                    <i class="fas fa-user-circle fa-3x" style="color: var(--primary);"></i>
-                    <div>
-                        <p style="font-weight: 600;">Your ID (Read-only)</p>
-                        <div class="input-with-copy">
-                            <input type="text" id="userIdDisplay" value="Loading..." readonly style="font-weight: 700;">
-                            <button type="button" class="btn btn-secondary btn-icon" data-copy-id="userIdDisplay" title="Copy ID"><i class="fas fa-copy"></i></button>
-                        </div>
-                        <p class="helper-text">This is your unique client ID for all transactions.</p>
-                    </div>
-                </div>
-            </div>
+    <section class="grid-3">
+      <div class="card">
+        <h3>Total Orders</h3>
+        <div id="statOrders" class="stat big">—</div>
+      </div>
+      <div class="card">
+        <h3>Total Exchanges</h3>
+        <div id="statExchanges" class="stat big">—</div>
+      </div>
+      <div class="card">
+        <h3>Your ID</h3>
+        <div id="yourId" class="stat small">—</div>
+        <div style="margin-top:8px;font-size:0.9rem;color:var(--muted)">Last Order: <span id="lastOrder">—</span></div>
+      </div>
+    </section>
 
-            <h2 style="margin-top: 2rem;">Statistics</h2>
-            <div class="grid-2 stats-grid" id="statsGrid">
-                <div class="card stat-card">
-                    <div class="value" id="totalOrders">0</div>
-                    <div class="label">Total Orders</div>
-                </div>
-                <div class="card stat-card">
-                    <div class="value" id="totalExchanges">0</div>
-                    <div class="label">Total Exchanges (P2P)</div>
-                </div>
-            </div>
-            [span_26](start_span)[span_27](start_span)<p class="helper-text" style="text-align: center; margin-top: 10px;">Data fetched from Firebase/GAS[span_26](end_span)[span_27](end_span).</p>
+    <section class="card">
+      <h3>Quick Links</h3>
+      <div class="grid-3">
+        <a class="card link-card" href="status.html"><strong>📊 Status Live</strong><p>Track your orders in realtime</p></a>
+        <a class="card link-card" href="services.html"><strong>🛠 Services</strong><p>View available services & prices</p></a>
+        <a class="card link-card" href="order_smm.html"><strong>⚙️ SMM Order</strong><p>Place SocialFastMM orders</p></a>
+      </div>
+    </section>
+  </main>
 
-            <h2 style="margin-top: 2rem;">Quick Actions</h2>
-            <div class="grid-2" style="margin-bottom: 30px;">
-                <a href="order.html" class="btn btn-primary btn-full"><i class="fas fa-shopping-cart"></i> Place New Order (TopUp)</a>
-                <a href="pay.html" class="btn btn-secondary btn-full"><i class="fas fa-exchange-alt"></i> Exchange Money (P2P)</a>
-            </div>
-
-            <div class="card">
-                <p style="font-weight: 600; margin-bottom: 10px;">Last Submitted Order ID</p>
-                <p id="lastOrderIdDisplay" style="font-size: 1.2rem; color: var(--primary);">N/A</p>
-                <div style="margin-top: 20px;">
-                    <a href="status.html" class="btn btn-secondary"><i class="fas fa-history"></i> Status Live</a>
-                    <a href="services.html" class="btn btn-secondary" style="margin-left: 10px;"><i class="fas fa-list"></i> Services</a>
-                </div>
-            </div>
-
-        </div>
-    </main>
-
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; EasyRecharge MM 2025 | <a href="index.html">Home</a> | <a href="faq.html">FAQ</a> | <a href="privacy.html">Privacy Policy</a> | <a href="#">Other</a></p>
-        </div>
-    </footer>
-
-    <script src="script.js" defer></script>
-    <script>
-        // Dashboard specific script to fetch stats
-        async function fetchDashboardStats() {
-            // Using a simple GAS doGet fallback for demonstration
-            if (GAS_URL.includes("YOUR_GAS_DEPLOY_URL")) {
-                console.log("Using dummy data for stats because GAS_URL is a placeholder.");
-                document.getElementById('totalOrders').textContent = '12';
-                document.getElementById('totalExchanges').textContent = '5';
-                return;
-            }
-            
-            try {
-                const response = await fetch(`${GAS_URL}?action=getStats&userId=${window.USER_ID}`);
-                const data = await response.json();
-                
-                if (data.success) {
-                    document.getElementById('totalOrders').textContent = data.ordersCount || '0';
-                    document.getElementById('totalExchanges').textContent = data.p2pCount || '0';
-                } else {
-                    showToast('Failed to load stats: ' + data.error, 'error');
-                }
-            } catch (error) {
-                console.error('Stats fetch error:', error);
-                showToast('Failed to connect to GAS for statistics.', 'error');
-            }
-        }
-        
-        document.addEventListener('DOMContentLoaded', fetchDashboardStats);
-    </script>
+  <footer class="footer">
+    © EasyRecharge MM 2025 | <a href="index.html">Home</a> | <a href="faq.html">FAQ</a> | <a href="privacy.html">Privacy Policy</a> | Other
+  </footer>
 </body>
-                            </html>
-    
+</html>
