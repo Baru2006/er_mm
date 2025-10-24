@@ -1,70 +1,92 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>EasyRecharge MM — Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyRecharge MM - Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="script.js" defer></script>
 </head>
-<body>
-  <header class="header">
-    <div class="nav">
-      <div class="logo"><span class="mark" aria-hidden="true"></span><span class="text">EasyRecharge MM</span></div>
-      <nav class="nav-links" aria-label="Main navigation">
-        <a href="index.html">Home</a>
-        <a href="order.html">Order</a>
-        <a href="order_smm.html">SMM Order</a>
-        <a href="pay.html">Pay</a>
-        <a href="status.html">Status</a>
-        <a href="services.html">Services</a>
-        <a href="faq.html">FAQ</a>
-        <a href="privacy.html">Privacy</a>
-        <button id="modeToggle" class="mode-toggle" aria-label="Toggle theme">🌗</button>
-      </nav>
-      <button class="hamburger" aria-label="Open menu">☰</button>
-    </div>
-  </header>
+<body data-theme="light">
+    <header class="header">
+        <div class="container">
+            <div class="brand">
+                <div class="logo">⚡</div>
+                <h1>EasyRecharge MM</h1>
+            </div>
+            <button id="modeToggle" class="theme-toggle">🌙</button>
+        </div>
+    </header>
 
-  <main class="container">
-    <section class="card hero">
-      <h1>Fast, Safe, Easy Recharge in Myanmar</h1>
-      <p class="lead">Top up SIM, data, game credits — or place SMM orders powered by SocialFastMM.</p>
-      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;">
-        <a class="btn" href="order.html">➕ Place Order</a>
-        <a class="btn" href="pay.html">💱 Exchange Money</a>
-      </div>
-    </section>
+    <main class="container">
+        <section class="profile-section">
+            <div class="profile-avatar">
+                <div class="avatar">👤</div>
+            </div>
+            <div class="profile-info">
+                <div class="info-item">
+                    <span class="label">Your ID:</span>
+                    <span id="userId" class="value">—</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Your Device:</span>
+                    <span id="userDevice" class="value">—</span>
+                </div>
+            </div>
+        </section>
 
-    <section class="grid-3">
-      <div class="card">
-        <h3>Total Orders</h3>
-        <div id="statOrders" class="stat big">—</div>
-      </div>
-      <div class="card">
-        <h3>Total Exchanges</h3>
-        <div id="statExchanges" class="stat big">—</div>
-      </div>
-      <div class="card">
-        <h3>Your ID</h3>
-        <div id="yourId" class="stat small">—</div>
-        <div style="margin-top:8px;font-size:0.9rem;color:var(--muted)">Last Order: <span id="lastOrder">—</span></div>
-      </div>
-    </section>
+        <section class="stats-cards">
+            <div class="card">
+                <h3>Your Total Orders</h3>
+                <div class="number" id="totalOrders">—</div>
+            </div>
+            <div class="card">
+                <h3>Your Total Exchange</h3>
+                <div class="number" id="totalExchange">—</div>
+            </div>
+        </section>
 
-    <section class="card">
-      <h3>Quick Links</h3>
-      <div class="grid-3">
-        <a class="card link-card" href="status.html"><strong>📊 Status Live</strong><p>Track your orders in realtime</p></a>
-        <a class="card link-card" href="services.html"><strong>🛠 Services</strong><p>View available services & prices</p></a>
-        <a class="card link-card" href="order_smm.html"><strong>⚙️ SMM Order</strong><p>Place SocialFastMM orders</p></a>
-      </div>
-    </section>
-  </main>
+        <section class="gratitude-box">
+            <div class="card">
+                <p>🙏 Thank you for using EasyRecharge MM services.</p>
+            </div>
+        </section>
 
-  <footer class="footer">
-    © EasyRecharge MM 2025 | <a href="index.html">Home</a> | <a href="faq.html">FAQ</a> | <a href="privacy.html">Privacy Policy</a> | Other
-  </footer>
+        <section class="status-grid">
+            <div class="card">
+                <h3>Active Users</h3>
+                <div class="number" id="activeUsers">—</div>
+            </div>
+            <div class="card">
+                <h3>Total Orders</h3>
+                <div class="number" id="allOrders">—</div>
+            </div>
+            <div class="card">
+                <h3>Total Exchange</h3>
+                <div class="number" id="allExchange">—</div>
+            </div>
+        </section>
+    </main>
+
+    <nav class="main-menu">
+        <div class="container">
+            <a href="index.html" class="menu-item active">📊 Dashboard</a>
+            <a href="order.html" class="menu-item">🛒 Orders</a>
+            <a href="pay.html" class="menu-item">💱 Exchange</a>
+            <a href="status.html" class="menu-item">📈 Status</a>
+        </div>
+    </nav>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-links">
+                <a href="privacy.html">Privacy</a>
+                <a href="faq.html">FAQ</a>
+                <a href="services.html">Products</a>
+            </div>
+            <p>&copy; 2024 EasyRecharge MM. All rights reserved.</p>
+        </div>
+    </footer>
 </body>
 </html>
