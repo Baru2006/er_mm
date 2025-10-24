@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyRecharge MM - Order Status</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="script.js" defer></script>
+</head>
+<body data-theme="light">
+    <header class="header">
+        <div class="container">
+            <div class="brand">
+                <div class="logo">⚡</div>
+                <h1>EasyRecharge MM</h1>
+            </div>
+            <button id="modeToggle" class="theme-toggle">🌙</button>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="back-link">
+            <a href="index.html">← Back to Dashboard</a>
+        </div>
+
+        <section class="status-section">
+            <div class="card">
+                <div class="status-header">
+                    <h2>Order Status</h2>
+                    <button class="btn-secondary" onclick="refreshData()">🔄 Refresh</button>
+                </div>
+
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('your-orders')">Your Orders</button>
+                    <button class="tab-btn" onclick="switchTab('all-orders')">All Orders</button>
+                    <button class="tab-btn" onclick="switchTab('p2p-orders')">P2P Status</button>
+                    <button class="tab-btn" onclick="switchTab('smm-orders')">SMM Status</button>
+                </div>
+
+                <div class="tab-content">
+                    <div id="your-orders" class="tab-pane active">
+                        <div class="orders-table">
+                            <div class="table-header">
+                                <div>Order ID</div>
+                                <div>Category</div>
+                                <div>Service</div>
+                                <div>Qty</div>
+                                <div>Total</div>
+                                <div>Status</div>
+                                <div>SMM Status</div>
+                            </div>
+                            <div class="table-body" id="your-orders-body">
+                                <div class="table-row empty">
+                                    <div colspan="7">No orders found</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="all-orders" class="tab-pane">
+                        <div class="orders-table">
+                            <div class="table-header">
+                                <div>Order ID</div>
+                                <div>User ID</div>
+                                <div>Category</div>
+                                <div>Service</div>
+                                <div>Qty</div>
+                                <div>Total</div>
+                                <div>Status</div>
+                            </div>
+                            <div class="table-body" id="all-orders-body">
+                                <div class="table-row empty">
+                                    <div colspan="7">No orders found</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="p2p-orders" class="tab-pane">
+                        <div class="orders-table">
+                            <div class="table-header">
+                                <div>Order ID</div>
+                                <div>From → To</div>
+                                <div>Amount</div>
+                                <div>Receive</div>
+                                <div>Status</div>
+                                <div>Txn ID</div>
+                            </div>
+                            <div class="table-body" id="p2p-orders-body">
+                                <div class="table-row empty">
+                                    <div colspan="6">No P2P exchanges found</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="smm-orders" class="tab-pane">
+                        <div class="orders-table">
+                            <div class="table-header">
+                                <div>Order ID</div>
+                                <div>Platform</div>
+                                <div>Service</div>
+                                <div>Target</div>
+                                <div>Qty</div>
+                                <div>Status</div>
+                                <div>SMM Status</div>
+                            </div>
+                            <div class="table-body" id="smm-orders-body">
+                                <div class="table-row empty">
+                                    <div colspan="7">No SMM orders found</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <nav class="main-menu">
+        <div class="container">
+            <a href="index.html" class="menu-item">📊 Dashboard</a>
+            <a href="order.html" class="menu-item">🛒 Orders</a>
+            <a href="pay.html" class="menu-item">💱 Exchange</a>
+            <a href="status.html" class="menu-item active">📈 Status</a>
+        </div>
+    </nav>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-links">
+                <a href="privacy.html">Privacy</a>
+                <a href="faq.html">FAQ</a>
+                <a href="services.html">Products</a>
+            </div>
+            <p>&copy; 2024 EasyRecharge MM. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function switchTab(tabName) {
+            // Hide all tab panes
+            document.querySelectorAll('.tab-pane').forEach(pane => {
+                pane.classList.remove('active');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab pane
+            document.getElementById(tabName).classList.add('active');
+            
+            // Activate clicked tab button
+            event.target.classList.add('active');
+        }
+
+        function refreshData() {
+            showToast('✅ Live Data Updated');
+            // In production, this would fetch fresh data from Firebase/GAS
+        }
+
+        // Demo data for status page
+        document.addEventListener('DOMContentLoaded', function() {
+            // This would be replaced with real data from Firebase/GAS
+            setTimeout(() => {
+                const demoOrder = `
+                    <div class="table-row">
+                        <div>ORD-${Date.now().toString(36)}</div>
+                        <div>SIM</div>
+                        <div>MPT 1GB Data</div>
+                        <div>1</div>
+                        <div>500 MMK</div>
+                        <div><span class="badge processing">Processing</span></div>
+                        <div>—</div>
+                    </div>
+                `;
+                document.getElementById('your-orders-body').innerHTML = demoOrder;
+            }, 1000);
+        });
+    </script>
+</body>
+              </html>
