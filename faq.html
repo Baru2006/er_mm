@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyRecharge MM - FAQ</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="script.js" defer></script>
+</head>
+<body data-theme="light">
+    <header class="header">
+        <div class="container">
+            <div class="brand">
+                <div class="logo">⚡</div>
+                <h1>EasyRecharge MM</h1>
+            </div>
+            <button id="modeToggle" class="theme-toggle">🌙</button>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="back-link">
+            <a href="index.html">← Back to Dashboard</a>
+        </div>
+
+        <section class="faq-section">
+            <div class="card">
+                <h2>Frequently Asked Questions</h2>
+                
+                <div class="accordion">
+                    <div class="accordion-item">
+                        <button class="accordion-header">
+                            How to place an order?
+                            <span class="accordion-icon">+</span>
+                        </button>
+                        <div class="accordion-content">
+                            <p>1. Select your service category from the Orders page<br>
+                               2. Fill in the required information<br>
+                               3. Make payment to the provided number<br>
+                               4. Enter the transaction ID and submit</p>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-header">
+                            What is the delivery time?
+                            <span class="accordion-icon">+</span>
+                        </button>
+                        <div class="accordion-content">
+                            <p>• SIM/Data: Instant delivery<br>
+                               • Game TopUp: 5-15 minutes<br>
+                               • SMM Services: 1-24 hours depending on service<br>
+                               • P2P Exchange: 15-30 minutes</p>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-header">
+                            Which payment methods are accepted?
+                            <span class="accordion-icon">+</span>
+                        </button>
+                        <div class="accordion-content">
+                            <p>We accept all major Myanmar payment methods:<br>
+                               • Wave Money<br>
+                               • KBZPay<br>
+                               • AYA Pay<br>
+                               • CB Pay</p>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-header">
+                            How to contact support?
+                            <span class="accordion-icon">+</span>
+                        </button>
+                        <div class="accordion-content">
+                            <p>Email: support@easyrecharge.mm<br>
+                               Telegram: @EasyRechargeMM<br>
+                               Response time: Within 30 minutes during business hours (9AM - 6PM)</p>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <button class="accordion-header">
+                            What if my order fails?
+                            <span class="accordion-icon">+</span>
+                        </button>
+                        <div class="accordion-content">
+                            <p>If your order fails or is not delivered within the expected time:<br>
+                               1. Check your order status in the Status page<br>
+                               2. Contact support with your Order ID<br>
+                               3. We will either process your order or provide a full refund</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <nav class="main-menu">
+        <div class="container">
+            <a href="index.html" class="menu-item">📊 Dashboard</a>
+            <a href="order.html" class="menu-item">🛒 Orders</a>
+            <a href="pay.html" class="menu-item">💱 Exchange</a>
+            <a href="status.html" class="menu-item">📈 Status</a>
+        </div>
+    </nav>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-links">
+                <a href="privacy.html">Privacy</a>
+                <a href="faq.html">FAQ</a>
+                <a href="services.html">Products</a>
+            </div>
+            <p>&copy; 2024 EasyRecharge MM. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const accordionHeaders = document.querySelectorAll('.accordion-header');
+            
+            accordionHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    const content = this.nextElementSibling;
+                    const icon = this.querySelector('.accordion-icon');
+                    
+                    // Toggle current item
+                    content.style.display = content.style.display === 'block' ? 'none' : 'block';
+                    icon.textContent = content.style.display === 'block' ? '−' : '+';
+                    
+                    // Close other items
+                    accordionHeaders.forEach(otherHeader => {
+                        if (otherHeader !== this) {
+                            const otherContent = otherHeader.nextElementSibling;
+                            const otherIcon = otherHeader.querySelector('.accordion-icon');
+                            otherContent.style.display = 'none';
+                            otherIcon.textContent = '+';
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+  </html>
