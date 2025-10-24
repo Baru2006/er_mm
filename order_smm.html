@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyRecharge MM - SMM Services</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="script.js" defer></script>
+</head>
+<body data-theme="light">
+    <header class="header">
+        <div class="container">
+            <div class="brand">
+                <div class="logo">⚡</div>
+                <h1>EasyRecharge MM</h1>
+            </div>
+            <button id="modeToggle" class="theme-toggle">🌙</button>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="back-link">
+            <a href="order.html">← Back to Categories</a>
+        </div>
+
+        <section class="order-form">
+            <div class="card">
+                <h2>SMM Services Order</h2>
+                
+                <form id="smmOrderForm">
+                    <div class="form-group">
+                        <label for="userId">User ID</label>
+                        <input type="text" id="userId" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="device">Device</label>
+                        <input type="text" id="device" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="platform">Platform *</label>
+                        <select id="platform" required onchange="loadServices()">
+                            <option value="">Select Platform</option>
+                            <option value="facebook">Facebook</option>
+                            <option value="instagram">Instagram</option>
+                            <option value="tiktok">TikTok</option>
+                            <option value="youtube">YouTube</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="service">Service *</label>
+                        <select id="service" required onchange="calculateTotal()">
+                            <option value="">Select Service</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="target">Target Link/Username *</label>
+                        <input type="text" id="target" required placeholder="Enter profile URL or username">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="qty">Quantity</label>
+                        <input type="number" id="qty" value="100" min="1" onchange="calculateTotal()">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pricePerUnit">Price per Unit</label>
+                        <input type="text" id="pricePerUnit" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="total">Total Amount</label>
+                        <input type="text" id="total" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Payment Method *</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="payment" value="Wave" required> Wave Money
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="payment" value="KBZPay"> KBZPay
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="payment" value="AYA"> AYA Pay
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="payment" value="CBPay"> CB Pay
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="payment-info">
+                        <div class="payment-number">
+                            <label>Payment Number:</label>
+                            <span id="paymentNumber">09XXXXXXX</span>
+                            <button type="button" onclick="copyText('paymentNumber')" class="copy-btn">Copy</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="transactionId">Transaction ID *</label>
+                        <input type="text" id="transactionId" required placeholder="Enter transaction ID from payment">
+                        <button type="button" onclick="copyText('transactionId')" class="copy-btn">Copy Txn ID</button>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Submit Order</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <nav class="main-menu">
+        <div class="container">
+            <a href="index.html" class="menu-item">📊 Dashboard</a>
+            <a href="order.html" class="menu-item active">🛒 Orders</a>
+            <a href="pay.html" class="menu-item">💱 Exchange</a>
+            <a href="status.html" class="menu-item">📈 Status</a>
+        </div>
+    </nav>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-links">
+                <a href="privacy.html">Privacy</a>
+                <a href="faq.html">FAQ</a>
+                <a href="services.html">Products</a>
+            </div>
+            <p>&copy; 2024 EasyRecharge MM. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const servicePrices = {
+            facebook: {
+                'likes_100': 500,
+                'followers_100': 800,
+                'comments_50': 1200
+            },
+            instagram: {
+                'followers_100': 600,
+                'likes_100': 400,
+                'views_1000': 300
+            },
+            tiktok: {
+                'followers_100': 700,
+                'likes_100': 450,
+                'views_1000': 250
+            },
+            youtube: {
+                'subscribers_100': 1500,
+                'likes_100': 600,
+                'views_1000': 400
+            }
+        };
+
+        function loadServices() {
+            const platform = document.getElementById('platform').value;
+            const serviceSelect = document.getElementById('service');
+            
+            serviceSelect.innerHTML = '<option value="">Select Service</option>';
+            
+            if (platform && servicePrices[platform]) {
+                Object.entries(servicePrices[platform]).forEach(([key, price]) => {
+                    const option = document.createElement('option');
+                    option.value = key;
+                    option.textContent = `${key.replace(/_/g, ' ')} (${price} MMK)`;
+                    option.setAttribute('data-price', price);
+                    serviceSelect.appendChild(option);
+                });
+            }
+            
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            const serviceSelect = document.getElementById('service');
+            const qtyInput = document.getElementById('qty');
+            const priceInput = document.getElementById('pricePerUnit');
+            const totalInput = document.getElementById('total');
+            
+            const selectedOption = serviceSelect.options[serviceSelect.selectedIndex];
+            const price = selectedOption ? parseInt(selectedOption.getAttribute('data-price') || 0) : 0;
+            const qty = parseInt(qtyInput.value) || 1;
+            
+            priceInput.value = price.toLocaleString() + ' MMK';
+            totalInput.value = (price * qty).toLocaleString() + ' MMK';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            calculateTotal();
+            document.getElementById('smmOrderForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitOrderForm('smmOrderForm', 'order_smm');
+            });
+        });
+    </script>
+</body>
+</html>
