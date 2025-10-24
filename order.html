@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyRecharge MM - Order</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="script.js" defer></script>
+</head>
+<body data-theme="light">
+    <header class="header">
+        <div class="container">
+            <div class="brand">
+                <div class="logo">⚡</div>
+                <h1>EasyRecharge MM</h1>
+            </div>
+            <button id="modeToggle" class="theme-toggle">🌙</button>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="back-link">
+            <a href="index.html">← Back to Dashboard</a>
+        </div>
+
+        <section class="category-selection">
+            <div class="card">
+                <h2>Choose Service Category</h2>
+                <p class="description">Select the type of service you want to order</p>
+                
+                <div class="category-grid">
+                    <div class="category-card" onclick="selectCategory('SIM')">
+                        <div class="category-icon">📱</div>
+                        <h3>SIM/Data</h3>
+                        <p>Mobile data packages and SIM services</p>
+                    </div>
+                    
+                    <div class="category-card" onclick="selectCategory('Game')">
+                        <div class="category-icon">🎮</div>
+                        <h3>Game TopUp</h3>
+                        <p>Game credits and top-up services</p>
+                    </div>
+                    
+                    <div class="category-card" onclick="selectCategory('SMM')">
+                        <div class="category-icon">📢</div>
+                        <h3>SMM Services</h3>
+                        <p>Social media marketing services</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <nav class="main-menu">
+        <div class="container">
+            <a href="index.html" class="menu-item">📊 Dashboard</a>
+            <a href="order.html" class="menu-item active">🛒 Orders</a>
+            <a href="pay.html" class="menu-item">💱 Exchange</a>
+            <a href="status.html" class="menu-item">📈 Status</a>
+        </div>
+    </nav>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-links">
+                <a href="privacy.html">Privacy</a>
+                <a href="faq.html">FAQ</a>
+                <a href="services.html">Products</a>
+            </div>
+            <p>&copy; 2024 EasyRecharge MM. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function selectCategory(category) {
+            if (category === 'SIM') {
+                window.location.href = 'order_sim.html?category=SIM';
+            } else if (category === 'Game') {
+                window.location.href = 'order_game.html?category=Game';
+            } else if (category === 'SMM') {
+                window.location.href = 'order_smm.html?category=SMM';
+            }
+        }
+    </script>
+</body>
+</html>
