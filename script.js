@@ -1,135 +1,270 @@
-/* script.js */
-/* Shared frontend functions: theme, nav, toast, copy, submit templates, firebase placeholders */
+// Configuration - Replace with your actual values in production
+const GAS_URL = "YOUR_GAS_DEPLOY_URL"; // Replace with your Google Apps Script deployment URL
+// const firebaseConfig = {
+//     apiKey: "YOUR_API_KEY",
+//     authDomain: "YOUR_PROJECT.firebaseapp.com",
+//     databaseURL: "https://YOUR_PROJECT.firebaseio.com",
+//     projectId: "YOUR_PROJECT",
+//     storageBucket: "YOUR_PROJECT.appspot.com",
+//     messagingSenderId: "YOUR_SENDER_ID",
+//     appId: "YOUR_APP_ID"
+// };
 
-const GAS_URL = "YOUR_GAS_DEPLOY_URL"; // Replace with your Apps Script Web App URL
+// Theme Management
+document.addEventListener('DOMContentLoaded', function() {
+    initializeTheme();
+    initializeUser();
+    initializeDevice();
+    
+    // Initialize form submissions if forms exist
+    initializeForms();
+});
 
-// theme toggle
-(function(){
-  const body = document.body;
-  const toggle = document.getElementById('modeToggle');
-  const saved = localStorage.getItem('theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light');
-  body.dataset.theme = saved;
-  if (toggle) toggle.addEventListener('click', ()=> {
-    body.dataset.theme = body.dataset.theme === 'light' ? 'dark' : 'light';
-    localStorage.setItem('theme', body.dataset.theme);
-  });
-})();
-
-// mobile nav
-(function(){
-  const hamburger = document.querySelector('.hamburger');
-  const nav = document.querySelector('.nav-links');
-  if (hamburger && nav) {
-    hamburger.addEventListener('click', ()=> nav.classList.toggle('open'));
-    nav.querySelectorAll('a').forEach(a => a.addEventListener('click', ()=> nav.classList.remove('open')));
-  }
-})();
-
-// toast
-function showToast(msg, type='info') {
-  const t = document.createElement('div');
-  t.className = 'toast';
-  t.textContent = msg;
-  document.body.appendChild(t);
-  setTimeout(()=> t.classList.add('show'), 10);
-  setTimeout(()=> { t.classList.remove('show'); setTimeout(()=> t.remove(), 300); }, 2800);
+function initializeTheme() {
+    const toggle = document.getElementById('modeToggle');
+    const body = document.body;
+    const currentMode = localStorage.getItem('theme') || 'light';
+    body.dataset.theme = currentMode;
+    
+    if (toggle) {
+        toggle.addEventListener('click', () => {
+            body.dataset.theme = body.dataset.theme === 'light' ? 'dark' : 'light';
+            localStorage.setItem('theme', body.dataset.theme);
+            updateThemeIcon();
+        });
+        updateThemeIcon();
+    }
 }
 
-// copy
-function copyText(id){
-  const el = document.getElementById(id);
-  if(!el){ showToast('Nothing to copy'); return; }
-  const val = el.value || el.textContent || el.innerText;
-  if (!val) { showToast('Empty value'); return; }
-  navigator.clipboard.writeText(val).then(()=> showToast('📋 Copied'), ()=> showToast('⚠️ Copy failed'));
+function updateThemeIcon() {
+    const toggle = document.getElementById('modeToggle');
+    if (toggle) {
+        toggle.textContent = document.body.dataset.theme === 'light' ? '🌙' : '☀️';
+    }
 }
 
-// device detection and user id
+// User Management
+function initializeUser() {
+    if (!localStorage.user_id) {
+        localStorage.user_id = 'U' + Date.now().toString(36) + Math.floor(Math.random() * 1000);
+    }
+    
+    // Set user ID in all userId fields
+    const userIdElements = document.querySelectorAll('#userId');
+    userIdElements.forEach(element => {
+        if (element.tagName === 'INPUT') {
+            element.value = localStorage.user_id;
+        } else {
+            element.textContent = localStorage.user_id;
+        }
+    });
+}
+
+// Device Detection
 function detectDevice() {
-  const ua = navigator.userAgent.toLowerCase();
-  if (ua.includes('android')) return 'Android';
-  if (/iphone|ipad/.test(ua)) return 'iOS';
-  return 'Web';
-}
-(function initUser(){
-  if (!localStorage.getItem('user_id')) {
-    const uid = 'U' + Date.now().toString(36) + Math.floor(Math.random()*1000);
-    localStorage.setItem('user_id', uid);
-  }
-  window.USER_ID = localStorage.getItem('user_id');
-  window.DEVICE = detectDevice();
-  // populate any readonly user fields
-  document.querySelectorAll('input[readonly][name="user_id"], input[readonly]#userIdField, input[readonly]#smmUser, input[readonly]#p2pUser').forEach(inp => { if(inp) inp.value = window.USER_ID; });
-})();
-
-// helpers
-function generateOrderId(prefix='ORD') {
-  const d = new Date();
-  const date = d.toISOString().slice(0,10).replace(/-/g,'');
-  const rand = Math.floor(Math.random()*9000)+1000;
-  return `${prefix}-${date}-${rand}`;
-}
-function formatDate(ts){ return new Date(ts).toLocaleString(); }
-
-// form validation helper
-function requireTransactionId(formId) {
-  const f = document.getElementById(formId);
-  if (!f) return true;
-  const txn = f.querySelector('input[name="transactionId"], input[name="txn"], input[name="transaction_id"]');
-  if (txn && !txn.value) {
-    showToast('Transaction ID required');
-    txn.focus();
-    return false;
-  }
-  return true;
-}
-
-// submit template
-async function submitOrderForm(formId, endpoint=GAS_URL) {
-  const form = document.getElementById(formId);
-  if (!form) { showToast('Form not found'); return; }
-  const data = {};
-  new FormData(form).forEach((v,k)=> data[k]=v);
-  data.user_id = data.user_id || window.USER_ID;
-  data.device = data.device || window.DEVICE;
-  data.orderId = data.orderId || generateOrderId();
-  // minimal validation: required fields
-  const required = form.querySelectorAll('[required]');
-  for (let r of required) {
-    if (!form.elements[r.name].value) {
-      showToast('Please fill required fields');
-      form.elements[r.name].focus();
-      return;
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    
+    if (/android/i.test(userAgent)) {
+        return "Android";
     }
-  }
-  // send
-  try {
-    const payload = { action: formId === 'smmForm' ? 'order_smm' : (formId === 'p2pForm' ? 'p2p' : 'order'), order: data };
-    const res = await fetch(endpoint, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
-    const json = await res.json();
-    if (json && json.success) {
-      showToast('✅ Order submitted');
-      localStorage.setItem('last_order_id', data.orderId);
-      form.reset();
-      return json;
+    if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        return "iOS";
+    }
+    return "Web";
+}
+
+function initializeDevice() {
+    const device = detectDevice();
+    
+    // Set device in all device fields
+    const deviceElements = document.querySelectorAll('#device');
+    deviceElements.forEach(element => {
+        if (element.tagName === 'INPUT') {
+            element.value = device;
+        } else {
+            element.textContent = device;
+        }
+    });
+}
+
+// Copy Text Function
+function copyText(elementId) {
+    const element = document.getElementById(elementId);
+    let textToCopy = '';
+    
+    if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+        textToCopy = element.value;
     } else {
-      showToast('❌ Submit failed');
-      console.error('submitOrderForm error', json);
+        textToCopy = element.textContent || element.innerText;
     }
-  } catch (err) {
-    console.error(err);
-    showToast('❌ Network error');
-  }
+    
+    navigator.clipboard.writeText(textToCopy).then(() => {
+        showToast('✅ Copied to clipboard!');
+    }).catch(err => {
+        console.error('Failed to copy text: ', err);
+        showToast('❌ Failed to copy');
+    });
 }
 
-// firebase placeholder (optional) - initialize only if config provided
-function initFirebaseAndListeners(firebaseConfig, onChildAdded, onChildChanged) {
-  if (!firebaseConfig || !window.firebase) { console.warn('Firebase not initialized'); return; }
-  try {
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-    const ref = db.ref('orders');
-    if (onChildAdded) ref.on('child_added', snap => onChildAdded(snap.val(), snap.key));
-    if (onChildChanged) ref.on('child_changed', snap => onChildChanged(snap.val(), snap.key));
-  } catch (e) { console.error('Firebase init error', e); }
-                                                                    }
+// Toast Notification
+function showToast(message) {
+    // Remove existing toast
+    const existingToast = document.querySelector('.toast');
+    if (existingToast) {
+        existingToast.remove();
+    }
+    
+    // Create new toast
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    
+    document.body.appendChild(toast);
+    
+    // Auto remove after 3 seconds
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+}
+
+// Form Submission
+function submitOrderForm(formId, action) {
+    const form = document.getElementById(formId);
+    if (!form) return;
+    
+    const formData = new FormData(form);
+    const orderData = {};
+    
+    // Convert FormData to object
+    for (let [key, value] of formData.entries()) {
+        orderData[key] = value;
+    }
+    
+    // Add metadata
+    orderData.orderId = generateOrderId();
+    orderData.user_id = localStorage.user_id;
+    orderData.device = detectDevice();
+    orderData.createdAt = new Date().toISOString();
+    
+    // Read category from URL if available
+    const category = readCategoryFromURL();
+    if (category) {
+        orderData.category = category;
+    }
+    
+    // Prepare payload
+    const payload = {
+        action: action,
+        order: orderData
+    };
+    
+    // Submit to GAS
+    fetch(GAS_URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast('✅ Order submitted successfully!');
+            localStorage.setItem('last_order_id', data.orderId);
+            
+            // Redirect to status page after success
+            setTimeout(() => {
+                window.location.href = 'status.html';
+            }, 2000);
+        } else {
+            showToast('❌ Order submission failed');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showToast('❌ Network error - please try again');
+    });
+}
+
+function initializeForms() {
+    // Initialize any form submissions that need special handling
+    const forms = document.querySelectorAll('form');
+    forms.forEach(form => {
+        // Forms are handled individually in their respective HTML files
+    });
+}
+
+// Utility Functions
+function generateOrderId(prefix = 'ORD') {
+    return prefix + '-' + Date.now().toString(36) + Math.random().toString(36).substr(2, 5).toUpperCase();
+}
+
+function formatDate(date) {
+    return new Date(date).toLocaleString();
+}
+
+function readCategoryFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('category');
+}
+
+// Firebase Integration (Optional)
+function initFirebaseAndListeners(config) {
+    if (!config || !config.apiKey) {
+        console.log('Firebase config not provided - skipping Firebase initialization');
+        return;
+    }
+    
+    try {
+        // Initialize Firebase
+        firebase.initializeApp(config);
+        const database = firebase.database();
+        
+        // Listen for order updates
+        const ordersRef = database.ref('orders');
+        
+        ordersRef.on('child_added', (snapshot) => {
+            updateOrderUI(snapshot.val());
+        });
+        
+        ordersRef.on('child_changed', (snapshot) => {
+            updateOrderUI(snapshot.val());
+        });
+        
+    } catch (error) {
+        console.error('Firebase initialization error:', error);
+    }
+}
+
+function updateOrderUI(order) {
+    // Update UI with realtime order data
+    // This would be implemented based on specific page requirements
+    console.log('Order updated:', order);
+}
+
+// Demo data initialization for dashboard
+function initializeDashboardData() {
+    // This would be replaced with real data from Firebase/GAS
+    setTimeout(() => {
+        const userIdElement = document.getElementById('userId');
+        const userDeviceElement = document.getElementById('userDevice');
+        
+        if (userIdElement) userIdElement.textContent = localStorage.user_id || '—';
+        if (userDeviceElement) userDeviceElement.textContent = detectDevice();
+        
+        // Demo stats - replace with real data
+        document.getElementById('totalOrders').textContent = '5';
+        document.getElementById('totalExchange').textContent = '25,000 MMK';
+        document.getElementById('activeUsers').textContent = '1,234';
+        document.getElementById('allOrders').textContent = '8,765';
+        document.getElementById('allExchange').textContent = '12.5M MMK';
+    }, 500);
+}
+
+// Initialize dashboard if on index page
+if (window.location.pathname.includes('index.html') || window.location.pathname === '/') {
+    document.addEventListener('DOMContentLoaded', initializeDashboardData);
+}
+
+// Initialize Firebase if config is provided (uncomment and add your config)
+// initFirebaseAndListeners(firebaseConfig);
