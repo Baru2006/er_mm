@@ -3,183 +3,208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EasyRecharge MM - Order Status</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Order Status - EasyRecharge MM</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body data-theme="light">
     <header class="header">
-        <div class="container">
-            <div class="brand">
-                <div class="logo">⚡</div>
-                <h1>EasyRecharge MM</h1>
-            </div>
-            <button id="modeToggle" class="theme-toggle">🌙</button>
+        <div class="brand">
+            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiNmZjdiMDAiLz4KPHBhdGggZD0iTTE2IDE1SDE3VjI1SDE2VjE1WiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTIzIDE1SDI0VjI1SDIzVjE1WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+" alt="EasyRecharge MM Logo" class="logo">
+            <h1>EasyRecharge MM</h1>
         </div>
+        <button id="modeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path class="sun-icon" d="M12 17C14.7614 17 17 14.7614 17 12C17 9.23858 14.7614 7 12 7C9.23858 7 7 9.23858 7 12C7 14.7614 9.23858 17 12 17Z"/>
+                <path class="moon-icon" d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"/>
+            </svg>
+        </button>
     </header>
 
     <main class="container">
-        <div class="back-link">
-            <a href="index.html">← Back to Dashboard</a>
+        <div class="page-header">
+            <a href="index.html" class="back-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Back to Dashboard
+            </a>
+            <h2>Order Status</h2>
+            <p class="page-subtitle">Track your orders in real-time</p>
+            <button class="btn-refresh" onclick="refreshData()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M23 4V10H17M1 20V14H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M3.51 9.00001C4.01717 7.5668 4.87913 6.2854 6.01547 5.27542C7.1518 4.26543 8.52547 3.55976 10.0083 3.22426C11.4911 2.88875 13.0348 2.93436 14.4952 3.35677C15.9556 3.77918 17.2853 4.56471 18.36 5.64001L23 10M1 14L5.64 18.36C6.71475 19.4353 8.04437 20.2208 9.50481 20.6432C10.9652 21.0656 12.5089 21.1113 13.9917 20.7757C15.4745 20.4402 16.8482 19.7346 17.9845 18.7246C19.1209 17.7146 19.9828 16.4332 20.49 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Refresh Data
+            </button>
         </div>
 
-        <section class="status-section">
-            <div class="card">
-                <div class="status-header">
-                    <h2>Order Status</h2>
-                    <button class="btn-secondary" onclick="refreshData()">🔄 Refresh</button>
-                </div>
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="your-orders">Your Orders</button>
+            <button class="tab-btn" data-tab="order-status">Order Status</button>
+            <button class="tab-btn" data-tab="p2p-status">P2P Status</button>
+            <button class="tab-btn" data-tab="smm-status">SMM Status</button>
+        </div>
 
-                <div class="tabs">
-                    <button class="tab-btn active" onclick="switchTab('your-orders')">Your Orders</button>
-                    <button class="tab-btn" onclick="switchTab('all-orders')">All Orders</button>
-                    <button class="tab-btn" onclick="switchTab('p2p-orders')">P2P Status</button>
-                    <button class="tab-btn" onclick="switchTab('smm-orders')">SMM Status</button>
-                </div>
-
-                <div class="tab-content">
-                    <div id="your-orders" class="tab-pane active">
-                        <div class="orders-table">
-                            <div class="table-header">
-                                <div>Order ID</div>
-                                <div>Category</div>
-                                <div>Service</div>
-                                <div>Qty</div>
-                                <div>Total</div>
-                                <div>Status</div>
-                                <div>SMM Status</div>
+        <div class="tab-content">
+            <!-- Your Orders Tab -->
+            <div id="your-orders" class="tab-pane active">
+                <div class="orders-list">
+                    <div class="order-card">
+                        <div class="order-header">
+                            <span class="order-id">ORD-001</span>
+                            <span class="badge badge-pending">Pending</span>
+                        </div>
+                        <div class="order-details">
+                            <div class="detail-item">
+                                <span class="label">Service:</span>
+                                <span class="value">MPT Data Package</span>
                             </div>
-                            <div class="table-body" id="your-orders-body">
-                                <div class="table-row empty">
-                                    <div colspan="7">No orders found</div>
-                                </div>
+                            <div class="detail-item">
+                                <span class="label">Amount:</span>
+                                <span class="value">1,000 MMK</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="label">Date:</span>
+                                <span class="value">2024-01-15 14:30</span>
                             </div>
                         </div>
                     </div>
 
-                    <div id="all-orders" class="tab-pane">
-                        <div class="orders-table">
-                            <div class="table-header">
-                                <div>Order ID</div>
-                                <div>User ID</div>
-                                <div>Category</div>
-                                <div>Service</div>
-                                <div>Qty</div>
-                                <div>Total</div>
-                                <div>Status</div>
-                            </div>
-                            <div class="table-body" id="all-orders-body">
-                                <div class="table-row empty">
-                                    <div colspan="7">No orders found</div>
-                                </div>
-                            </div>
+                    <div class="order-card">
+                        <div class="order-header">
+                            <span class="order-id">ORD-002</span>
+                            <span class="badge badge-processing">Processing</span>
                         </div>
-                    </div>
-
-                    <div id="p2p-orders" class="tab-pane">
-                        <div class="orders-table">
-                            <div class="table-header">
-                                <div>Order ID</div>
-                                <div>From → To</div>
-                                <div>Amount</div>
-                                <div>Receive</div>
-                                <div>Status</div>
-                                <div>Txn ID</div>
+                        <div class="order-details">
+                            <div class="detail-item">
+                                <span class="label">Service:</span>
+                                <span class="value">Free Fire TopUp</span>
                             </div>
-                            <div class="table-body" id="p2p-orders-body">
-                                <div class="table-row empty">
-                                    <div colspan="6">No P2P exchanges found</div>
-                                </div>
+                            <div class="detail-item">
+                                <span class="label">Amount:</span>
+                                <span class="value">5,000 MMK</span>
                             </div>
-                        </div>
-                    </div>
-
-                    <div id="smm-orders" class="tab-pane">
-                        <div class="orders-table">
-                            <div class="table-header">
-                                <div>Order ID</div>
-                                <div>Platform</div>
-                                <div>Service</div>
-                                <div>Target</div>
-                                <div>Qty</div>
-                                <div>Status</div>
-                                <div>SMM Status</div>
-                            </div>
-                            <div class="table-body" id="smm-orders-body">
-                                <div class="table-row empty">
-                                    <div colspan="7">No SMM orders found</div>
-                                </div>
+                            <div class="detail-item">
+                                <span class="label">Date:</span>
+                                <span class="value">2024-01-15 10:15</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+
+            <!-- Order Status Tab -->
+            <div id="order-status" class="tab-pane">
+                <div class="status-table">
+                    <div class="table-header">
+                        <div>Order ID</div>
+                        <div>Service</div>
+                        <div>Amount</div>
+                        <div>Status</div>
+                        <div>Date</div>
+                    </div>
+                    <div class="table-row">
+                        <div>ORD-001</div>
+                        <div>MPT Data</div>
+                        <div>1,000 MMK</div>
+                        <div><span class="badge badge-pending">Pending</span></div>
+                        <div>2024-01-15</div>
+                    </div>
+                    <div class="table-row">
+                        <div>ORD-002</div>
+                        <div>Free Fire</div>
+                        <div>5,000 MMK</div>
+                        <div><span class="badge badge-processing">Processing</span></div>
+                        <div>2024-01-15</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- P2P Status Tab -->
+            <div id="p2p-status" class="tab-pane">
+                <div class="status-table">
+                    <div class="table-header">
+                        <div>Exchange ID</div>
+                        <div>From → To</div>
+                        <div>Amount</div>
+                        <div>Status</div>
+                        <div>Date</div>
+                    </div>
+                    <div class="table-row">
+                        <div>P2P-001</div>
+                        <div>Wave → KBZPay</div>
+                        <div>10,000 MMK</div>
+                        <div><span class="badge badge-success">Success</span></div>
+                        <div>2024-01-14</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SMM Status Tab -->
+            <div id="smm-status" class="tab-pane">
+                <div class="status-table">
+                    <div class="table-header">
+                        <div>Order ID</div>
+                        <div>Platform</div>
+                        <div>Service</div>
+                        <div>Status</div>
+                        <div>Progress</div>
+                    </div>
+                    <div class="table-row">
+                        <div>SMM-001</div>
+                        <div>Facebook</div>
+                        <div>Followers</div>
+                        <div><span class="badge badge-processing">Processing</span></div>
+                        <div>45%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
-    <nav class="main-menu">
-        <div class="container">
-            <a href="index.html" class="menu-item">📊 Dashboard</a>
-            <a href="order.html" class="menu-item">🛒 Orders</a>
-            <a href="pay.html" class="menu-item">💱 Exchange</a>
-            <a href="status.html" class="menu-item active">📈 Status</a>
-        </div>
-    </nav>
-
     <footer class="footer">
-        <div class="container">
+        <div class="footer-background"></div>
+        <div class="footer-content">
             <div class="footer-links">
                 <a href="privacy.html">Privacy</a>
                 <a href="faq.html">FAQ</a>
                 <a href="services.html">Products</a>
             </div>
-            <p>&copy; 2024 EasyRecharge MM. All rights reserved.</p>
+            <div class="footer-copyright">
+                &copy; <span id="currentYear"></span> EasyRecharge MM. All rights reserved.
+            </div>
         </div>
     </footer>
 
+    <div id="toast" class="toast"></div>
+
+    <script src="script.js"></script>
     <script>
-        function switchTab(tabName) {
-            // Hide all tab panes
-            document.querySelectorAll('.tab-pane').forEach(pane => {
-                pane.classList.remove('active');
+        // Tab functionality
+        document.querySelectorAll('.tab-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons and panes
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+                
+                // Add active class to clicked button and corresponding pane
+                button.classList.add('active');
+                const tabId = button.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
             });
-            
-            // Remove active class from all tab buttons
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            // Show selected tab pane
-            document.getElementById(tabName).classList.add('active');
-            
-            // Activate clicked tab button
-            event.target.classList.add('active');
-        }
+        });
 
         function refreshData() {
             showToast('✅ Live Data Updated');
             // In production, this would fetch fresh data from Firebase/GAS
         }
 
-        // Demo data for status page
+        // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            // This would be replaced with real data from Firebase/GAS
-            setTimeout(() => {
-                const demoOrder = `
-                    <div class="table-row">
-                        <div>ORD-${Date.now().toString(36)}</div>
-                        <div>SIM</div>
-                        <div>MPT 1GB Data</div>
-                        <div>1</div>
-                        <div>500 MMK</div>
-                        <div><span class="badge processing">Processing</span></div>
-                        <div>—</div>
-                    </div>
-                `;
-                document.getElementById('your-orders-body').innerHTML = demoOrder;
-            }, 1000);
+            initUser();
         });
     </script>
 </body>
-              </html>
+    </html>
