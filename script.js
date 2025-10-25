@@ -1,5 +1,5 @@
 // Configuration - Replace with your actual values in production
-const GAS_URL = "YOUR_GAS_DEPLOY_URL"; // Replace with your Google Apps Script deployment URL
+const GAS_URL = "https://script.google.com/macros/s/AKfycbyPpl4YnfAHXtw2E5xkMgU-Ar9cJHfT0bheeXRpOZoIJCJRn6dQeyItIBBQIKIKZEHFJw/exec"; // Replace with your Google Apps Script deployment URL
 // const firebaseConfig = {
 //     apiKey: "YOUR_API_KEY",
 //     authDomain: "YOUR_PROJECT.firebaseapp.com",
