@@ -800,7 +800,7 @@ body[data-theme='dark'] .faq-answer {
     padding: 0.5rem;
     border-radius: var(--radius);
     transition: all 0.3s ease;
-    min-width: 60px;
+    min-width: 80px;
 }
 
 .menu-item.active {
