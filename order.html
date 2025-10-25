@@ -3,85 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EasyRecharge MM - Order</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Order - EasyRecharge MM</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body data-theme="light">
     <header class="header">
-        <div class="container">
-            <div class="brand">
-                <div class="logo">⚡</div>
-                <h1>EasyRecharge MM</h1>
-            </div>
-            <button id="modeToggle" class="theme-toggle">🌙</button>
+        <div class="brand">
+            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiNmZjdiMDAiLz4KPHBhdGggZD0iTTE2IDE1SDE3VjI1SDE2VjE1WiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTIzIDE1SDI0VjI1SDIzVjE1WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+" alt="EasyRecharge MM Logo" class="logo">
+            <h1>EasyRecharge MM</h1>
         </div>
+        <button id="modeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path class="sun-icon" d="M12 17C14.7614 17 17 14.7614 17 12C17 9.23858 14.7614 7 12 7C9.23858 7 7 9.23858 7 12C7 14.7614 9.23858 17 12 17Z"/>
+                <path class="moon-icon" d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"/>
+            </svg>
+        </button>
     </header>
 
     <main class="container">
-        <div class="back-link">
-            <a href="index.html">← Back to Dashboard</a>
+        <div class="page-header">
+            <a href="index.html" class="back-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Back to Dashboard
+            </a>
+            <h2>Place New Order</h2>
+            <p class="page-subtitle">Choose your service category to continue</p>
         </div>
 
-        <section class="category-selection">
-            <div class="card">
-                <h2>Choose Service Category</h2>
-                <p class="description">Select the type of service you want to order</p>
-                
-                <div class="category-grid">
-                    <div class="category-card" onclick="selectCategory('SIM')">
-                        <div class="category-icon">📱</div>
-                        <h3>SIM/Data</h3>
-                        <p>Mobile data packages and SIM services</p>
-                    </div>
-                    
-                    <div class="category-card" onclick="selectCategory('Game')">
-                        <div class="category-icon">🎮</div>
-                        <h3>Game TopUp</h3>
-                        <p>Game credits and top-up services</p>
-                    </div>
-                    
-                    <div class="category-card" onclick="selectCategory('SMM')">
-                        <div class="category-icon">📢</div>
-                        <h3>SMM Services</h3>
-                        <p>Social media marketing services</p>
-                    </div>
+        <div class="category-grid">
+            <div class="category-card" onclick="location.href='order_sim.html?category=SIM'">
+                <div class="category-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                        <rect x="5" y="2" width="14" height="20" rx="2" stroke="var(--primary)" stroke-width="2"/>
+                        <circle cx="12" cy="17" r="1" fill="var(--primary)"/>
+                    </svg>
                 </div>
+                <h3>SIM/Data</h3>
+                <p>Mobile data packages and SIM card services</p>
+                <button class="btn-primary">Order Now</button>
             </div>
-        </section>
+
+            <div class="category-card" onclick="location.href='order_game.html?category=Game'">
+                <div class="category-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                        <path d="M6 12H18M12 6V18" stroke="var(--primary)" stroke-width="2" stroke-linecap="round"/>
+                        <circle cx="12" cy="12" r="10" stroke="var(--primary)" stroke-width="2"/>
+                    </svg>
+                </div>
+                <h3>Game TopUp</h3>
+                <p>Top up your favorite games and gaming platforms</p>
+                <button class="btn-primary">Order Now</button>
+            </div>
+
+            <div class="category-card" onclick="location.href='order_smm.html?category=SMM'">
+                <div class="category-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                        <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="var(--primary)" stroke-width="2"/>
+                    </svg>
+                </div>
+                <h3>SMM Services</h3>
+                <p>Social media marketing and engagement services</p>
+                <button class="btn-primary">Order Now</button>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <h4>How to Order</h4>
+            <ol>
+                <li>Select your service category</li>
+                <li>Fill in the required information</li>
+                <li>Choose payment method and complete payment</li>
+                <li>Submit your transaction ID</li>
+                <li>Track your order status in real-time</li>
+            </ol>
+        </div>
     </main>
 
-    <nav class="main-menu">
-        <div class="container">
-            <a href="index.html" class="menu-item">📊 Dashboard</a>
-            <a href="order.html" class="menu-item active">🛒 Orders</a>
-            <a href="pay.html" class="menu-item">💱 Exchange</a>
-            <a href="status.html" class="menu-item">📈 Status</a>
-        </div>
-    </nav>
-
     <footer class="footer">
-        <div class="container">
+        <div class="footer-background"></div>
+        <div class="footer-content">
             <div class="footer-links">
                 <a href="privacy.html">Privacy</a>
                 <a href="faq.html">FAQ</a>
                 <a href="services.html">Products</a>
             </div>
-            <p>&copy; 2024 EasyRecharge MM. All rights reserved.</p>
+            <div class="footer-copyright">
+                &copy; <span id="currentYear"></span> EasyRecharge MM. All rights reserved.
+            </div>
         </div>
     </footer>
 
-    <script>
-        function selectCategory(category) {
-            if (category === 'SIM') {
-                window.location.href = 'order_sim.html?category=SIM';
-            } else if (category === 'Game') {
-                window.location.href = 'order_game.html?category=Game';
-            } else if (category === 'SMM') {
-                window.location.href = 'order_smm.html?category=SMM';
-            }
-        }
-    </script>
+    <div id="toast" class="toast"></div>
+
+    <script src="script.js"></script>
 </body>
 </html>
