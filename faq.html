@@ -3,146 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EasyRecharge MM - FAQ</title>
-    <link rel="stylesheet" href="style.css">
+    <title>FAQ - EasyRecharge MM</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body data-theme="light">
     <header class="header">
-        <div class="container">
-            <div class="brand">
-                <div class="logo">⚡</div>
-                <h1>EasyRecharge MM</h1>
-            </div>
-            <button id="modeToggle" class="theme-toggle">🌙</button>
+        <div class="brand">
+            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiNmZjdiMDAiLz4KPHBhdGggZD0iTTE2IDE1SDE3VjI1SDE2VjE1WiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTIzIDE1SDI0VjI1SDIzVjE1WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+" alt="EasyRecharge MM Logo" class="logo">
+            <h1>EasyRecharge MM</h1>
         </div>
+        <button id="modeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path class="sun-icon" d="M12 17C14.7614 17 17 14.7614 17 12C17 9.23858 14.7614 7 12 7C9.23858 7 7 9.23858 7 12C7 14.7614 9.23858 17 12 17Z"/>
+                <path class="moon-icon" d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"/>
+            </svg>
+        </button>
     </header>
 
     <main class="container">
-        <div class="back-link">
-            <a href="index.html">← Back to Dashboard</a>
+        <div class="page-header">
+            <a href="index.html" class="back-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Back to Dashboard
+            </a>
+            <h2>Frequently Asked Questions</h2>
+            <p class="page-subtitle">Find answers to common questions about our services</p>
         </div>
 
-        <section class="faq-section">
-            <div class="card">
-                <h2>Frequently Asked Questions</h2>
-                
-                <div class="accordion">
-                    <div class="accordion-item">
-                        <button class="accordion-header">
-                            How to place an order?
-                            <span class="accordion-icon">+</span>
-                        </button>
-                        <div class="accordion-content">
-                            <p>1. Select your service category from the Orders page<br>
-                               2. Fill in the required information<br>
-                               3. Make payment to the provided number<br>
-                               4. Enter the transaction ID and submit</p>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item">
-                        <button class="accordion-header">
-                            What is the delivery time?
-                            <span class="accordion-icon">+</span>
-                        </button>
-                        <div class="accordion-content">
-                            <p>• SIM/Data: Instant delivery<br>
-                               • Game TopUp: 5-15 minutes<br>
-                               • SMM Services: 1-24 hours depending on service<br>
-                               • P2P Exchange: 15-30 minutes</p>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item">
-                        <button class="accordion-header">
-                            Which payment methods are accepted?
-                            <span class="accordion-icon">+</span>
-                        </button>
-                        <div class="accordion-content">
-                            <p>We accept all major Myanmar payment methods:<br>
-                               • Wave Money<br>
-                               • KBZPay<br>
-                               • AYA Pay<br>
-                               • CB Pay</p>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item">
-                        <button class="accordion-header">
-                            How to contact support?
-                            <span class="accordion-icon">+</span>
-                        </button>
-                        <div class="accordion-content">
-                            <p>Email: support@easyrecharge.mm<br>
-                               Telegram: @EasyRechargeMM<br>
-                               Response time: Within 30 minutes during business hours (9AM - 6PM)</p>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item">
-                        <button class="accordion-header">
-                            What if my order fails?
-                            <span class="accordion-icon">+</span>
-                        </button>
-                        <div class="accordion-content">
-                            <p>If your order fails or is not delivered within the expected time:<br>
-                               1. Check your order status in the Status page<br>
-                               2. Contact support with your Order ID<br>
-                               3. We will either process your order or provide a full refund</p>
-                        </div>
-                    </div>
+        <div class="faq-container">
+            <div class="faq-item">
+                <button class="faq-question">
+                    How do I place an order?
+                    <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <p>To place an order:</p>
+                    <ol>
+                        <li>Go to the Orders section from the main menu</li>
+                        <li>Select your service category (SIM/Data, Game TopUp, or SMM)</li>
+                        <li>Fill in the required information</li>
+                        <li>Choose your payment method and complete the payment</li>
+                        <li>Enter your transaction ID and submit the order</li>
+                    </ol>
                 </div>
             </div>
-        </section>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    What is the delivery time for orders?
+                    <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <p>Delivery times vary by service:</p>
+                    <ul>
+                        <li><strong>SIM/Data:</strong> 5-15 minutes</li>
+                        <li><strong>Game TopUp:</strong> 1-10 minutes</li>
+                        <li><strong>SMM Services:</strong> 15 minutes to 24 hours (depending on quantity)</li>
+                        <li><strong>P2P Exchange:</strong> 5-15 minutes</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    Which payment methods do you accept?
+                    <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <p>We accept all major Myanmar payment methods:</p>
+                    <ul>
+                        <li>Wave Money</li>
+                        <li>KBZPay</li>
+                        <li>AYA Pay</li>
+                        <li>CB Pay</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    How can I track my order status?
+                    <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <p>You can track your order status in real-time:</p>
+                    <ol>
+                        <li>Go to the Status section from the main menu</li>
+                        <li>Select the appropriate tab (Your Orders, Order Status, P2P Status, or SMM Status)</li>
+                        <li>View your order details and current status</li>
+                        <li>Use the refresh button to get the latest updates</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    What should I do if my order fails?
+                    <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <p>If your order fails:</p>
+                    <ol>
+                        <li>Check your transaction ID is correct</li>
+                        <li>Wait 15 minutes and check the status again</li>
+                        <li>If still failed, contact our support team</li>
+                        <li>Provide your order ID and transaction details</li>
+                        <li>We will investigate and process refunds if necessary</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    How do I contact customer support?
+                    <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <p>You can contact our customer support through:</p>
+                    <ul>
+                        <li><strong>Email:</strong> support@easyrecharge.mm</li>
+                        <li><strong>Telegram:</strong> @EasyRechargeMM_Support</li>
+                        <li><strong>Phone:</strong> 09-123 456 789 (9AM - 6PM)</li>
+                    </ul>
+                    <p>Please have your order ID ready when contacting support.</p>
+                </div>
+            </div>
+        </div>
     </main>
 
-    <nav class="main-menu">
-        <div class="container">
-            <a href="index.html" class="menu-item">📊 Dashboard</a>
-            <a href="order.html" class="menu-item">🛒 Orders</a>
-            <a href="pay.html" class="menu-item">💱 Exchange</a>
-            <a href="status.html" class="menu-item">📈 Status</a>
-        </div>
-    </nav>
-
     <footer class="footer">
-        <div class="container">
+        <div class="footer-background"></div>
+        <div class="footer-content">
             <div class="footer-links">
                 <a href="privacy.html">Privacy</a>
                 <a href="faq.html">FAQ</a>
                 <a href="services.html">Products</a>
             </div>
-            <p>&copy; 2024 EasyRecharge MM. All rights reserved.</p>
+            <div class="footer-copyright">
+                &copy; <span id="currentYear"></span> EasyRecharge MM. All rights reserved.
+            </div>
         </div>
     </footer>
 
+    <div id="toast" class="toast"></div>
+
+    <script src="script.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const accordionHeaders = document.querySelectorAll('.accordion-header');
-            
-            accordionHeaders.forEach(header => {
-                header.addEventListener('click', function() {
-                    const content = this.nextElementSibling;
-                    const icon = this.querySelector('.accordion-icon');
-                    
-                    // Toggle current item
-                    content.style.display = content.style.display === 'block' ? 'none' : 'block';
-                    icon.textContent = content.style.display === 'block' ? '−' : '+';
-                    
-                    // Close other items
-                    accordionHeaders.forEach(otherHeader => {
-                        if (otherHeader !== this) {
-                            const otherContent = otherHeader.nextElementSibling;
-                            const otherIcon = otherHeader.querySelector('.accordion-icon');
-                            otherContent.style.display = 'none';
-                            otherIcon.textContent = '+';
-                        }
-                    });
-                });
+        // FAQ accordion functionality
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const faqItem = button.parentElement;
+                const answer = button.nextElementSibling;
+                const icon = button.querySelector('.faq-icon');
+                
+                // Toggle active class
+                faqItem.classList.toggle('active');
+                
+                // Toggle icon rotation
+                if (faqItem.classList.contains('active')) {
+                    icon.style.transform = 'rotate(180deg)';
+                    answer.style.maxHeight = answer.scrollHeight + 'px';
+                } else {
+                    icon.style.transform = 'rotate(0deg)';
+                    answer.style.maxHeight = '0px';
+                }
             });
         });
     </script>
 </body>
-  </html>
+                            </html>
