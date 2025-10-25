@@ -3,201 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EasyRecharge MM - SMM Services</title>
-    <link rel="stylesheet" href="style.css">
+    <title>SMM Services Order - EasyRecharge MM</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body data-theme="light">
     <header class="header">
-        <div class="container">
-            <div class="brand">
-                <div class="logo">⚡</div>
-                <h1>EasyRecharge MM</h1>
-            </div>
-            <button id="modeToggle" class="theme-toggle">🌙</button>
+        <div class="brand">
+            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiNmZjdiMDAiLz4KPHBhdGggZD0iTTE2IDE1SDE3VjI1SDE2VjE1WiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTIzIDE1SDI0VjI1SDIzVjE1WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+" alt="EasyRecharge MM Logo" class="logo">
+            <h1>EasyRecharge MM</h1>
         </div>
+        <button id="modeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path class="sun-icon" d="M12 17C14.7614 17 17 14.7614 17 12C17 9.23858 14.7614 7 12 7C9.23858 7 7 9.23858 7 12C7 14.7614 9.23858 17 12 17Z"/>
+                <path class="moon-icon" d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"/>
+            </svg>
+        </button>
     </header>
 
     <main class="container">
-        <div class="back-link">
-            <a href="order.html">← Back to Categories</a>
+        <div class="page-header">
+            <a href="order.html" class="back-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Back to Categories
+            </a>
+            <h2>SMM Services Order</h2>
+            <p class="page-subtitle">Fill in your social media marketing service details</p>
         </div>
 
-        <section class="order-form">
-            <div class="card">
-                <h2>SMM Services Order</h2>
-                
-                <form id="smmOrderForm">
-                    <div class="form-group">
-                        <label for="userId">User ID</label>
-                        <input type="text" id="userId" readonly>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="device">Device</label>
-                        <input type="text" id="device" readonly>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="platform">Platform *</label>
-                        <select id="platform" required onchange="loadServices()">
-                            <option value="">Select Platform</option>
-                            <option value="facebook">Facebook</option>
-                            <option value="instagram">Instagram</option>
-                            <option value="tiktok">TikTok</option>
-                            <option value="youtube">YouTube</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="service">Service *</label>
-                        <select id="service" required onchange="calculateTotal()">
-                            <option value="">Select Service</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="target">Target Link/Username *</label>
-                        <input type="text" id="target" required placeholder="Enter profile URL or username">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="qty">Quantity</label>
-                        <input type="number" id="qty" value="100" min="1" onchange="calculateTotal()">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="pricePerUnit">Price per Unit</label>
-                        <input type="text" id="pricePerUnit" readonly>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="total">Total Amount</label>
-                        <input type="text" id="total" readonly>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Payment Method *</label>
-                        <div class="radio-group">
-                            <label class="radio-label">
-                                <input type="radio" name="payment" value="Wave" required> Wave Money
-                            </label>
-                            <label class="radio-label">
-                                <input type="radio" name="payment" value="KBZPay"> KBZPay
-                            </label>
-                            <label class="radio-label">
-                                <input type="radio" name="payment" value="AYA"> AYA Pay
-                            </label>
-                            <label class="radio-label">
-                                <input type="radio" name="payment" value="CBPay"> CB Pay
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="payment-info">
-                        <div class="payment-number">
-                            <label>Payment Number:</label>
-                            <span id="paymentNumber">09XXXXXXX</span>
-                            <button type="button" onclick="copyText('paymentNumber')" class="copy-btn">Copy</button>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="transactionId">Transaction ID *</label>
-                        <input type="text" id="transactionId" required placeholder="Enter transaction ID from payment">
-                        <button type="button" onclick="copyText('transactionId')" class="copy-btn">Copy Txn ID</button>
-                    </div>
-
-                    <button type="submit" class="btn-primary">Submit Order</button>
-                </form>
+        <form id="smmOrderForm" class="order-form">
+            <div class="form-group">
+                <label for="userId">User ID</label>
+                <input type="text" id="userId" readonly>
             </div>
-        </section>
+
+            <div class="form-group">
+                <label for="device">Device</label>
+                <input type="text" id="device" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="platform">Platform *</label>
+                <select id="platform" required>
+                    <option value="">Select Platform</option>
+                    <option value="Facebook">Facebook</option>
+                    <option value="Instagram">Instagram</option>
+                    <option value="TikTok">TikTok</option>
+                    <option value="YouTube">YouTube</option>
+                    <option value="Twitter">Twitter</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="service">Service Type *</label>
+                <select id="service" required>
+                    <option value="">Select Service</option>
+                    <option value="Followers">Followers</option>
+                    <option value="Likes">Likes</option>
+                    <option value="Views">Views</option>
+                    <option value="Comments">Comments</option>
+                    <option value="Shares">Shares</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="target">Target Link/Username *</label>
+                <input type="text" id="target" placeholder="Enter profile URL or username" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="qty">Quantity</label>
+                    <input type="number" id="qty" value="100" min="1">
+                </div>
+                <div class="form-group">
+                    <label for="price">Price per Unit (MMK)</label>
+                    <input type="number" id="price" value="10" readonly>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="total">Total Amount (MMK)</label>
+                <input type="number" id="total" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>Payment Method *</label>
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="radio" name="payment" value="Wave" required>
+                        <span>Wave Money</span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="payment" value="KBZPay">
+                        <span>KBZPay</span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="payment" value="AYA">
+                        <span>AYA Pay</span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="payment" value="CBPay">
+                        <span>CB Pay</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="paymentNumber">Payment Number</label>
+                <div class="input-with-button">
+                    <input type="text" id="paymentNumber" readonly value="09XXXXXXXXX">
+                    <button type="button" class="btn-copy" onclick="copyText('paymentNumber')">Copy</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="transactionId">Transaction ID *</label>
+                <div class="input-with-button">
+                    <input type="text" id="transactionId" placeholder="Enter your payment transaction ID" required>
+                    <button type="button" class="btn-copy" onclick="copyText('transactionId')">Copy</button>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-primary btn-submit">Submit Order</button>
+        </form>
     </main>
 
-    <nav class="main-menu">
-        <div class="container">
-            <a href="index.html" class="menu-item">📊 Dashboard</a>
-            <a href="order.html" class="menu-item active">🛒 Orders</a>
-            <a href="pay.html" class="menu-item">💱 Exchange</a>
-            <a href="status.html" class="menu-item">📈 Status</a>
-        </div>
-    </nav>
-
     <footer class="footer">
-        <div class="container">
+        <div class="footer-background"></div>
+        <div class="footer-content">
             <div class="footer-links">
                 <a href="privacy.html">Privacy</a>
                 <a href="faq.html">FAQ</a>
                 <a href="services.html">Products</a>
             </div>
-            <p>&copy; 2024 EasyRecharge MM. All rights reserved.</p>
+            <div class="footer-copyright">
+                &copy; <span id="currentYear"></span> EasyRecharge MM. All rights reserved.
+            </div>
         </div>
     </footer>
 
+    <div id="toast" class="toast"></div>
+
+    <script src="script.js"></script>
     <script>
-        const servicePrices = {
-            facebook: {
-                'likes_100': 500,
-                'followers_100': 800,
-                'comments_50': 1200
-            },
-            instagram: {
-                'followers_100': 600,
-                'likes_100': 400,
-                'views_1000': 300
-            },
-            tiktok: {
-                'followers_100': 700,
-                'likes_100': 450,
-                'views_1000': 250
-            },
-            youtube: {
-                'subscribers_100': 1500,
-                'likes_100': 600,
-                'views_1000': 400
-            }
-        };
-
-        function loadServices() {
-            const platform = document.getElementById('platform').value;
-            const serviceSelect = document.getElementById('service');
-            
-            serviceSelect.innerHTML = '<option value="">Select Service</option>';
-            
-            if (platform && servicePrices[platform]) {
-                Object.entries(servicePrices[platform]).forEach(([key, price]) => {
-                    const option = document.createElement('option');
-                    option.value = key;
-                    option.textContent = `${key.replace(/_/g, ' ')} (${price} MMK)`;
-                    option.setAttribute('data-price', price);
-                    serviceSelect.appendChild(option);
-                });
-            }
-            
-            calculateTotal();
-        }
-
+        // Calculate total when quantity or price changes
+        document.getElementById('qty').addEventListener('input', calculateTotal);
+        document.getElementById('price').addEventListener('input', calculateTotal);
+        
         function calculateTotal() {
-            const serviceSelect = document.getElementById('service');
-            const qtyInput = document.getElementById('qty');
-            const priceInput = document.getElementById('pricePerUnit');
-            const totalInput = document.getElementById('total');
-            
-            const selectedOption = serviceSelect.options[serviceSelect.selectedIndex];
-            const price = selectedOption ? parseInt(selectedOption.getAttribute('data-price') || 0) : 0;
-            const qty = parseInt(qtyInput.value) || 1;
-            
-            priceInput.value = price.toLocaleString() + ' MMK';
-            totalInput.value = (price * qty).toLocaleString() + ' MMK';
+            const qty = parseInt(document.getElementById('qty').value) || 0;
+            const price = parseInt(document.getElementById('price').value) || 0;
+            document.getElementById('total').value = qty * price;
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            calculateTotal();
-            document.getElementById('smmOrderForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                submitOrderForm('smmOrderForm', 'order_smm');
+        // Update payment number based on selected method
+        document.querySelectorAll('input[name="payment"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const paymentNumbers = {
+                    'Wave': '09 123 456 789',
+                    'KBZPay': '09 987 654 321', 
+                    'AYA': '09 555 666 777',
+                    'CBPay': '09 444 333 222'
+                };
+                document.getElementById('paymentNumber').value = paymentNumbers[this.value] || '09XXXXXXXXX';
             });
+        });
+
+        // Initialize form
+        document.addEventListener('DOMContentLoaded', function() {
+            initUser();
+            document.getElementById('device').value = detectDevice();
+            calculateTotal();
         });
     </script>
 </body>
