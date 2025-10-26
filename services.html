@@ -1,174 +1,310 @@
+<!-- services.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Services - EasyRecharge MM</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>EasyRecharge MM - Services</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body data-theme="light">
-    <header class="header">
-        <div class="brand">
-            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiNmZjdiMDAiLz4KPHBhdGggZD0iTTE2IDE1SDE3VjI1SDE2VjE1WiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTIzIDE1SDI0VjI1SDIzVjE1WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+" alt="EasyRecharge MM Logo" class="logo">
-            <h1>EasyRecharge MM</h1>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>EasyRecharge MM</h1>
+            </div>
+            <button id="modeToggle" class="theme-toggle">🌙</button>
         </div>
-        <button id="modeToggle" class="theme-toggle" aria-label="Toggle dark mode">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path class="sun-icon" d="M12 17C14.7614 17 17 14.7614 17 12C17 9.23858 14.7614 7 12 7C9.23858 7 7 9.23858 7 12C7 14.7614 9.23858 17 12 17Z"/>
-                <path class="moon-icon" d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"/>
-            </svg>
-        </button>
     </header>
 
     <main class="container">
-        <div class="page-header">
-            <a href="index.html" class="back-link">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                    <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                Back to Dashboard
-            </a>
-            <h2>Our Services</h2>
-            <p class="page-subtitle">Explore all available services and packages</p>
+        <div class="back-link">
+            <a href="index.html">← Back to Dashboard</a>
         </div>
 
-        <div class="services-grid">
+        <section class="services-section">
+            <h2 style="text-align: center; margin-bottom: 3rem; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 2.5rem;">
+                Our Services
+            </h2>
+            
             <!-- SIM/Data Services -->
             <div class="service-category">
-                <h3>SIM/Data Services</h3>
-                <div class="service-cards">
-                    <div class="service-card">
-                        <h4>MPT Data Packages</h4>
-                        <p class="service-desc">High-speed mobile data packages for MPT networks</p>
-                        <div class="service-prices">
-                            <div class="price-item">
-                                <span>1GB 1Day</span>
-                                <span>1,000 MMK</span>
-                            </div>
-                            <div class="price-item">
-                                <span>3GB 3Days</span>
-                                <span>2,500 MMK</span>
-                            </div>
-                            <div class="price-item">
-                                <span>10GB 7Days</span>
-                                <span>5,000 MMK</span>
-                            </div>
-                        </div>
-                        <a href="order_sim.html?category=SIM" class="btn-primary">Order Now</a>
-                    </div>
-
-                    <div class="service-card">
-                        <h4>Telenor Data Packages</h4>
-                        <p class="service-desc">Reliable data packages for Telenor users</p>
-                        <div class="service-prices">
-                            <div class="price-item">
-                                <span>1.5GB 1Day</span>
-                                <span>1,200 MMK</span>
-                            </div>
-                            <div class="price-item">
-                                <span>4GB 3Days</span>
-                                <span>3,000 MMK</span>
-                            </div>
-                        </div>
-                        <a href="order_sim.html?category=SIM" class="btn-primary">Order Now</a>
-                    </div>
+                <h3 style="color: var(--primary); margin-bottom: 2rem; font-size: 1.8rem; display: flex; align-items: center; gap: 1rem;">
+                    📱 SIM/Data Packages
+                </h3>
+                <div class="table-container">
+                    <table class="services-table">
+                        <thead>
+                            <tr>
+                                <th>Service Name</th>
+                                <th>Description</th>
+                                <th>Sub Services</th>
+                                <th>Price (MMK)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="service-name">MPT Data Package</div>
+                                    <div class="service-desc">High-speed internet packages</div>
+                                </td>
+                                <td>Fast and reliable mobile data</td>
+                                <td>
+                                    <div>3GB/7Days</div>
+                                    <div>5GB/15Days</div>
+                                    <div>10GB/30Days</div>
+                                </td>
+                                <td>
+                                    <div class="service-price">1,500</div>
+                                    <div class="service-price">2,500</div>
+                                    <div class="service-price">4,500</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="service-name">Telenor TopUp</div>
+                                    <div class="service-desc">Call and data bundles</div>
+                                </td>
+                                <td>Flexible top-up options</td>
+                                <td>
+                                    <div>Regular TopUp</div>
+                                    <div>Data Bundle</div>
+                                    <div>Social Bundle</div>
+                                </td>
+                                <td>
+                                    <div class="service-price">1,000</div>
+                                    <div class="service-price">1,200</div>
+                                    <div class="service-price">800</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="service-name">Ooredoo Package</div>
+                                    <div class="service-desc">Comprehensive packages</div>
+                                </td>
+                                <td>All-in-one solutions</td>
+                                <td>
+                                    <div>Basic Pack</div>
+                                    <div>Premium Pack</div>
+                                    <div>Unlimited Pack</div>
+                                </td>
+                                <td>
+                                    <div class="service-price">2,000</div>
+                                    <div class="service-price">3,500</div>
+                                    <div class="service-price">6,000</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
             <!-- Game TopUp Services -->
-            <div class="service-category">
-                <h3>Game TopUp Services</h3>
-                <div class="service-cards">
-                    <div class="service-card">
-                        <h4>Free Fire</h4>
-                        <p class="service-desc">Diamonds and in-game currency for Free Fire</p>
-                        <div class="service-prices">
-                            <div class="price-item">
-                                <span>100 Diamonds</span>
-                                <span>3,000 MMK</span>
-                            </div>
-                            <div class="price-item">
-                                <span>310 Diamonds</span>
-                                <span>8,000 MMK</span>
-                            </div>
-                        </div>
-                        <a href="order_game.html?category=Game" class="btn-primary">Order Now</a>
-                    </div>
-
-                    <div class="service-card">
-                        <h4>PUBG Mobile</h4>
-                        <p class="service-desc">UC and premium items for PUBG Mobile</p>
-                        <div class="service-prices">
-                            <div class="price-item">
-                                <span>60 UC</span>
-                                <span>1,500 MMK</span>
-                            </div>
-                            <div class="price-item">
-                                <span>325 UC</span>
-                                <span>7,000 MMK</span>
-                            </div>
-                        </div>
-                        <a href="order_game.html?category=Game" class="btn-primary">Order Now</a>
-                    </div>
+            <div class="service-category" style="margin-top: 4rem;">
+                <h3 style="color: var(--primary); margin-bottom: 2rem; font-size: 1.8rem; display: flex; align-items: center; gap: 1rem;">
+                    🎮 Game TopUp
+                </h3>
+                <div class="table-container">
+                    <table class="services-table">
+                        <thead>
+                            <tr>
+                                <th>Game Name</th>
+                                <th>Description</th>
+                                <th>Items/Packages</th>
+                                <th>Price (MMK)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="service-name">Free Fire</div>
+                                    <div class="service-desc">Battle royale game</div>
+                                </td>
+                                <td>Diamonds and items</td>
+                                <td>
+                                    <div>100 Diamonds</div>
+                                    <div>500 Diamonds</div>
+                                    <div>1000 Diamonds</div>
+                                </td>
+                                <td>
+                                    <div class="service-price">3,000</div>
+                                    <div class="service-price">12,000</div>
+                                    <div class="service-price">22,000</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="service-name">PUBG Mobile</div>
+                                    <div class="service-desc">Popular battle game</div>
+                                </td>
+                                <td>UC and crates</td>
+                                <td>
+                                    <div>60 UC</div>
+                                    <div>325 UC</div>
+                                    <div>660 UC</div>
+                                </td>
+                                <td>
+                                    <div class="service-price">2,000</div>
+                                    <div class="service-price">8,000</div>
+                                    <div class="service-price">15,000</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="service-name">Mobile Legends</div>
+                                    <div class="service-desc">MOBA game</div>
+                                </td>
+                                <td>Diamonds and skins</td>
+                                <td>
+                                    <div>86 Diamonds</div>
+                                    <div>429 Diamonds</div>
+                                    <div>875 Diamonds</div>
+                                </td>
+                                <td>
+                                    <div class="service-price">2,500</div>
+                                    <div class="service-price">10,000</div>
+                                    <div class="service-price">18,000</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
             <!-- SMM Services -->
-            <div class="service-category">
-                <h3>SMM Services</h3>
-                <div class="service-cards">
-                    <div class="service-card">
-                        <h4>Facebook Services</h4>
-                        <p class="service-desc">Boost your Facebook presence</p>
-                        <div class="service-prices">
-                            <div class="price-item">
-                                <span>100 Followers</span>
-                                <span>1,000 MMK</span>
-                            </div>
-                            <div class="price-item">
-                                <span>100 Likes</span>
-                                <span>800 MMK</span>
-                            </div>
-                        </div>
-                        <a href="order_smm.html?category=SMM" class="btn-primary">Order Now</a>
-                    </div>
-
-                    <div class="service-card">
-                        <h4>Instagram Services</h4>
-                        <p class="service-desc">Increase Instagram engagement</p>
-                        <div class="service-prices">
-                            <div class="price-item">
-                                <span>100 Followers</span>
-                                <span>1,200 MMK</span>
-                            </div>
-                            <div class="price-item">
-                                <span>100 Likes</span>
-                                <span>900 MMK</span>
-                            </div>
-                        </div>
-                        <a href="order_smm.html?category=SMM" class="btn-primary">Order Now</a>
-                    </div>
+            <div class="service-category" style="margin-top: 4rem;">
+                <h3 style="color: var(--primary); margin-bottom: 2rem; font-size: 1.8rem; display: flex; align-items: center; gap: 1rem;">
+                    📢 SMM Services
+                </h3>
+                <div class="table-container">
+                    <table class="services-table">
+                        <thead>
+                            <tr>
+                                <th>Platform</th>
+                                <th>Description</th>
+                                <th>Services</th>
+                                <th>Price per 1000</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="service-name">Facebook</div>
+                                    <div class="service-desc">Social media platform</div>
+                                </td>
+                                <td>Page and post engagement</td>
+                                <td>
+                                    <div>Likes</div>
+                                    <div>Followers</div>
+                                    <div>Comments</div>
+                                </td>
+                                <td>
+                                    <div class="service-price">2,000</div>
+                                    <div class="service-price">3,500</div>
+                                    <div class="service-price">4,000</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="service-name">Instagram</div>
+                                    <div class="service-desc">Photo sharing app</div>
+                                </td>
+                                <td>Profile growth</td>
+                                <td>
+                                    <div>Followers</div>
+                                    <div>Likes</div>
+                                    <div>Views</div>
+                                </td>
+                                <td>
+                                    <div class="service-price">4,000</div>
+                                    <div class="service-price">2,500</div>
+                                    <div class="service-price">1,500</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="service-name">YouTube</div>
+                                    <div class="service-desc">Video platform</div>
+                                </td>
+                                <td>Channel growth</td>
+                                <td>
+                                    <div>Subscribers</div>
+                                    <div>Likes</div>
+                                    <div>Views</div>
+                                </td>
+                                <td>
+                                    <div class="service-price">8,000</div>
+                                    <div class="service-price">3,000</div>
+                                    <div class="service-price">2,000</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        </div>
+
+            <!-- Service Cards -->
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3>📱 SIM/Data</h3>
+                    <p>Mobile top-up and data packages for all major providers in Myanmar with instant delivery.</p>
+                    <div class="service-price">From 800 MMK</div>
+                    <ul class="service-features">
+                        <li>Instant Activation</li>
+                        <li>24/7 Service</li>
+                        <li>All Networks Supported</li>
+                        <li>Best Rates Guaranteed</li>
+                    </ul>
+                    <a href="order_sim.html" class="btn-primary">Order Now</a>
+                </div>
+
+                <div class="service-card">
+                    <h3>🎮 Game TopUp</h3>
+                    <p>Game credits, diamonds, and vouchers for popular mobile games with fast delivery.</p>
+                    <div class="service-price">From 2,000 MMK</div>
+                    <ul class="service-features">
+                        <li>5-30 Minute Delivery</li>
+                        <li>All Popular Games</li>
+                        <li>Secure Transactions</li>
+                        <li>24/7 Support</li>
+                    </ul>
+                    <a href="order_game.html" class="btn-primary">Order Now</a>
+                </div>
+
+                <div class="service-card">
+                    <h3>📢 SMM Services</h3>
+                    <p>Social media marketing services including likes, followers, and views for growth.</p>
+                    <div class="service-price">From 1,500 MMK</div>
+                    <ul class="service-features">
+                        <li>High Quality Services</li>
+                        <li>Gradual Delivery</li>
+                        <li>All Platforms</li>
+                        <li>Retention Guarantee</li>
+                    </ul>
+                    <a href="order_smm.html" class="btn-primary">Order Now</a>
+                </div>
+            </div>
+        </section>
     </main>
 
-    <footer class="footer">
-        <div class="footer-background"></div>
-        <div class="footer-content">
-            <div class="footer-links">
-                <a href="privacy.html">Privacy</a>
-                <a href="faq.html">FAQ</a>
-                <a href="services.html">Products</a>
-            </div>
-            <div class="footer-copyright">
-                &copy; <span id="currentYear"></span> EasyRecharge MM. All rights reserved.
-            </div>
+    <nav class="bottom-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-item">Dashboard</a>
+            <a href="order.html" class="nav-item">Orders</a>
+            <a href="pay.html" class="nav-item">Exchange</a>
+            <a href="status.html" class="nav-item">Status</a>
+        </div>
+    </nav>
+
+    <footer>
+        <div class="footer-bg"></div>
+        <div class="footer-links">
+            <a href="privacy.html">Privacy</a>
+            <a href="faq.html">FAQ</a>
+            <a href="services.html">Products</a>
         </div>
     </footer>
-
-    <div id="toast" class="toast"></div>
 
     <script src="script.js"></script>
 </body>
