@@ -1,5 +1,47 @@
-// script.js
-const GAS_URL = "YOUR_GAS_DEPLOY_URL"; // Replace with your GAS web app URL
+// script.js - Updated with fixed pricing and auto-calculation
+const GAS_URL = "YOUR_GAS_DEPLOY_URL";
+
+// Service pricing data
+const SERVICE_PRICES = {
+    // SIM/Data Services
+    sim: {
+        'mpt-3gb': { name: 'MPT 3GB/7Days', price: 1500 },
+        'mpt-5gb': { name: 'MPT 5GB/15Days', price: 2500 },
+        'mpt-10gb': { name: 'MPT 10GB/30Days', price: 4500 },
+        'telenor-regular': { name: 'Telenor Regular', price: 1000 },
+        'telenor-data': { name: 'Telenor Data Bundle', price: 1200 },
+        'telenor-social': { name: 'Telenor Social Bundle', price: 800 },
+        'ooredoo-basic': { name: 'Ooredoo Basic', price: 2000 },
+        'ooredoo-premium': { name: 'Ooredoo Premium', price: 3500 },
+        'ooredoo-unlimited': { name: 'Ooredoo Unlimited', price: 6000 }
+    },
+    
+    // Game Services
+    game: {
+        'freefire-100': { name: 'Free Fire 100 Diamonds', price: 3000 },
+        'freefire-500': { name: 'Free Fire 500 Diamonds', price: 12000 },
+        'freefire-1000': { name: 'Free Fire 1000 Diamonds', price: 22000 },
+        'pubg-60': { name: 'PUBG 60 UC', price: 2000 },
+        'pubg-325': { name: 'PUBG 325 UC', price: 8000 },
+        'pubg-660': { name: 'PUBG 660 UC', price: 15000 },
+        'mlbb-86': { name: 'MLBB 86 Diamonds', price: 2500 },
+        'mlbb-429': { name: 'MLBB 429 Diamonds', price: 10000 },
+        'mlbb-875': { name: 'MLBB 875 Diamonds', price: 18000 }
+    },
+    
+    // SMM Services
+    smm: {
+        'fb-likes': { name: 'Facebook Likes', price: 2000, unit: 1000 },
+        'fb-followers': { name: 'Facebook Followers', price: 3500, unit: 1000 },
+        'fb-comments': { name: 'Facebook Comments', price: 4000, unit: 1000 },
+        'ig-followers': { name: 'Instagram Followers', price: 4000, unit: 1000 },
+        'ig-likes': { name: 'Instagram Likes', price: 2500, unit: 1000 },
+        'ig-views': { name: 'Instagram Views', price: 1500, unit: 1000 },
+        'yt-subscribers': { name: 'YouTube Subscribers', price: 8000, unit: 1000 },
+        'yt-likes': { name: 'YouTube Likes', price: 3000, unit: 1000 },
+        'yt-views': { name: 'YouTube Views', price: 2000, unit: 1000 }
+    }
+};
 
 // Theme Management
 function initTheme() {
@@ -54,6 +96,13 @@ function initUser() {
     if (userDeviceDisplay) {
         userDeviceDisplay.textContent = device;
     }
+
+    // Update profile picture with user initial
+    const profilePic = document.querySelector('.profile-pic');
+    if (profilePic) {
+        const initial = userId.charAt(0).toUpperCase();
+        profilePic.textContent = initial;
+    }
 }
 
 function generateUserId() {
@@ -63,71 +112,135 @@ function generateUserId() {
 function detectDevice() {
     const ua = navigator.userAgent;
     if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry/.test(ua)) {
-        return 'Mobile';
+        return '📱 Mobile';
     } else if (/Tablet|iPad/.test(ua)) {
-        return 'Tablet';
+        return '📟 Tablet';
     } else {
-        return 'Desktop';
+        return '💻 Desktop';
     }
 }
 
-// Form Calculations
+// Enhanced Form Calculations with Fixed Pricing
 function initFormCalculations() {
     // SIM/Data form
     const simForm = document.getElementById('simOrderForm');
     if (simForm) {
+        const serviceSelect = simForm.querySelector('#service');
         const quantity = simForm.querySelector('#quantity');
         const price = simForm.querySelector('#price');
         const total = simForm.querySelector('#totalAmount');
         
+        serviceSelect.innerHTML = `
+            <option value="">Select Service</option>
+            <option value="mpt-3gb">MPT 3GB/7Days - 1,500 MMK</option>
+            <option value="mpt-5gb">MPT 5GB/15Days - 2,500 MMK</option>
+            <option value="mpt-10gb">MPT 10GB/30Days - 4,500 MMK</option>
+            <option value="telenor-regular">Telenor Regular - 1,000 MMK</option>
+            <option value="telenor-data">Telenor Data Bundle - 1,200 MMK</option>
+            <option value="telenor-social">Telenor Social Bundle - 800 MMK</option>
+            <option value="ooredoo-basic">Ooredoo Basic - 2,000 MMK</option>
+            <option value="ooredoo-premium">Ooredoo Premium - 3,500 MMK</option>
+            <option value="ooredoo-unlimited">Ooredoo Unlimited - 6,000 MMK</option>
+        `;
+        
         const calculateTotal = () => {
-            if (quantity && price && total) {
-                const qty = parseInt(quantity.value) || 0;
-                const prc = parseInt(price.value) || 0;
-                total.value = (qty * prc).toLocaleString() + ' MMK';
+            if (serviceSelect && quantity && price && total) {
+                const selectedService = SERVICE_PRICES.sim[serviceSelect.value];
+                if (selectedService) {
+                    price.value = selectedService.price;
+                    const qty = parseInt(quantity.value) || 1;
+                    total.value = (qty * selectedService.price).toLocaleString() + ' MMK';
+                } else {
+                    price.value = '';
+                    total.value = '0 MMK';
+                }
             }
         };
         
+        serviceSelect?.addEventListener('change', calculateTotal);
         quantity?.addEventListener('input', calculateTotal);
-        price?.addEventListener('input', calculateTotal);
     }
     
     // Game form
     const gameForm = document.getElementById('gameOrderForm');
     if (gameForm) {
+        const gameSelect = gameForm.querySelector('#game');
         const quantity = gameForm.querySelector('#quantity');
         const price = gameForm.querySelector('#price');
         const total = gameForm.querySelector('#totalAmount');
         
+        gameSelect.innerHTML = `
+            <option value="">Select Game Package</option>
+            <option value="freefire-100">Free Fire 100 Diamonds - 3,000 MMK</option>
+            <option value="freefire-500">Free Fire 500 Diamonds - 12,000 MMK</option>
+            <option value="freefire-1000">Free Fire 1000 Diamonds - 22,000 MMK</option>
+            <option value="pubg-60">PUBG 60 UC - 2,000 MMK</option>
+            <option value="pubg-325">PUBG 325 UC - 8,000 MMK</option>
+            <option value="pubg-660">PUBG 660 UC - 15,000 MMK</option>
+            <option value="mlbb-86">MLBB 86 Diamonds - 2,500 MMK</option>
+            <option value="mlbb-429">MLBB 429 Diamonds - 10,000 MMK</option>
+            <option value="mlbb-875">MLBB 875 Diamonds - 18,000 MMK</option>
+        `;
+        
         const calculateTotal = () => {
-            if (quantity && price && total) {
-                const qty = parseInt(quantity.value) || 0;
-                const prc = parseInt(price.value) || 0;
-                total.value = (qty * prc).toLocaleString() + ' MMK';
+            if (gameSelect && quantity && price && total) {
+                const selectedService = SERVICE_PRICES.game[gameSelect.value];
+                if (selectedService) {
+                    price.value = selectedService.price;
+                    const qty = parseInt(quantity.value) || 1;
+                    total.value = (qty * selectedService.price).toLocaleString() + ' MMK';
+                } else {
+                    price.value = '';
+                    total.value = '0 MMK';
+                }
             }
         };
         
+        gameSelect?.addEventListener('change', calculateTotal);
         quantity?.addEventListener('input', calculateTotal);
-        price?.addEventListener('input', calculateTotal);
     }
     
     // SMM form
     const smmForm = document.getElementById('smmOrderForm');
     if (smmForm) {
+        const serviceSelect = smmForm.querySelector('#service');
         const quantity = smmForm.querySelector('#quantity');
         const price = smmForm.querySelector('#price');
         const total = smmForm.querySelector('#totalAmount');
         
+        serviceSelect.innerHTML = `
+            <option value="">Select SMM Service</option>
+            <option value="fb-likes">Facebook Likes (per 1000) - 2,000 MMK</option>
+            <option value="fb-followers">Facebook Followers (per 1000) - 3,500 MMK</option>
+            <option value="fb-comments">Facebook Comments (per 1000) - 4,000 MMK</option>
+            <option value="ig-followers">Instagram Followers (per 1000) - 4,000 MMK</option>
+            <option value="ig-likes">Instagram Likes (per 1000) - 2,500 MMK</option>
+            <option value="ig-views">Instagram Views (per 1000) - 1,500 MMK</option>
+            <option value="yt-subscribers">YouTube Subscribers (per 1000) - 8,000 MMK</option>
+            <option value="yt-likes">YouTube Likes (per 1000) - 3,000 MMK</option>
+            <option value="yt-views">YouTube Views (per 1000) - 2,000 MMK</option>
+        `;
+        
         const calculateTotal = () => {
-            if (quantity && price && total) {
-                const qty = parseInt(quantity.value) || 0;
-                const prc = parseInt(price.value) || 0;
-                total.value = (qty * prc).toLocaleString() + ' MMK';
+            if (serviceSelect && quantity && price && total) {
+                const selectedService = SERVICE_PRICES.smm[serviceSelect.value];
+                if (selectedService) {
+                    price.value = selectedService.price;
+                    const qty = parseInt(quantity.value) || 100;
+                    const unit = selectedService.unit || 1;
+                    total.value = (qty * selectedService.price / unit).toLocaleString() + ' MMK';
+                } else {
+                    price.value = '';
+                    total.value = '0 MMK';
+                }
             }
         };
         
+        serviceSelect?.addEventListener('change', calculateTotal);
         quantity?.addEventListener('input', calculateTotal);
-        price?.addEventListener('input', calculateTotal);
+        
+        // Set default quantity for SMM
+        quantity.value = 1000;
     }
     
     // P2P form calculations
@@ -163,10 +276,11 @@ function copyText(elementId) {
     try {
         const successful = document.execCommand('copy');
         if (successful) {
-            showToast('Copied to clipboard!');
+            showToast('✅ Copied to clipboard!');
         }
     } catch (err) {
         console.error('Failed to copy text: ', err);
+        showToast('❌ Failed to copy', 'error');
     }
 }
 
@@ -262,7 +376,18 @@ async function submitOrderForm(formId, action) {
         orderData.order.paymentMethod = paymentMethod.value;
     }
     
+    // Get service name from pricing data
+    const serviceSelect = form.querySelector('select');
+    if (serviceSelect && serviceSelect.value) {
+        const category = readCategoryFromURL() || 'sim';
+        const serviceData = SERVICE_PRICES[category][serviceSelect.value];
+        if (serviceData) {
+            orderData.order.serviceName = serviceData.name;
+        }
+    }
+    
     try {
+        showToast('🔄 Submitting order...', 'info');
         const response = await fetch(GAS_URL, {
             method: 'POST',
             headers: {
@@ -274,17 +399,17 @@ async function submitOrderForm(formId, action) {
         const result = await response.json();
         
         if (result.success) {
-            showToast('Order submitted successfully!');
+            showToast('✅ Order submitted successfully!');
             localStorage.setItem('last_order_id', result.orderId);
             setTimeout(() => {
                 window.location.href = 'status.html';
-            }, 1500);
+            }, 2000);
         } else {
-            showToast('Failed to submit order. Please try again.', 'error');
+            showToast('❌ Failed to submit order. Please try again.', 'error');
         }
     } catch (error) {
         console.error('Error submitting order:', error);
-        showToast('Network error. Please check your connection.', 'error');
+        showToast('❌ Network error. Please check your connection.', 'error');
     }
 }
 
@@ -307,6 +432,7 @@ async function submitP2PForm() {
     };
     
     try {
+        showToast('🔄 Processing exchange...', 'info');
         const response = await fetch(GAS_URL, {
             method: 'POST',
             headers: {
@@ -318,17 +444,17 @@ async function submitP2PForm() {
         const result = await response.json();
         
         if (result.success) {
-            showToast('P2P exchange submitted successfully!');
+            showToast('✅ P2P exchange submitted successfully!');
             localStorage.setItem('last_order_id', result.orderId);
             setTimeout(() => {
                 window.location.href = 'status.html';
-            }, 1500);
+            }, 2000);
         } else {
-            showToast('Failed to submit exchange. Please try again.', 'error');
+            showToast('❌ Failed to submit exchange. Please try again.', 'error');
         }
     } catch (error) {
         console.error('Error submitting P2P:', error);
-        showToast('Network error. Please check your connection.', 'error');
+        showToast('❌ Network error. Please check your connection.', 'error');
     }
 }
 
@@ -399,103 +525,28 @@ function initAccordion() {
 // Dashboard Data
 async function loadDashboardData() {
     try {
-        // This would typically fetch from GAS
-        // For now, we'll simulate with random data
-        setTimeout(() => {
-            document.getElementById('totalOrders').textContent = Math.floor(Math.random() * 50);
-            document.getElementById('totalExchange').textContent = (Math.random() * 1000000).toLocaleString() + ' MMK';
-            document.getElementById('activeUsers').textContent = Math.floor(Math.random() * 1000);
-            document.getElementById('allOrders').textContent = Math.floor(Math.random() * 5000);
-            document.getElementById('allExchange').textContent = (Math.random() * 50000000).toLocaleString() + ' MMK';
-        }, 1000);
+        // Simulate API call with better visual feedback
+        const elements = {
+            totalOrders: document.getElementById('totalOrders'),
+            totalExchange: document.getElementById('totalExchange'),
+            activeUsers: document.getElementById('activeUsers'),
+            allOrders: document.getElementById('allOrders'),
+            allExchange: document.getElementById('allExchange')
+        };
+        
+        // Animate counting effect
+        Object.values(elements).forEach(el => {
+            if (el) {
+                animateCount(el, Math.floor(Math.random() * 1000));
+            }
+        });
+        
     } catch (error) {
         console.error('Error loading dashboard data:', error);
     }
 }
 
-// Order Status
-async function loadUserOrders() {
-    const tbody = document.querySelector('#ordersTable tbody');
-    if (!tbody) return;
-    
-    tbody.innerHTML = '<tr><td colspan="7" class="no-data">Loading orders...</td></tr>';
-    
-    try {
-        // Simulate API call
-        setTimeout(() => {
-            // This would be replaced with actual GAS API call
-            const orders = [
-                {
-                    orderId: generateOrderId(),
-                    category: 'SIM',
-                    service: 'MPT Package',
-                    quantity: 1,
-                    total: '5000 MMK',
-                    payment: 'KBZ Pay',
-                    status: 'Processing'
-                }
-            ];
-            
-            if (orders.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" class="no-data">No orders found</td></tr>';
-                return;
-            }
-            
-            tbody.innerHTML = orders.map(order => `
-                <tr>
-                    <td>${order.orderId}</td>
-                    <td>${order.category}</td>
-                    <td>${order.service}</td>
-                    <td>${order.quantity}</td>
-                    <td>${order.total}</td>
-                    <td>${order.payment}</td>
-                    <td><span class="badge badge-${order.status.toLowerCase()}">${order.status}</span></td>
-                </tr>
-            `).join('');
-        }, 1000);
-    } catch (error) {
-        console.error('Error loading orders:', error);
-        tbody.innerHTML = '<tr><td colspan="7" class="no-data">Error loading orders</td></tr>';
-    }
-}
-
-function refreshOrders() {
-    showToast('Refreshing orders...');
-    loadUserOrders();
-}
-
-// Initialize everything when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    initTheme();
-    initUser();
-    initFormCalculations();
-    initFormSubmissions();
-    initTabs();
-    initAccordion();
-    
-    // Load appropriate data based on page
-    if (window.location.pathname.includes('index.html') || window.location.pathname === '/') {
-        loadDashboardData();
-    }
-    
-    if (window.location.pathname.includes('status.html')) {
-        loadUserOrders();
-    }
-    
-    // Add theme toggle event listener
-    const themeToggle = document.getElementById('modeToggle');
-    if (themeToggle) {
-        themeToggle.addEventListener('click', toggleTheme);
-    }
-});
-
-// Utility function for date formatting
-function formatDate(date) {
-    return new Date(date).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
-        }
+function animateCount(element, target) {
+    let current = 0;
+    const increment = target / 50;
+    const timer = setI
