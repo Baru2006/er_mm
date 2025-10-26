@@ -1,169 +1,123 @@
+<!-- order_game.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game TopUp Order - EasyRecharge MM</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>EasyRecharge MM - Game TopUp</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body data-theme="light">
-    <header class="header">
-        <div class="brand">
-            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiNmZjdiMDAiLz4KPHBhdGggZD0iTTE2IDE1SDE3VjI1SDE2VjE1WiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTIzIDE1SDI0VjI1SDIzVjE1WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+" alt="EasyRecharge MM Logo" class="logo">
-            <h1>EasyRecharge MM</h1>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>EasyRecharge MM</h1>
+            </div>
+            <button id="modeToggle" class="theme-toggle">🌙</button>
         </div>
-        <button id="modeToggle" class="theme-toggle" aria-label="Toggle dark mode">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path class="sun-icon" d="M12 17C14.7614 17 17 14.7614 17 12C17 9.23858 14.7614 7 12 7C9.23858 7 7 9.23858 7 12C7 14.7614 9.23858 17 12 17Z"/>
-                <path class="moon-icon" d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"/>
-            </svg>
-        </button>
     </header>
 
     <main class="container">
-        <div class="page-header">
-            <a href="order.html" class="back-link">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                    <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                Back to Categories
-            </a>
-            <h2>Game TopUp Order</h2>
-            <p class="page-subtitle">Fill in your game top-up details</p>
+        <div class="back-link">
+            <a href="order.html">← Back to Categories</a>
         </div>
 
-        <form id="gameOrderForm" class="order-form">
-            <div class="form-group">
-                <label for="userId">User ID</label>
-                <input type="text" id="userId" readonly>
-            </div>
-
-            <div class="form-group">
-                <label for="device">Device</label>
-                <input type="text" id="device" readonly>
-            </div>
-
-            <div class="form-group">
-                <label for="service">Game Service *</label>
-                <select id="service" required>
-                    <option value="">Select Game</option>
-                    <option value="Free Fire">Free Fire</option>
-                    <option value="PUBG Mobile">PUBG Mobile</option>
-                    <option value="Mobile Legends">Mobile Legends</option>
-                    <option value="Genshin Impact">Genshin Impact</option>
-                    <option value="Valorant">Valorant</option>
-                    <option value="Steam Wallet">Steam Wallet</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="gameId">Game ID / Server *</label>
-                <input type="text" id="gameId" placeholder="Enter your Game ID or Server" required>
-            </div>
-
-            <div class="form-row">
+        <section class="order-form-section">
+            <h2>Game TopUp Order</h2>
+            
+            <form id="gameOrderForm" class="order-form">
                 <div class="form-group">
-                    <label for="qty">Quantity</label>
-                    <input type="number" id="qty" value="1" min="1">
+                    <label>User ID</label>
+                    <input type="text" id="userId" readonly>
                 </div>
+
                 <div class="form-group">
-                    <label for="price">Price per Unit (MMK)</label>
-                    <input type="number" id="price" value="1000" readonly>
+                    <label>Device</label>
+                    <input type="text" id="userDevice" readonly>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label for="total">Total Amount (MMK)</label>
-                <input type="number" id="total" readonly>
-            </div>
-
-            <div class="form-group">
-                <label>Payment Method *</label>
-                <div class="radio-group">
-                    <label class="radio-label">
-                        <input type="radio" name="payment" value="Wave" required>
-                        <span>Wave Money</span>
-                    </label>
-                    <label class="radio-label">
-                        <input type="radio" name="payment" value="KBZPay">
-                        <span>KBZPay</span>
-                    </label>
-                    <label class="radio-label">
-                        <input type="radio" name="payment" value="AYA">
-                        <span>AYA Pay</span>
-                    </label>
-                    <label class="radio-label">
-                        <input type="radio" name="payment" value="CBPay">
-                        <span>CB Pay</span>
-                    </label>
+                <div class="form-group">
+                    <label for="game">Game *</label>
+                    <select id="game" required>
+                        <option value="">Select Game</option>
+                        <option value="freefire">Free Fire</option>
+                        <option value="pubg">PUBG Mobile</option>
+                        <option value="mlbb">Mobile Legends</option>
+                        <option value="genshin">Genshin Impact</option>
+                    </select>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label for="paymentNumber">Payment Number</label>
-                <div class="input-with-button">
-                    <input type="text" id="paymentNumber" readonly value="09XXXXXXXXX">
-                    <button type="button" class="btn-copy" onclick="copyText('paymentNumber')">Copy</button>
+                <div class="form-group">
+                    <label for="gameId">Game ID *</label>
+                    <input type="text" id="gameId" required placeholder="Enter your Game ID">
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label for="transactionId">Transaction ID *</label>
-                <input type="text" id="transactionId" placeholder="Enter your payment transaction ID" required>
-            </div>
+                <div class="form-group">
+                    <label for="server">Server</label>
+                    <input type="text" id="server" placeholder="Server name/number">
+                </div>
 
-            <button type="submit" class="btn-primary btn-submit">Submit Order</button>
-        </form>
+                <div class="form-group">
+                    <label for="quantity">Quantity *</label>
+                    <input type="number" id="quantity" value="1" min="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="price">Price per Unit (MMK) *</label>
+                    <input type="number" id="price" required min="100" step="100">
+                </div>
+
+                <div class="form-group">
+                    <label>Total Amount (MMK)</label>
+                    <input type="text" id="totalAmount" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Payment Method *</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="paymentMethod" value="kbz" required> KBZ Pay</label>
+                        <label><input type="radio" name="paymentMethod" value="wave"> Wave Money</label>
+                        <label><input type="radio" name="paymentMethod" value="cb"> CB Pay</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Payment Number</label>
+                    <div class="copy-field">
+                        <input type="text" id="paymentNumber" readonly value="09XXXXXXX">
+                        <button type="button" onclick="copyText('paymentNumber')">Copy</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="transactionId">Transaction ID *</label>
+                    <input type="text" id="transactionId" required placeholder="Enter transaction ID from payment">
+                </div>
+
+                <button type="submit" class="btn-primary">Submit Order</button>
+            </form>
+        </section>
     </main>
 
-    <footer class="footer">
-        <div class="footer-background"></div>
-        <div class="footer-content">
-            <div class="footer-links">
-                <a href="privacy.html">Privacy</a>
-                <a href="faq.html">FAQ</a>
-                <a href="services.html">Products</a>
-            </div>
-            <div class="footer-copyright">
-                &copy; <span id="currentYear"></span> EasyRecharge MM. All rights reserved.
-            </div>
+    <nav class="bottom-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-item">Dashboard</a>
+            <a href="order.html" class="nav-item active">Orders</a>
+            <a href="pay.html" class="nav-item">Exchange</a>
+            <a href="status.html" class="nav-item">Status</a>
+        </div>
+    </nav>
+
+    <footer>
+        <div class="footer-bg"></div>
+        <div class="footer-links">
+            <a href="privacy.html">Privacy</a>
+            <a href="faq.html">FAQ</a>
+            <a href="services.html">Products</a>
         </div>
     </footer>
 
-    <div id="toast" class="toast"></div>
-
     <script src="script.js"></script>
-    <script>
-        // Calculate total when quantity or price changes
-        document.getElementById('qty').addEventListener('input', calculateTotal);
-        document.getElementById('price').addEventListener('input', calculateTotal);
-        
-        function calculateTotal() {
-            const qty = parseInt(document.getElementById('qty').value) || 0;
-            const price = parseInt(document.getElementById('price').value) || 0;
-            document.getElementById('total').value = qty * price;
-        }
-
-        // Update payment number based on selected method
-        document.querySelectorAll('input[name="payment"]').forEach(radio => {
-            radio.addEventListener('change', function() {
-                const paymentNumbers = {
-                    'Wave': '09 123 456 789',
-                    'KBZPay': '09 987 654 321', 
-                    'AYA': '09 555 666 777',
-                    'CBPay': '09 444 333 222'
-                };
-                document.getElementById('paymentNumber').value = paymentNumbers[this.value] || '09XXXXXXXXX';
-            });
-        });
-
-        // Initialize form
-        document.addEventListener('DOMContentLoaded', function() {
-            initUser();
-            document.getElementById('device').value = detectDevice();
-            calculateTotal();
-        });
-    </script>
 </body>
 </html>
