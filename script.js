@@ -1,4 +1,4 @@
-const GAS_URL = 'YOUR_GAS_DEPLOY_URL';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbwo82rh2cRWnCS3kXktpEM0kwd2GyT7HO9ToZ8xfcmh/dev';
 const SERVICE_PRICES = {
     sim: {
         'mpt-3gb': { name: 'MPT 3GB/7Days', price: 1500 },
@@ -155,46 +155,52 @@ function showToast(message, type = 'success') {
 }
 
 // Form Submission
+// script.js ထဲမှာ ဒီ function ကို ပြင်ပါ
 async function submitOrderForm(formId, action) {
-    const form = document.getElementById(formId);
-    if (!form) return;
-    
-    const formData = new FormData(form);
-    const orderData = {
-        action: action,
-        order: {
-            orderId: generateOrderId(),
-            userId: localStorage.getItem('userId'),
-            device: detectDevice(),
-            timestamp: new Date().toISOString(),
-            ...Object.fromEntries(formData)
-        }
-    };
-    
-    try {
-        const response = await fetch(GAS_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(orderData)
-        });
-        
-        const result = await response.json();
-        
-        if (result.success) {
-            localStorage.setItem('last_order_id', result.orderId);
-            showToast('Order submitted successfully!');
-            setTimeout(() => {
-                window.location.href = 'status.html';
-            }, 1500);
-        } else {
-            throw new Error(result.error || 'Submission failed');
-        }
-    } catch (error) {
-        console.error('Submission error:', error);
-        showToast('Failed to submit order. Please try again.', 'error');
+  const form = document.getElementById(formId);
+  if (!form) return;
+  
+  const formData = new FormData(form);
+  
+  // FIX: Make sure we're sending the correct data structure
+  const orderData = {
+    action: action,
+    order: {
+      orderId: generateOrderId(),
+      userId: localStorage.getItem('userId'),
+      device: detectDevice(),
+      timestamp: new Date().toISOString(),
+      ...Object.fromEntries(formData)
     }
+  };
+  
+  console.log("Submitting order data:", orderData);
+  
+  try {
+    const response = await fetch(GAS_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(orderData)
+    });
+    
+    const result = await response.json();
+    console.log("Server response:", result);
+    
+    if (result.success) {
+      localStorage.setItem('last_order_id', result.orderId);
+      showToast('Order submitted successfully!');
+      setTimeout(() => {
+        window.location.href = 'status.html';
+      }, 1500);
+    } else {
+      throw new Error(result.error || 'Submission failed');
+    }
+  } catch (error) {
+    console.error('Submission error:', error);
+    showToast('Failed to submit order: ' + error.message, 'error');
+  }
 }
 
 function generateOrderId() {
