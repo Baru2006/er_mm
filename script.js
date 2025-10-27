@@ -1,4 +1,4 @@
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbwo82rh2cRWnCS3kXktpEM0kwd2GyT7HO9ToZ8xfcmh/dev';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbxa6X2kUeft0N9szdu5ENgGi9uH6MTc0RvOFFvF3EDZN7d0-ujhKla3a-rFHhAvahi-0g/exec';
 const SERVICE_PRICES = {
     sim: {
         'mpt-3gb': { name: 'MPT 3GB/7Days', price: 1500 },
