@@ -1,118 +1,219 @@
-<!-- order_sim.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EasyRecharge MM - SIM/Data Order</title>
-    <link rel="stylesheet" href="style.css">
+    <title>SIM/Data Order - Easy Recharge MM</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="logo">
-                <h1>EasyRecharge MM</h1>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <a href="order.html" class="back-link">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                </svg>
+                Back
+            </a>
+            <div class="brand">
+                <h1>SIM/Data Order</h1>
             </div>
-            <button id="modeToggle" class="theme-toggle">🌙</button>
-        </div>
-    </header>
+            <button class="theme-toggle" id="themeToggle">
+                <span class="theme-icon">🌙</span>
+            </button>
+        </header>
 
-    <main class="container">
-        <div class="back-link">
-            <a href="order.html">← Back to Categories</a>
-        </div>
+        <!-- Order Form -->
+        <form id="simOrderForm" class="form-container">
+            <!-- User Info -->
+            <div class="form-group">
+                <label for="userId">User ID</label>
+                <input type="text" id="userId" class="form-control" readonly>
+            </div>
 
-        <section class="order-form-section">
-            <h2>SIM/Data Order</h2>
-            
-            <form id="simOrderForm" class="order-form">
-                <div class="form-group">
-                    <label>User ID</label>
-                    <input type="text" id="userId" readonly>
-                </div>
+            <div class="form-group">
+                <label for="userDevice">Device</label>
+                <input type="text" id="userDevice" class="form-control" readonly>
+            </div>
 
-                <div class="form-group">
-                    <label>Device</label>
-                    <input type="text" id="userDevice" readonly>
-                </div>
+            <!-- Service Selection -->
+            <div class="form-group">
+                <label for="service">Service *</label>
+                <select id="service" name="service" class="form-control" required>
+                    <option value="">Select Service</option>
+                    <optgroup label="MPT">
+                        <option value="mpt-3gb">MPT 3GB/7Days - 1,500 MMK</option>
+                        <option value="mpt-5gb">MPT 5GB/15Days - 2,500 MMK</option>
+                        <option value="mpt-10gb">MPT 10GB/30Days - 4,500 MMK</option>
+                    </optgroup>
+                    <optgroup label="Telenor">
+                        <option value="telenor-regular">Telenor Regular - 1,000 MMK</option>
+                        <option value="telenor-data">Telenor Data Bundle - 1,200 MMK</option>
+                        <option value="telenor-social">Telenor Social Bundle - 800 MMK</option>
+                    </optgroup>
+                    <optgroup label="Ooredoo">
+                        <option value="ooredoo-basic">Ooredoo Basic - 2,000 MMK</option>
+                        <option value="ooredoo-premium">Ooredoo Premium - 3,500 MMK</option>
+                        <option value="ooredoo-unlimited">Ooredoo Unlimited - 6,000 MMK</option>
+                    </optgroup>
+                </select>
+            </div>
 
-                <div class="form-group">
-                    <label for="service">Service *</label>
-                    <select id="service" required>
-                        <option value="">Select Service</option>
-                        <option value="mpt">MPT Package</option>
-                        <option value="telenor">Telenor Package</option>
-                        <option value="ooredoo">Ooredoo Package</option>
-                        <option value="mytel">Mytel Package</option>
-                    </select>
-                </div>
+            <!-- Phone Number -->
+            <div class="form-group">
+                <label for="phone">Phone Number *</label>
+                <input type="tel" id="phone" name="phone" class="form-control" placeholder="09XXXXXXXXX" required>
+            </div>
 
-                <div class="form-group">
-                    <label for="phone">Phone Number *</label>
-                    <input type="tel" id="phone" required placeholder="09XXXXXXXX">
-                </div>
+            <!-- Quantity & Pricing -->
+            <div class="form-group">
+                <label for="quantity">Quantity</label>
+                <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1" max="10">
+            </div>
 
-                <div class="form-group">
-                    <label for="quantity">Quantity *</label>
-                    <input type="number" id="quantity" value="1" min="1" required>
-                </div>
+            <div class="form-group">
+                <label for="price">Price per unit</label>
+                <input type="text" id="price" class="form-control" readonly>
+            </div>
 
-                <div class="form-group">
-                    <label for="price">Price per Unit (MMK) *</label>
-                    <input type="number" id="price" required min="100" step="100">
-                </div>
+            <div class="form-group">
+                <label for="total">Total Amount</label>
+                <input type="text" id="total" name="total" class="form-control" readonly>
+            </div>
 
-                <div class="form-group">
-                    <label>Total Amount (MMK)</label>
-                    <input type="text" id="totalAmount" readonly>
-                </div>
-
-                <div class="form-group">
-                    <label>Payment Method *</label>
-                    <div class="radio-group">
-                        <label><input type="radio" name="paymentMethod" value="kbz" required> KBZ Pay</label>
-                        <label><input type="radio" name="paymentMethod" value="wave"> Wave Money</label>
-                        <label><input type="radio" name="paymentMethod" value="cb"> CB Pay</label>
+            <!-- Payment Method -->
+            <div class="form-group">
+                <label>Payment Method *</label>
+                <div class="radio-group">
+                    <div class="radio-item">
+                        <input type="radio" id="kpay" name="payment" value="KBZ Pay" required>
+                        <label for="kpay">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                                <circle cx="12" cy="12" r="10" fill="#00a76e"/>
+                                <text x="12" y="16" text-anchor="middle" fill="white" font-size="8" font-weight="bold">K</text>
+                            </svg>
+                            KBZ Pay
+                        </label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="wave" name="payment" value="Wave Money" required>
+                        <label for="wave">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                                <circle cx="12" cy="12" r="10" fill="#6b5aed"/>
+                                <text x="12" y="16" text-anchor="middle" fill="white" font-size="8" font-weight="bold">W</text>
+                            </svg>
+                            Wave Money
+                        </label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="cb" name="payment" value="CB Pay" required>
+                        <label for="cb">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                                <circle cx="12" cy="12" r="10" fill="#e6007e"/>
+                                <text x="12" y="16" text-anchor="middle" fill="white" font-size="8" font-weight="bold">C</text>
+                            </svg>
+                            CB Pay
+                        </label>
                     </div>
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <label>Payment Number</label>
-                    <div class="copy-field">
-                        <input type="text" id="paymentNumber" readonly value="09XXXXXXX">
-                        <button type="button" onclick="copyText('paymentNumber')">Copy</button>
-                    </div>
+            <!-- Payment Number -->
+            <div class="form-group">
+                <label>Payment Number</label>
+                <div class="payment-number">
+                    <input type="text" id="paymentNumber" class="form-control" value="09XXXXXXX" readonly>
+                    <button type="button" class="copy-btn" onclick="copyText('paymentNumber')">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                        </svg>
+                    </button>
                 </div>
+                <small style="opacity: 0.7; font-size: 0.8rem;">Make payment to this number and enter transaction ID below</small>
+            </div>
 
-                <div class="form-group">
-                    <label for="transactionId">Transaction ID *</label>
-                    <input type="text" id="transactionId" required placeholder="Enter transaction ID from payment">
-                </div>
+            <!-- Transaction ID -->
+            <div class="form-group">
+                <label for="transactionId">Transaction ID *</label>
+                <input type="text" id="transactionId" name="transactionId" class="form-control" placeholder="Enter transaction ID from payment" required>
+            </div>
 
-                <button type="submit" class="btn-primary">Submit Order</button>
-            </form>
-        </section>
-    </main>
+            <!-- Submit Button -->
+            <button type="submit" class="submit-btn">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+                Submit Order
+            </button>
+        </form>
 
-    <nav class="bottom-nav">
-        <div class="nav-container">
-            <a href="index.html" class="nav-item">Dashboard</a>
-            <a href="order.html" class="nav-item active">Orders</a>
-            <a href="pay.html" class="nav-item">Exchange</a>
-            <a href="status.html" class="nav-item">Status</a>
-        </div>
-    </nav>
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                </svg>
+                <span>Dashboard</span>
+            </a>
+            <a href="order.html" class="nav-item active">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M13 2v8h8c0-4.42-3.58-8-8-8zm2 6V4.34c1.7.6 3.05 1.95 3.66 3.66H15zm-8.56 3l-.95-2H2v2h2.22s1.89 4.07 2.12 4.42c-1.1.59-1.84 1.75-1.84 3.08C4.5 20.43 6.07 22 8 22c1.76 0 3.22-1.3 3.46-3h2.08c.24 1.7 1.7 3 3.46 3 1.93 0 3.5-1.57 3.5-3.5 0-1.04-.46-1.97-1.18-2.61C20.37 14.54 21 12.84 21 11H6.44z"/>
+                </svg>
+                <span>Orders</span>
+            </a>
+            <a href="pay.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
+                </svg>
+                <span>Exchange</span>
+            </a>
+            <a href="status.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
+                    <path d="M7 10h2v7H7zm4-3h2v10h-2zm4-3h2v13h-2z"/>
+                </svg>
+                <span>Status</span>
+            </a>
+        </nav>
+    </div>
 
-    <footer>
-        <div class="footer-bg"></div>
-        <div class="footer-links">
-            <a href="privacy.html">Privacy</a>
-            <a href="faq.html">FAQ</a>
-            <a href="services.html">Products</a>
-        </div>
-    </footer>
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
 
     <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize user info
+            const userId = localStorage.getItem('userId');
+            document.getElementById('userId').value = userId;
+            
+            // Initialize device detection
+            const device = detectDevice();
+            document.getElementById('userDevice').value = device;
+            
+            // Initialize auto-calculation
+            initAutoCalculation('sim');
+            
+            // Form submission
+            document.getElementById('simOrderForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitOrderForm('simOrderForm', 'order');
+            });
+            
+            // Update payment number based on selection
+            document.querySelectorAll('input[name="payment"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const paymentNumbers = {
+                        'KBZ Pay': '09 123 456 789',
+                        'Wave Money': '09 987 654 321', 
+                        'CB Pay': '09 555 666 777'
+                    };
+                    document.getElementById('paymentNumber').value = paymentNumbers[this.value] || '09XXXXXXX';
+                });
+            });
+        });
+    </script>
 </body>
-</html>
+                                                                             </html>
