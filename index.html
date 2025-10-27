@@ -3,119 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EasyRecharge MM - Dashboard</title>
+    <title>Easy Recharge MM - Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <nav class="navbar">
-                <img src="https://example.com/logo/easyrecharge-light.svg" alt="EasyRecharge MM" class="logo" id="mainLogo">
-                <button class="theme-toggle" id="themeToggle">🌓</button>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Profile Section -->
-    <section class="profile-section">
-        <div class="container">
-            <div class="profile-content">
-                <img src="" alt="Profile" class="profile-picture" id="profilePicture">
-                <div class="profile-info">
-                    <h1>Welcome back!</h1>
-                    <div class="user-id">User ID: <span id="userId"></span></div>
-                    <div class="device-info" id="deviceInfo">Loading device info...</div>
-                </div>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="brand">
+                <h1>Easy Recharge MM</h1>
             </div>
-        </div>
-    </section>
+            <button class="theme-toggle" id="themeToggle">
+                <span class="theme-icon">🌙</span>
+            </button>
+        </header>
 
-    <!-- Main Content -->
-    <main class="container">
-        <!-- Stats Grid -->
+        <!-- Profile Section -->
+        <section class="profile-section">
+            <div class="profile-pic" id="userAvatar"></div>
+            <div class="profile-info">
+                <h3 id="userId">Loading...</h3>
+                <p id="userDevice">Detecting device...</p>
+            </div>
+        </section>
+
+        <!-- Stats Cards -->
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-icon">
-                    <svg class="icon" data-icon="orders" viewBox="0 0 24 24" fill="currentColor"></svg>
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                    </svg>
                 </div>
-                <div class="stat-number" id="totalOrders">0</div>
-                <div class="stat-label">Total Orders</div>
+                <div class="stat-content">
+                    <h4>Your Total Orders</h4>
+                    <p id="totalOrders">—</p>
+                </div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon">
-                    <svg class="icon" data-icon="exchange" viewBox="0 0 24 24" fill="currentColor"></svg>
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
                 </div>
-                <div class="stat-number" id="totalExchange">0 MMK</div>
-                <div class="stat-label">Total Exchange</div>
+                <div class="stat-content">
+                    <h4>Your Total Exchange</h4>
+                    <p id="totalExchange">—</p>
+                </div>
             </div>
         </div>
 
         <!-- Gratitude Box -->
         <div class="gratitude-box">
-            <h2>Thank You for Choosing EasyRecharge MM! 🎉</h2>
-            <p>Your trusted partner for mobile recharge and digital services in Myanmar. Fast, reliable, and secure transactions guaranteed.</p>
+            <div class="gratitude-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+            </div>
+            <p>Thank you for using EasyRecharge MM services.</p>
         </div>
 
-        <!-- Quick Actions -->
-        <div class="card-grid">
-            <a href="order.html" class="category-card">
-                <svg class="category-icon" data-icon="orders" viewBox="0 0 24 24" fill="currentColor"></svg>
-                <h3>Place New Order</h3>
-                <p>Recharge mobile, game credits, or SMM services</p>
-            </a>
-            <a href="status.html" class="category-card">
-                <svg class="category-icon" data-icon="status" viewBox="0 0 24 24" fill="currentColor"></svg>
-                <h3>Check Order Status</h3>
-                <p>Track your recent orders and transactions</p>
-            </a>
-            <a href="pay.html" class="category-card">
-                <svg class="category-icon" data-icon="exchange" viewBox="0 0 24 24" fill="currentColor"></svg>
-                <h3>P2P Exchange</h3>
-                <p>Exchange funds between different payment methods</p>
-            </a>
-            <a href="services.html" class="category-card">
-                <svg class="category-icon" data-icon="dashboard" viewBox="0 0 24 24" fill="currentColor"></svg>
-                <h3>View Services</h3>
-                <p>Browse all available services and prices</p>
-            </a>
-        </div>
-    </main>
-
-    <!-- Bottom Navigation -->
-    <nav class="bottom-nav">
-        <div class="container">
-            <div class="nav-items">
-                <a href="index.html" class="nav-item active">
-                    <svg class="nav-icon" data-icon="dashboard" viewBox="0 0 24 24" fill="currentColor"></svg>
-                    <span class="nav-label">Dashboard</span>
-                </a>
-                <a href="order.html" class="nav-item">
-                    <svg class="nav-icon" data-icon="orders" viewBox="0 0 24 24" fill="currentColor"></svg>
-                    <span class="nav-label">Orders</span>
-                </a>
-                <a href="pay.html" class="nav-item">
-                    <svg class="nav-icon" data-icon="exchange" viewBox="0 0 24 24" fill="currentColor"></svg>
-                    <span class="nav-label">Exchange</span>
-                </a>
-                <a href="status.html" class="nav-item">
-                    <svg class="nav-icon" data-icon="status" viewBox="0 0 24 24" fill="currentColor"></svg>
-                    <span class="nav-label">Status</span>
-                </a>
+        <!-- Status Grid -->
+        <div class="status-grid">
+            <div class="status-item">
+                <div class="status-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                    </svg>
+                </div>
+                <div class="status-content">
+                    <h4>Active Users</h4>
+                    <p id="activeUsers">—</p>
+                </div>
+            </div>
+            <div class="status-item">
+                <div class="status-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M13 2v8h8c0-4.42-3.58-8-8-8zm2 6V4.34c1.7.6 3.05 1.95 3.66 3.66H15zm-8.56 3l-.95-2H2v2h2.22s1.89 4.07 2.12 4.42c-1.1.59-1.84 1.75-1.84 3.08C4.5 20.43 6.07 22 8 22c1.76 0 3.22-1.3 3.46-3h2.08c.24 1.7 1.7 3 3.46 3 1.93 0 3.5-1.57 3.5-3.5 0-1.04-.46-1.97-1.18-2.61C20.37 14.54 21 12.84 21 11H6.44zM8 20c-.83 0-1.5-.67-1.5-1.5S7.17 17 8 17s1.5.67 1.5 1.5S8.83 20 8 20zm9 0c-.83 0-1.5-.67-1.5-1.5S16.17 17 17 17s1.5.67 1.5 1.5S17.83 20 17 20zm.74-5.34l-.29.37c-.14-.02-.3-.03-.45-.03-1.39 0-2.6.82-3.16 2h-2.68c-.5-1.04-1.55-1.75-2.74-1.75-.88 0-1.67.38-2.2 1l-1.57-1.34C6.15 13.1 7 12.35 7 11H2c0 2.63 1.3 4.94 3.27 6.36-.59.84-.95 1.87-.95 2.97 0 .16.01.32.03.48.66-.35 1.44-.56 2.28-.56 1.38 0 2.6.82 3.16 2h2.68c.5-1.04 1.55-1.75 2.74-1.75.21 0 .41.03.61.08l1.11-1.43z"/>
+                    </svg>
+                </div>
+                <div class="status-content">
+                    <h4>Total Orders</h4>
+                    <p id="globalOrders">—</p>
+                </div>
+            </div>
+            <div class="status-item">
+                <div class="status-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                </div>
+                <div class="status-content">
+                    <h4>Total Exchange</h4>
+                    <p id="globalExchange">—</p>
+                </div>
             </div>
         </div>
-    </nav>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <p>&copy; 2024 EasyRecharge MM. All rights reserved.</p>
-                <p>Fast, Reliable Digital Services for Myanmar</p>
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item active">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                </svg>
+                <span>Dashboard</span>
+            </a>
+            <a href="order.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M13 2v8h8c0-4.42-3.58-8-8-8zm2 6V4.34c1.7.6 3.05 1.95 3.66 3.66H15zm-8.56 3l-.95-2H2v2h2.22s1.89 4.07 2.12 4.42c-1.1.59-1.84 1.75-1.84 3.08C4.5 20.43 6.07 22 8 22c1.76 0 3.22-1.3 3.46-3h2.08c.24 1.7 1.7 3 3.46 3 1.93 0 3.5-1.57 3.5-3.5 0-1.04-.46-1.97-1.18-2.61C20.37 14.54 21 12.84 21 11H6.44z"/>
+                </svg>
+                <span>Orders</span>
+            </a>
+            <a href="pay.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
+                </svg>
+                <span>Exchange</span>
+            </a>
+            <a href="status.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
+                    <path d="M7 10h2v7H7zm4-3h2v10h-2zm4-3h2v13h-2z"/>
+                </svg>
+                <span>Status</span>
+            </a>
+        </nav>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-background"></div>
+            <div class="footer-links">
+                <a href="privacy.html">Privacy</a>
+                <a href="faq.html">FAQ</a>
+                <a href="services.html">Products</a>
             </div>
-        </div>
-    </footer>
+        </footer>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
 
     <script src="script.js"></script>
 </body>
