@@ -1,7 +1,4 @@
-// Configuration
-const GAS_URL = 'YOUR_GAS_DEPLOY_URL'; // Replace with your deployed GAS URL
-
-// Service Pricing System
+const GAS_URL = 'YOUR_GAS_DEPLOY_URL';
 const SERVICE_PRICES = {
     sim: {
         'mpt-3gb': { name: 'MPT 3GB/7Days', price: 1500 },
