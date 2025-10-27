@@ -1,7 +1,7 @@
 // === Configuration ===
 const EXTERNAL_ASSETS = {
     logo: {
-        light: 'https://example.com/logo/easyrecharge-light.svg',
+        light: 'https://i.postimg.cc/t46Z0n79/IMG-20251027-132605-899.png',
         dark: 'https://i.postimg.cc/d3RHSVrF/ei-1761547356275-removebg-preview.png'
     },
     profile: {
