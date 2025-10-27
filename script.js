@@ -2,7 +2,7 @@
 const EXTERNAL_ASSETS = {
     logo: {
         light: 'https://example.com/logo/easyrecharge-light.svg',
-        dark: 'https://example.com/logo/easyrecharge-dark.svg'
+        dark: 'https://i.postimg.cc/d3RHSVrF/ei-1761547356275-removebg-preview.png'
     },
     profile: {
         baseUrl: 'https://example.com/profiles/',
