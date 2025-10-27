@@ -1,552 +1,557 @@
-// script.js - Updated with fixed pricing and auto-calculation
-const GAS_URL = "YOUR_GAS_DEPLOY_URL";
-
-// Service pricing data
-const SERVICE_PRICES = {
-    // SIM/Data Services
-    sim: {
-        'mpt-3gb': { name: 'MPT 3GB/7Days', price: 1500 },
-        'mpt-5gb': { name: 'MPT 5GB/15Days', price: 2500 },
-        'mpt-10gb': { name: 'MPT 10GB/30Days', price: 4500 },
-        'telenor-regular': { name: 'Telenor Regular', price: 1000 },
-        'telenor-data': { name: 'Telenor Data Bundle', price: 1200 },
-        'telenor-social': { name: 'Telenor Social Bundle', price: 800 },
-        'ooredoo-basic': { name: 'Ooredoo Basic', price: 2000 },
-        'ooredoo-premium': { name: 'Ooredoo Premium', price: 3500 },
-        'ooredoo-unlimited': { name: 'Ooredoo Unlimited', price: 6000 }
+// === Configuration ===
+const EXTERNAL_ASSETS = {
+    logo: {
+        light: 'https://example.com/logo/easyrecharge-light.svg',
+        dark: 'https://example.com/logo/easyrecharge-dark.svg'
     },
-    
-    // Game Services
-    game: {
-        'freefire-100': { name: 'Free Fire 100 Diamonds', price: 3000 },
-        'freefire-500': { name: 'Free Fire 500 Diamonds', price: 12000 },
-        'freefire-1000': { name: 'Free Fire 1000 Diamonds', price: 22000 },
-        'pubg-60': { name: 'PUBG 60 UC', price: 2000 },
-        'pubg-325': { name: 'PUBG 325 UC', price: 8000 },
-        'pubg-660': { name: 'PUBG 660 UC', price: 15000 },
-        'mlbb-86': { name: 'MLBB 86 Diamonds', price: 2500 },
-        'mlbb-429': { name: 'MLBB 429 Diamonds', price: 10000 },
-        'mlbb-875': { name: 'MLBB 875 Diamonds', price: 18000 }
+    profile: {
+        baseUrl: 'https://example.com/profiles/',
+        default: 'https://example.com/profiles/default-avatar.svg'
     },
-    
-    // SMM Services
-    smm: {
-        'fb-likes': { name: 'Facebook Likes', price: 2000, unit: 1000 },
-        'fb-followers': { name: 'Facebook Followers', price: 3500, unit: 1000 },
-        'fb-comments': { name: 'Facebook Comments', price: 4000, unit: 1000 },
-        'ig-followers': { name: 'Instagram Followers', price: 4000, unit: 1000 },
-        'ig-likes': { name: 'Instagram Likes', price: 2500, unit: 1000 },
-        'ig-views': { name: 'Instagram Views', price: 1500, unit: 1000 },
-        'yt-subscribers': { name: 'YouTube Subscribers', price: 8000, unit: 1000 },
-        'yt-likes': { name: 'YouTube Likes', price: 3000, unit: 1000 },
-        'yt-views': { name: 'YouTube Views', price: 2000, unit: 1000 }
+    icons: {
+        dashboard: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h1v7c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-7h1c.6 0 1-.4 1-1s-.4-1-1-1h-1V4c0-1.1-.9-2-2-2H6C4.9 2 4 2.9 4 4v7H3c-.6 0-1 .4-1 1s.4 1 1 1zm4-9h10v5H7V4zm0 16v-7h10v7H7z"/></svg>',
+        orders: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5-7l-3 3-2-2-2 2 4 4 5-5z"/></svg>',
+        exchange: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M6.99 11L3 15l3.99 4v-3H14v-2H6.99v-3zM21 9l-3.99-4v3H10v2h7.01v3L21 9z"/></svg>',
+        status: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8z"/></svg>',
+        sim: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19.99 4c0-1.1-.89-2-1.99-2h-8L4 8v12c0 1.1.9 2 2 2h12.01c1.1 0 1.99-.9 1.99-2l-.01-16zM9 19H7v-2h2v2zm8 0h-2v-2h2v2zm-8-4H7v-4h2v4zm4 4h-2v-4h2v4zm0-6h-2v-2h2v2zm4 2h-2v-4h2v4z"/></svg>',
+        game: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 10H3V8h18v8zM6 15h2v-2h2v-2H8V9H6v2H4v2h2z"/><circle cx="14.5" cy="12.5" r="1.5"/><circle cx="18.5" cy="12.5" r="1.5"/></svg>',
+        smm: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4v3c0 .6.4 1 1 1h.5c.2 0 .5-.1.7-.3L13.5 18H20c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14h-6.5l-1 1H9v-1H4V4h16v12z"/></svg>',
+        copy: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>',
+        refresh: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>',
+        back: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>'
     }
 };
 
-// Theme Management
-function initTheme() {
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    document.body.setAttribute('data-theme', savedTheme);
-    updateThemeToggle(savedTheme);
-}
+const SERVICE_PRICES = {
+    sim: {
+        'mpt-3gb': { name: 'MPT 3GB/7Days', price: 1500 },
+        'mpt-5gb': { name: 'MPT 5GB/30Days', price: 2500 },
+        'mpt-10gb': { name: 'MPT 10GB/30Days', price: 4500 },
+        'telenor-2gb': { name: 'Telenor 2GB/7Days', price: 1200 },
+        'telenor-5gb': { name: 'Telenor 5GB/30Days', price: 3000 },
+        'ooredoo-3gb': { name: 'Ooredoo 3GB/7Days', price: 1400 },
+        'ooredoo-8gb': { name: 'Ooredoo 8GB/30Days', price: 3800 }
+    },
+    game: {
+        'freefire-100': { name: 'Free Fire 100 Diamonds', price: 3000 },
+        'freefire-310': { name: 'Free Fire 310 Diamonds', price: 8500 },
+        'freefire-520': { name: 'Free Fire 520 Diamonds', price: 13500 },
+        'pubg-60': { name: 'PUBG Mobile 60 UC', price: 2000 },
+        'pubg-325': { name: 'PUBG Mobile 325 UC', price: 9500 },
+        'pubg-660': { name: 'PUBG Mobile 660 UC', price: 18500 },
+        'ml-50': { name: 'Mobile Legends 50 Diamonds', price: 1800 },
+        'ml-100': { name: 'Mobile Legends 100 Diamonds', price: 3500 }
+    },
+    smm: {
+        'fb-likes': { name: 'Facebook Likes', price: 2000, unit: 1000 },
+        'fb-followers': { name: 'Facebook Followers', price: 1500, unit: 1000 },
+        'ig-likes': { name: 'Instagram Likes', price: 1800, unit: 1000 },
+        'ig-followers': { name: 'Instagram Followers', price: 2000, unit: 1000 },
+        'yt-views': { name: 'YouTube Views', price: 2500, unit: 1000 },
+        'yt-likes': { name: 'YouTube Likes', price: 3000, unit: 1000 },
+        'tt-followers': { name: 'TikTok Followers', price: 2200, unit: 1000 },
+        'tt-likes': { name: 'TikTok Likes', price: 1800, unit: 1000 }
+    }
+};
 
-function toggleTheme() {
-    const currentTheme = document.body.getAttribute('data-theme');
-    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-    
-    document.body.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-    updateThemeToggle(newTheme);
-}
+const GAS_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
 
-function updateThemeToggle(theme) {
-    const toggle = document.getElementById('modeToggle');
-    if (toggle) {
-        toggle.textContent = theme === 'light' ? '🌙' : '☀️';
+// === Theme Management ===
+class ThemeManager {
+    constructor() {
+        this.currentTheme = localStorage.getItem('theme') || 'light';
+        this.init();
+    }
+
+    init() {
+        this.applyTheme(this.currentTheme);
+        this.setupEventListeners();
+    }
+
+    applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        this.updateLogo(theme);
+    }
+
+    toggleTheme() {
+        this.currentTheme = this.currentTheme === 'light' ? 'dark' : 'light';
+        this.applyTheme(this.currentTheme);
+    }
+
+    setupEventListeners() {
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => this.toggleTheme());
+        }
+    }
+
+    updateLogo(theme) {
+        const logo = document.getElementById('mainLogo');
+        if (logo) {
+            logo.src = EXTERNAL_ASSETS.logo[theme];
+        }
     }
 }
 
-// User Management
-function initUser() {
-    let userId = localStorage.getItem('userId');
-    if (!userId) {
-        userId = generateUserId();
-        localStorage.setItem('userId', userId);
-    }
-    
-    const device = detectDevice();
-    localStorage.setItem('userDevice', device);
-    
-    // Update user info in forms
-    document.querySelectorAll('#userId').forEach(el => {
-        if (el) el.value = userId;
-    });
-    
-    document.querySelectorAll('#userDevice').forEach(el => {
-        if (el) el.value = device;
-    });
-    
-    // Update display elements
-    const userIdDisplay = document.getElementById('userId');
-    const userDeviceDisplay = document.getElementById('userDevice');
-    
-    if (userIdDisplay && userIdDisplay.tagName === 'SPAN') {
-        userIdDisplay.textContent = userId;
-    }
-    if (userDeviceDisplay) {
-        userDeviceDisplay.textContent = device;
+// === User Management ===
+class UserManager {
+    constructor() {
+        this.userId = this.getUserId();
+        this.init();
     }
 
-    // Update profile picture with user initial
-    const profilePic = document.querySelector('.profile-pic');
-    if (profilePic) {
-        const initial = userId.charAt(0).toUpperCase();
-        profilePic.textContent = initial;
+    getUserId() {
+        let userId = localStorage.getItem('userId');
+        if (!userId) {
+            userId = 'user_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('userId', userId);
+        }
+        return userId;
     }
-}
 
-function generateUserId() {
-    return 'USER_' + Math.random().toString(36).substr(2, 9).toUpperCase();
-}
-
-function detectDevice() {
-    const ua = navigator.userAgent;
-    if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry/.test(ua)) {
-        return '📱 Mobile';
-    } else if (/Tablet|iPad/.test(ua)) {
-        return '📟 Tablet';
-    } else {
-        return '💻 Desktop';
+    init() {
+        this.updateProfileSection();
     }
-}
 
-// Enhanced Form Calculations with Fixed Pricing
-function initFormCalculations() {
-    // SIM/Data form
-    const simForm = document.getElementById('simOrderForm');
-    if (simForm) {
-        const serviceSelect = simForm.querySelector('#service');
-        const quantity = simForm.querySelector('#quantity');
-        const price = simForm.querySelector('#price');
-        const total = simForm.querySelector('#totalAmount');
-        
-        serviceSelect.innerHTML = `
-            <option value="">Select Service</option>
-            <option value="mpt-3gb">MPT 3GB/7Days - 1,500 MMK</option>
-            <option value="mpt-5gb">MPT 5GB/15Days - 2,500 MMK</option>
-            <option value="mpt-10gb">MPT 10GB/30Days - 4,500 MMK</option>
-            <option value="telenor-regular">Telenor Regular - 1,000 MMK</option>
-            <option value="telenor-data">Telenor Data Bundle - 1,200 MMK</option>
-            <option value="telenor-social">Telenor Social Bundle - 800 MMK</option>
-            <option value="ooredoo-basic">Ooredoo Basic - 2,000 MMK</option>
-            <option value="ooredoo-premium">Ooredoo Premium - 3,500 MMK</option>
-            <option value="ooredoo-unlimited">Ooredoo Unlimited - 6,000 MMK</option>
-        `;
-        
-        const calculateTotal = () => {
-            if (serviceSelect && quantity && price && total) {
-                const selectedService = SERVICE_PRICES.sim[serviceSelect.value];
-                if (selectedService) {
-                    price.value = selectedService.price;
-                    const qty = parseInt(quantity.value) || 1;
-                    total.value = (qty * selectedService.price).toLocaleString() + ' MMK';
-                } else {
-                    price.value = '';
-                    total.value = '0 MMK';
-                }
-            }
+    updateProfileSection() {
+        const userIdElement = document.getElementById('userId');
+        const profilePicture = document.getElementById('profilePicture');
+
+        if (userIdElement) {
+            userIdElement.textContent = this.userId;
+        }
+
+        if (profilePicture) {
+            this.loadProfilePicture(profilePicture);
+        }
+
+        this.updateDeviceInfo();
+    }
+
+    loadProfilePicture(imgElement) {
+        const profileUrl = `${EXTERNAL_ASSETS.profile.baseUrl}${this.userId}.jpg`;
+        imgElement.src = profileUrl;
+        imgElement.onerror = () => {
+            imgElement.src = EXTERNAL_ASSETS.profile.default;
         };
-        
-        serviceSelect?.addEventListener('change', calculateTotal);
-        quantity?.addEventListener('input', calculateTotal);
     }
-    
-    // Game form
-    const gameForm = document.getElementById('gameOrderForm');
-    if (gameForm) {
-        const gameSelect = gameForm.querySelector('#game');
-        const quantity = gameForm.querySelector('#quantity');
-        const price = gameForm.querySelector('#price');
-        const total = gameForm.querySelector('#totalAmount');
-        
-        gameSelect.innerHTML = `
-            <option value="">Select Game Package</option>
-            <option value="freefire-100">Free Fire 100 Diamonds - 3,000 MMK</option>
-            <option value="freefire-500">Free Fire 500 Diamonds - 12,000 MMK</option>
-            <option value="freefire-1000">Free Fire 1000 Diamonds - 22,000 MMK</option>
-            <option value="pubg-60">PUBG 60 UC - 2,000 MMK</option>
-            <option value="pubg-325">PUBG 325 UC - 8,000 MMK</option>
-            <option value="pubg-660">PUBG 660 UC - 15,000 MMK</option>
-            <option value="mlbb-86">MLBB 86 Diamonds - 2,500 MMK</option>
-            <option value="mlbb-429">MLBB 429 Diamonds - 10,000 MMK</option>
-            <option value="mlbb-875">MLBB 875 Diamonds - 18,000 MMK</option>
-        `;
-        
-        const calculateTotal = () => {
-            if (gameSelect && quantity && price && total) {
-                const selectedService = SERVICE_PRICES.game[gameSelect.value];
-                if (selectedService) {
-                    price.value = selectedService.price;
-                    const qty = parseInt(quantity.value) || 1;
-                    total.value = (qty * selectedService.price).toLocaleString() + ' MMK';
-                } else {
-                    price.value = '';
-                    total.value = '0 MMK';
-                }
+
+    updateDeviceInfo() {
+        const deviceInfo = document.getElementById('deviceInfo');
+        if (deviceInfo) {
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            deviceInfo.textContent = isMobile ? 'Mobile Device' : 'Desktop Device';
+        }
+    }
+}
+
+// === Form Management ===
+class FormManager {
+    constructor() {
+        this.setupEventListeners();
+    }
+
+    setupEventListeners() {
+        // Service selection changes
+        document.addEventListener('change', (e) => {
+            if (e.target.name === 'service') {
+                this.updatePrice(e.target);
             }
-        };
-        
-        gameSelect?.addEventListener('change', calculateTotal);
-        quantity?.addEventListener('input', calculateTotal);
-    }
-    
-    // SMM form
-    const smmForm = document.getElementById('smmOrderForm');
-    if (smmForm) {
-        const serviceSelect = smmForm.querySelector('#service');
-        const quantity = smmForm.querySelector('#quantity');
-        const price = smmForm.querySelector('#price');
-        const total = smmForm.querySelector('#totalAmount');
-        
-        serviceSelect.innerHTML = `
-            <option value="">Select SMM Service</option>
-            <option value="fb-likes">Facebook Likes (per 1000) - 2,000 MMK</option>
-            <option value="fb-followers">Facebook Followers (per 1000) - 3,500 MMK</option>
-            <option value="fb-comments">Facebook Comments (per 1000) - 4,000 MMK</option>
-            <option value="ig-followers">Instagram Followers (per 1000) - 4,000 MMK</option>
-            <option value="ig-likes">Instagram Likes (per 1000) - 2,500 MMK</option>
-            <option value="ig-views">Instagram Views (per 1000) - 1,500 MMK</option>
-            <option value="yt-subscribers">YouTube Subscribers (per 1000) - 8,000 MMK</option>
-            <option value="yt-likes">YouTube Likes (per 1000) - 3,000 MMK</option>
-            <option value="yt-views">YouTube Views (per 1000) - 2,000 MMK</option>
-        `;
-        
-        const calculateTotal = () => {
-            if (serviceSelect && quantity && price && total) {
-                const selectedService = SERVICE_PRICES.smm[serviceSelect.value];
-                if (selectedService) {
-                    price.value = selectedService.price;
-                    const qty = parseInt(quantity.value) || 100;
-                    const unit = selectedService.unit || 1;
-                    total.value = (qty * selectedService.price / unit).toLocaleString() + ' MMK';
-                } else {
-                    price.value = '';
-                    total.value = '0 MMK';
-                }
+            if (e.target.name === 'quantity') {
+                this.calculateTotal(e.target);
             }
-        };
-        
-        serviceSelect?.addEventListener('change', calculateTotal);
-        quantity?.addEventListener('input', calculateTotal);
-        
-        // Set default quantity for SMM
-        quantity.value = 1000;
+        });
+
+        // Form submissions
+        document.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.handleFormSubmit(e.target);
+        });
+
+        // Copy buttons
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('copy-btn') || e.target.closest('.copy-btn')) {
+                this.handleCopy(e);
+            }
+        });
     }
-    
-    // P2P form calculations
-    const p2pForm = document.getElementById('p2pForm');
-    if (p2pForm) {
-        const amount = p2pForm.querySelector('#amount');
-        const fee = p2pForm.querySelector('#fee');
-        const receive = p2pForm.querySelector('#receive');
+
+    updatePrice(selectElement) {
+        const form = selectElement.closest('form');
+        const category = form.dataset.category;
+        const serviceId = selectElement.value;
+        const priceElement = form.querySelector('.price-display');
+
+        if (priceElement && SERVICE_PRICES[category] && SERVICE_PRICES[category][serviceId]) {
+            const service = SERVICE_PRICES[category][serviceId];
+            priceElement.textContent = `${service.price} MMK`;
+            this.calculateTotal(selectElement);
+        }
+    }
+
+    calculateTotal(triggerElement) {
+        const form = triggerElement.closest('form');
+        const quantityInput = form.querySelector('input[name="quantity"]');
+        const serviceSelect = form.querySelector('select[name="service"]');
+        const totalElement = form.querySelector('.total-display');
+
+        if (quantityInput && serviceSelect && totalElement) {
+            const quantity = parseInt(quantityInput.value) || 0;
+            const category = form.dataset.category;
+            const serviceId = serviceSelect.value;
+
+            if (SERVICE_PRICES[category] && SERVICE_PRICES[category][serviceId]) {
+                const service = SERVICE_PRICES[category][serviceId];
+                const total = service.price * quantity;
+                totalElement.textContent = `${total} MMK`;
+            }
+        }
+    }
+
+    async handleFormSubmit(form) {
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
         
-        const calculateP2P = () => {
-            if (amount && fee && receive) {
-                const amt = parseInt(amount.value) || 0;
-                const feeAmount = Math.max(100, Math.floor(amt * 0.01)); // 1% fee, min 100 MMK
-                const receiveAmount = amt - feeAmount;
+        try {
+            submitBtn.innerHTML = '<div class="spinner"></div> Processing...';
+            submitBtn.disabled = true;
+
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            
+            // Add user info
+            data.userId = userManager.userId;
+            data.timestamp = new Date().toISOString();
+
+            const response = await fetch(GAS_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                this.showToast('Order submitted successfully!', 'success');
+                form.reset();
                 
-                fee.value = feeAmount.toLocaleString() + ' MMK';
-                receive.value = receiveAmount.toLocaleString() + ' MMK';
+                // Redirect to status page after successful order
+                setTimeout(() => {
+                    window.location.href = 'status.html';
+                }, 2000);
+            } else {
+                throw new Error(result.error || 'Submission failed');
             }
+
+        } catch (error) {
+            console.error('Form submission error:', error);
+            this.showToast('Failed to submit order. Please try again.', 'error');
+        } finally {
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }
+    }
+
+    handleCopy(e) {
+        const button = e.target.classList.contains('copy-btn') ? e.target : e.target.closest('.copy-btn');
+        const textToCopy = button.dataset.copy;
+        
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            this.showToast('Copied to clipboard!', 'success');
+            
+            // Visual feedback
+            const originalHTML = button.innerHTML;
+            button.innerHTML = '<svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Copied!';
+            
+            setTimeout(() => {
+                button.innerHTML = originalHTML;
+            }, 2000);
+        }).catch(() => {
+            this.showToast('Failed to copy text', 'error');
+        });
+    }
+
+    showToast(message, type = 'info') {
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.innerHTML = `
+            <svg class="toast-icon" viewBox="0 0 24 24" fill="currentColor">
+                ${this.getToastIcon(type)}
+            </svg>
+            <span>${message}</span>
+        `;
+
+        const container = document.getElementById('toastContainer') || this.createToastContainer();
+        container.appendChild(toast);
+
+        // Show toast
+        setTimeout(() => toast.classList.add('show'), 100);
+
+        // Remove toast after delay
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+
+    getToastIcon(type) {
+        const icons = {
+            success: '<path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>',
+            error: '<path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>',
+            info: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>'
         };
-        
-        amount?.addEventListener('input', calculateP2P);
+        return icons[type] || icons.info;
+    }
+
+    createToastContainer() {
+        const container = document.createElement('div');
+        container.id = 'toastContainer';
+        container.className = 'toast-container';
+        document.body.appendChild(container);
+        return container;
     }
 }
 
-// Copy to Clipboard
-function copyText(elementId) {
-    const element = document.getElementById(elementId);
-    if (!element) return;
-    
-    element.select();
-    element.setSelectionRange(0, 99999);
-    
-    try {
-        const successful = document.execCommand('copy');
-        if (successful) {
-            showToast('✅ Copied to clipboard!');
-        }
-    } catch (err) {
-        console.error('Failed to copy text: ', err);
-        showToast('❌ Failed to copy', 'error');
+// === Tab Management ===
+class TabManager {
+    constructor() {
+        this.setupEventListeners();
     }
-}
 
-// Toast Notifications
-function showToast(message, type = 'success') {
-    // Remove existing toast
-    const existingToast = document.querySelector('.toast');
-    if (existingToast) {
-        existingToast.remove();
-    }
-    
-    // Create new toast
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    toast.textContent = message;
-    document.body.appendChild(toast);
-    
-    // Show toast
-    setTimeout(() => toast.classList.add('show'), 100);
-    
-    // Hide toast after 3 seconds
-    setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => toast.remove(), 300);
-    }, 3000);
-}
-
-// Form Submission
-function initFormSubmissions() {
-    // SIM Order Form
-    const simForm = document.getElementById('simOrderForm');
-    if (simForm) {
-        simForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            submitOrderForm('simOrderForm', 'order');
-        });
-    }
-    
-    // Game Order Form
-    const gameForm = document.getElementById('gameOrderForm');
-    if (gameForm) {
-        gameForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            submitOrderForm('gameOrderForm', 'order');
-        });
-    }
-    
-    // SMM Order Form
-    const smmForm = document.getElementById('smmOrderForm');
-    if (smmForm) {
-        smmForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            submitOrderForm('smmOrderForm', 'order_smm');
-        });
-    }
-    
-    // P2P Form
-    const p2pForm = document.getElementById('p2pForm');
-    if (p2pForm) {
-        p2pForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            submitP2PForm();
-        });
-    }
-}
-
-async function submitOrderForm(formId, action) {
-    const form = document.getElementById(formId);
-    if (!form) return;
-    
-    const formData = new FormData(form);
-    const orderData = {
-        action: action,
-        order: {
-            orderId: generateOrderId(),
-            userId: localStorage.getItem('userId'),
-            device: localStorage.getItem('userDevice'),
-            timestamp: new Date().toISOString(),
-            category: readCategoryFromURL() || 'general'
-        }
-    };
-    
-    // Collect form fields
-    for (let [key, value] of formData.entries()) {
-        if (key !== 'paymentMethod') {
-            orderData.order[key] = value;
-        }
-    }
-    
-    // Get payment method
-    const paymentMethod = form.querySelector('input[name="paymentMethod"]:checked');
-    if (paymentMethod) {
-        orderData.order.paymentMethod = paymentMethod.value;
-    }
-    
-    // Get service name from pricing data
-    const serviceSelect = form.querySelector('select');
-    if (serviceSelect && serviceSelect.value) {
-        const category = readCategoryFromURL() || 'sim';
-        const serviceData = SERVICE_PRICES[category][serviceSelect.value];
-        if (serviceData) {
-            orderData.order.serviceName = serviceData.name;
-        }
-    }
-    
-    try {
-        showToast('🔄 Submitting order...', 'info');
-        const response = await fetch(GAS_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(orderData)
-        });
-        
-        const result = await response.json();
-        
-        if (result.success) {
-            showToast('✅ Order submitted successfully!');
-            localStorage.setItem('last_order_id', result.orderId);
-            setTimeout(() => {
-                window.location.href = 'status.html';
-            }, 2000);
-        } else {
-            showToast('❌ Failed to submit order. Please try again.', 'error');
-        }
-    } catch (error) {
-        console.error('Error submitting order:', error);
-        showToast('❌ Network error. Please check your connection.', 'error');
-    }
-}
-
-async function submitP2PForm() {
-    const form = document.getElementById('p2pForm');
-    if (!form) return;
-    
-    const formData = new FormData(form);
-    const p2pData = {
-        action: 'p2p',
-        data: {
-            orderId: generateOrderId(),
-            userId: localStorage.getItem('userId'),
-            timestamp: new Date().toISOString(),
-            fromPayment: formData.get('fromPayment'),
-            toPayment: formData.get('toPayment'),
-            amount: formData.get('amount'),
-            transactionId: formData.get('transactionId')
-        }
-    };
-    
-    try {
-        showToast('🔄 Processing exchange...', 'info');
-        const response = await fetch(GAS_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(p2pData)
-        });
-        
-        const result = await response.json();
-        
-        if (result.success) {
-            showToast('✅ P2P exchange submitted successfully!');
-            localStorage.setItem('last_order_id', result.orderId);
-            setTimeout(() => {
-                window.location.href = 'status.html';
-            }, 2000);
-        } else {
-            showToast('❌ Failed to submit exchange. Please try again.', 'error');
-        }
-    } catch (error) {
-        console.error('Error submitting P2P:', error);
-        showToast('❌ Network error. Please check your connection.', 'error');
-    }
-}
-
-function generateOrderId() {
-    const timestamp = Date.now().toString(36);
-    const random = Math.random().toString(36).substr(2, 5);
-    return `ORD_${timestamp}_${random}`.toUpperCase();
-}
-
-function readCategoryFromURL() {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('category');
-}
-
-// Tab Management
-function initTabs() {
-    const tabBtns = document.querySelectorAll('.tab-btn');
-    const tabContents = document.querySelectorAll('.tab-content');
-    
-    tabBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const tabId = btn.getAttribute('data-tab');
-            
-            // Update buttons
-            tabBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            
-            // Update contents
-            tabContents.forEach(content => {
-                content.classList.remove('active');
-                if (content.id === `${tabId}-tab`) {
-                    content.classList.add('active');
-                }
-            });
-            
-            // Load data for active tab
-            if (tabId === 'orders') {
-                loadUserOrders();
+    setupEventListeners() {
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('tab') || e.target.closest('.tab')) {
+                const tab = e.target.classList.contains('tab') ? e.target : e.target.closest('.tab');
+                this.switchTab(tab.dataset.tab);
             }
         });
+    }
+
+    switchTab(tabId) {
+        // Update tab buttons
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.classList.toggle('active', tab.dataset.tab === tabId);
+        });
+
+        // Update tab content
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.toggle('active', content.id === `${tabId}-tab`);
+        });
+
+        // Load data for the tab if needed
+        if (typeof this.loadTabData === 'function') {
+            this.loadTabData(tabId);
+        }
+    }
+}
+
+// === Accordion Management ===
+class AccordionManager {
+    constructor() {
+        this.setupEventListeners();
+    }
+
+    setupEventListeners() {
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('accordion-header') || e.target.closest('.accordion-header')) {
+                const header = e.target.classList.contains('accordion-header') ? e.target : e.target.closest('.accordion-header');
+                const accordion = header.parentElement;
+                this.toggleAccordion(accordion);
+            }
+        });
+    }
+
+    toggleAccordion(accordion) {
+        const isActive = accordion.classList.contains('active');
+        
+        // Close all accordions
+        document.querySelectorAll('.accordion').forEach(acc => {
+            acc.classList.remove('active');
+        });
+
+        // Open clicked accordion if it wasn't active
+        if (!isActive) {
+            accordion.classList.add('active');
+        }
+    }
+}
+
+// === Order Status Management ===
+class OrderStatusManager {
+    constructor() {
+        this.setupEventListeners();
+    }
+
+    setupEventListeners() {
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('refresh-orders') || e.target.closest('.refresh-orders')) {
+                this.refreshOrders();
+            }
+        });
+    }
+
+    async refreshOrders() {
+        const refreshBtn = document.querySelector('.refresh-orders');
+        const originalHTML = refreshBtn.innerHTML;
+
+        try {
+            refreshBtn.innerHTML = '<div class="spinner"></div>';
+            
+            const response = await fetch(`${GAS_URL}?action=list&userId=${userManager.userId}`);
+            const orders = await response.json();
+            
+            this.displayOrders(orders);
+            formManager.showToast('Orders updated!', 'success');
+        } catch (error) {
+            console.error('Error fetching orders:', error);
+            formManager.showToast('Failed to update orders', 'error');
+        } finally {
+            refreshBtn.innerHTML = originalHTML;
+        }
+    }
+
+    displayOrders(orders) {
+        const container = document.getElementById('ordersContainer');
+        if (!container) return;
+
+        if (orders.length === 0) {
+            container.innerHTML = '<div class="text-center">No orders found</div>';
+            return;
+        }
+
+        const ordersHTML = orders.map(order => `
+            <tr>
+                <td>${order.orderId}</td>
+                <td>${order.service}</td>
+                <td>${order.quantity}</td>
+                <td>${order.total} MMK</td>
+                <td>
+                    <span class="status-badge status-${order.status.toLowerCase()}">
+                        <svg class="icon" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                            ${this.getStatusIcon(order.status)}
+                        </svg>
+                        ${order.status}
+                    </span>
+                </td>
+                <td>${new Date(order.timestamp).toLocaleDateString()}</td>
+            </tr>
+        `).join('');
+
+        container.innerHTML = ordersHTML;
+    }
+
+    getStatusIcon(status) {
+        const icons = {
+            'Pending': '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/><circle cx="12" cy="12" r="5"/>',
+            'Processing': '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/><path d="M12 6v6l4 2"/>',
+            'Success': '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>',
+            'Cancelled': '<path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/><path d="M15 9l-6 6m0-6l6 6"/>'
+        };
+        return icons[status] || icons.Pending;
+    }
+}
+
+// === Payment Method Selection ===
+class PaymentManager {
+    constructor() {
+        this.setupEventListeners();
+    }
+
+    setupEventListeners() {
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('payment-method') || e.target.closest('.payment-method')) {
+                const method = e.target.classList.contains('payment-method') ? e.target : e.target.closest('.payment-method');
+                this.selectPaymentMethod(method);
+            }
+        });
+    }
+
+    selectPaymentMethod(method) {
+        // Deselect all methods
+        document.querySelectorAll('.payment-method').forEach(m => {
+            m.classList.remove('selected');
+        });
+
+        // Select clicked method
+        method.classList.add('selected');
+
+        // Update hidden input if it exists
+        const paymentInput = document.querySelector('input[name="payment"]');
+        if (paymentInput) {
+            paymentInput.value = method.dataset.method;
+        }
+    }
+}
+
+// === Initialize Application ===
+let themeManager, userManager, formManager, tabManager, accordionManager, orderStatusManager, paymentManager;
+
+document.addEventListener('DOMContentLoaded', () => {
+    themeManager = new ThemeManager();
+    userManager = new UserManager();
+    formManager = new FormManager();
+    tabManager = new TabManager();
+    accordionManager = new AccordionManager();
+    orderStatusManager = new OrderStatusManager();
+    paymentManager = new PaymentManager();
+
+    // Update navigation active state
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    document.querySelectorAll('.nav-item').forEach(item => {
+        if (item.getAttribute('href') === currentPage) {
+            item.classList.add('active');
+        }
+    });
+
+    // Initialize any page-specific functionality
+    this.initializePageSpecificFeatures();
+});
+
+function initializePageSpecificFeatures() {
+    // Dashboard stats (mock data)
+    const totalOrders = document.getElementById('totalOrders');
+    const totalExchange = document.getElementById('totalExchange');
+    
+    if (totalOrders) totalOrders.textContent = '1,247';
+    if (totalExchange) totalExchange.textContent = '2,584,500 MMK';
+
+    // Update SVG icons
+    this.updateSvgIcons();
+}
+
+function updateSvgIcons() {
+    // Update navigation icons
+    document.querySelectorAll('.nav-icon').forEach(icon => {
+        const iconName = icon.dataset.icon;
+        if (EXTERNAL_ASSETS.icons[iconName]) {
+            icon.innerHTML = EXTERNAL_ASSETS.icons[iconName];
+        }
+    });
+
+    // Update other icons as needed
+    document.querySelectorAll('.icon[data-icon]').forEach(icon => {
+        const iconName = icon.dataset.icon;
+        if (EXTERNAL_ASSETS.icons[iconName]) {
+            icon.innerHTML = EXTERNAL_ASSETS.icons[iconName];
+        }
     });
 }
 
-// Accordion
-function initAccordion() {
-    const accordionBtns = document.querySelectorAll('.accordion-btn');
-    
-    accordionBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const content = btn.nextElementSibling;
-            const isActive = content.classList.contains('active');
-            
-            // Close all accordions
-            document.querySelectorAll('.accordion-content').forEach(c => {
-                c.classList.remove('active');
-                c.previousElementSibling.classList.remove('active');
-            });
-            
-            // Open current if it was closed
-            if (!isActive) {
-                content.classList.add('active');
-                btn.classList.add('active');
-            }
-        });
+// Utility function for external asset loading
+function loadExternalAsset(url, element, fallback) {
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+            element.src = url;
+            resolve(true);
+        };
+        img.onerror = () => {
+            element.src = fallback;
+            resolve(false);
+        };
+        img.src = url;
     });
 }
-
-// Dashboard Data
-async function loadDashboardData() {
-    try {
-        // Simulate API call with better visual feedback
-        const elements = {
-            totalOrders: document.getElementById('totalOrders'),
-            totalExchange: document.getElementById('totalExchange'),
-            activeUsers: document.getElementById('activeUsers'),
-            allOrders: document.getElementById('allOrders'),
-            allExchange: document.getElementById('allExchange')
-        };
-        
-        // Animate counting effect
-        Object.values(elements).forEach(el => {
-            if (el) {
-                animateCount(el, Math.floor(Math.random() * 1000));
-            }
-        });
-        
-    } catch (error) {
-        console.error('Error loading dashboard data:', error);
-    }
-}
-
-function animateCount(element, target) {
-    let current = 0;
-    const increment = target / 50;
-    const timer = setI
