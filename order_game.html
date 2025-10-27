@@ -1,123 +1,236 @@
-<!-- order_game.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EasyRecharge MM - Game TopUp</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Game TopUp - Easy Recharge MM</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="logo">
-                <h1>EasyRecharge MM</h1>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <a href="order.html" class="back-link">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                </svg>
+                Back
+            </a>
+            <div class="brand">
+                <h1>Game TopUp</h1>
             </div>
-            <button id="modeToggle" class="theme-toggle">🌙</button>
-        </div>
-    </header>
+            <button class="theme-toggle" id="themeToggle">
+                <span class="theme-icon">🌙</span>
+            </button>
+        </header>
 
-    <main class="container">
-        <div class="back-link">
-            <a href="order.html">← Back to Categories</a>
-        </div>
+        <!-- Order Form -->
+        <form id="gameOrderForm" class="form-container">
+            <!-- User Info -->
+            <div class="form-group">
+                <label for="userId">User ID</label>
+                <input type="text" id="userId" class="form-control" readonly>
+            </div>
 
-        <section class="order-form-section">
-            <h2>Game TopUp Order</h2>
-            
-            <form id="gameOrderForm" class="order-form">
-                <div class="form-group">
-                    <label>User ID</label>
-                    <input type="text" id="userId" readonly>
-                </div>
+            <div class="form-group">
+                <label for="userDevice">Device</label>
+                <input type="text" id="userDevice" class="form-control" readonly>
+            </div>
 
-                <div class="form-group">
-                    <label>Device</label>
-                    <input type="text" id="userDevice" readonly>
-                </div>
+            <!-- Game Selection -->
+            <div class="form-group">
+                <label for="service">Game & Package *</label>
+                <select id="service" name="service" class="form-control" required>
+                    <option value="">Select Game Package</option>
+                    <optgroup label="Free Fire">
+                        <option value="freefire-100">100 Diamonds - 3,000 MMK</option>
+                        <option value="freefire-500">500 Diamonds - 12,000 MMK</option>
+                        <option value="freefire-1000">1000 Diamonds - 22,000 MMK</option>
+                    </optgroup>
+                    <optgroup label="PUBG Mobile">
+                        <option value="pubg-60">60 UC - 2,000 MMK</option>
+                        <option value="pubg-325">325 UC - 8,000 MMK</option>
+                        <option value="pubg-660">660 UC - 15,000 MMK</option>
+                    </optgroup>
+                    <optgroup label="Mobile Legends">
+                        <option value="mlbb-86">86 Diamonds - 2,500 MMK</option>
+                        <option value="mlbb-429">429 Diamonds - 10,000 MMK</option>
+                        <option value="mlbb-875">875 Diamonds - 18,000 MMK</option>
+                    </optgroup>
+                </select>
+            </div>
 
-                <div class="form-group">
-                    <label for="game">Game *</label>
-                    <select id="game" required>
-                        <option value="">Select Game</option>
-                        <option value="freefire">Free Fire</option>
-                        <option value="pubg">PUBG Mobile</option>
-                        <option value="mlbb">Mobile Legends</option>
-                        <option value="genshin">Genshin Impact</option>
-                    </select>
-                </div>
+            <!-- Game ID -->
+            <div class="form-group">
+                <label for="gameId">Game ID *</label>
+                <input type="text" id="gameId" name="gameId" class="form-control" placeholder="Enter your Game ID" required>
+            </div>
 
-                <div class="form-group">
-                    <label for="gameId">Game ID *</label>
-                    <input type="text" id="gameId" required placeholder="Enter your Game ID">
-                </div>
+            <!-- Server/Region -->
+            <div class="form-group">
+                <label for="server">Server/Region</label>
+                <input type="text" id="server" name="server" class="form-control" placeholder="Optional: Server name">
+            </div>
 
-                <div class="form-group">
-                    <label for="server">Server</label>
-                    <input type="text" id="server" placeholder="Server name/number">
-                </div>
+            <!-- Quantity & Pricing -->
+            <div class="form-group">
+                <label for="quantity">Quantity</label>
+                <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1" max="5">
+            </div>
 
-                <div class="form-group">
-                    <label for="quantity">Quantity *</label>
-                    <input type="number" id="quantity" value="1" min="1" required>
-                </div>
+            <div class="form-group">
+                <label for="price">Price per unit</label>
+                <input type="text" id="price" class="form-control" readonly>
+            </div>
 
-                <div class="form-group">
-                    <label for="price">Price per Unit (MMK) *</label>
-                    <input type="number" id="price" required min="100" step="100">
-                </div>
+            <div class="form-group">
+                <label for="total">Total Amount</label>
+                <input type="text" id="total" name="total" class="form-control" readonly>
+            </div>
 
-                <div class="form-group">
-                    <label>Total Amount (MMK)</label>
-                    <input type="text" id="totalAmount" readonly>
-                </div>
-
-                <div class="form-group">
-                    <label>Payment Method *</label>
-                    <div class="radio-group">
-                        <label><input type="radio" name="paymentMethod" value="kbz" required> KBZ Pay</label>
-                        <label><input type="radio" name="paymentMethod" value="wave"> Wave Money</label>
-                        <label><input type="radio" name="paymentMethod" value="cb"> CB Pay</label>
+            <!-- Payment Method -->
+            <div class="form-group">
+                <label>Payment Method *</label>
+                <div class="radio-group">
+                    <div class="radio-item">
+                        <input type="radio" id="kpay-game" name="payment" value="KBZ Pay" required>
+                        <label for="kpay-game">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                                <circle cx="12" cy="12" r="10" fill="#00a76e"/>
+                                <text x="12" y="16" text-anchor="middle" fill="white" font-size="8" font-weight="bold">K</text>
+                            </svg>
+                            KBZ Pay
+                        </label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="wave-game" name="payment" value="Wave Money" required>
+                        <label for="wave-game">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                                <circle cx="12" cy="12" r="10" fill="#6b5aed"/>
+                                <text x="12" y="16" text-anchor="middle" fill="white" font-size="8" font-weight="bold">W</text>
+                            </svg>
+                            Wave Money
+                        </label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="cb-game" name="payment" value="CB Pay" required>
+                        <label for="cb-game">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                                <circle cx="12" cy="12" r="10" fill="#e6007e"/>
+                                <text x="12" y="16" text-anchor="middle" fill="white" font-size="8" font-weight="bold">C</text>
+                            </svg>
+                            CB Pay
+                        </label>
                     </div>
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <label>Payment Number</label>
-                    <div class="copy-field">
-                        <input type="text" id="paymentNumber" readonly value="09XXXXXXX">
-                        <button type="button" onclick="copyText('paymentNumber')">Copy</button>
-                    </div>
+            <!-- Payment Number -->
+            <div class="form-group">
+                <label>Payment Number</label>
+                <div class="payment-number">
+                    <input type="text" id="paymentNumber" class="form-control" value="09XXXXXXX" readonly>
+                    <button type="button" class="copy-btn" onclick="copyText('paymentNumber')">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                        </svg>
+                    </button>
                 </div>
+                <small style="opacity: 0.7; font-size: 0.8rem;">Make payment to this number and enter transaction ID below</small>
+            </div>
 
-                <div class="form-group">
-                    <label for="transactionId">Transaction ID *</label>
-                    <input type="text" id="transactionId" required placeholder="Enter transaction ID from payment">
-                </div>
+            <!-- Transaction ID -->
+            <div class="form-group">
+                <label for="transactionId">Transaction ID *</label>
+                <input type="text" id="transactionId" name="transactionId" class="form-control" placeholder="Enter transaction ID from payment" required>
+            </div>
 
-                <button type="submit" class="btn-primary">Submit Order</button>
-            </form>
-        </section>
-    </main>
+            <!-- Submit Button -->
+            <button type="submit" class="submit-btn">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+                Submit Order
+            </button>
+        </form>
 
-    <nav class="bottom-nav">
-        <div class="nav-container">
-            <a href="index.html" class="nav-item">Dashboard</a>
-            <a href="order.html" class="nav-item active">Orders</a>
-            <a href="pay.html" class="nav-item">Exchange</a>
-            <a href="status.html" class="nav-item">Status</a>
+        <!-- Game Instructions -->
+        <div class="form-container">
+            <h4>📝 Important Notes:</h4>
+            <ul style="padding-left: 20px; margin-top: 10px; font-size: 0.9rem;">
+                <li>Ensure your Game ID is correct</li>
+                <li>Delivery usually within 5-15 minutes</li>
+                <li>Keep the game open during top-up</li>
+                <li>Contact support if not received within 30 minutes</li>
+            </ul>
         </div>
-    </nav>
 
-    <footer>
-        <div class="footer-bg"></div>
-        <div class="footer-links">
-            <a href="privacy.html">Privacy</a>
-            <a href="faq.html">FAQ</a>
-            <a href="services.html">Products</a>
-        </div>
-    </footer>
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                </svg>
+                <span>Dashboard</span>
+            </a>
+            <a href="order.html" class="nav-item active">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M13 2v8h8c0-4.42-3.58-8-8-8zm2 6V4.34c1.7.6 3.05 1.95 3.66 3.66H15zm-8.56 3l-.95-2H2v2h2.22s1.89 4.07 2.12 4.42c-1.1.59-1.84 1.75-1.84 3.08C4.5 20.43 6.07 22 8 22c1.76 0 3.22-1.3 3.46-3h2.08c.24 1.7 1.7 3 3.46 3 1.93 0 3.5-1.57 3.5-3.5 0-1.04-.46-1.97-1.18-2.61C20.37 14.54 21 12.84 21 11H6.44z"/>
+                </svg>
+                <span>Orders</span>
+            </a>
+            <a href="pay.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
+                </svg>
+                <span>Exchange</span>
+            </a>
+            <a href="status.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
+                    <path d="M7 10h2v7H7zm4-3h2v10h-2zm4-3h2v13h-2z"/>
+                </svg>
+                <span>Status</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
 
     <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize user info
+            const userId = localStorage.getItem('userId');
+            document.getElementById('userId').value = userId;
+            
+            // Initialize device detection
+            const device = detectDevice();
+            document.getElementById('userDevice').value = device;
+            
+            // Initialize auto-calculation
+            initAutoCalculation('game');
+            
+            // Form submission
+            document.getElementById('gameOrderForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitOrderForm('gameOrderForm', 'order');
+            });
+            
+            // Update payment number based on selection
+            document.querySelectorAll('input[name="payment"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const paymentNumbers = {
+                        'KBZ Pay': '09 123 456 789',
+                        'Wave Money': '09 987 654 321',
+                        'CB Pay': '09 555 666 777'
+                    };
+                    document.getElementById('paymentNumber').value = paymentNumbers[this.value] || '09XXXXXXX';
+                });
+            });
+        });
+    </script>
 </body>
-</html>
+                </html>
