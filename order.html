@@ -1,68 +1,103 @@
-<!-- order.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EasyRecharge MM - Order</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Select Service - EasyRecharge MM</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
+    <!-- Header -->
+    <header class="header">
         <div class="container">
-            <div class="logo">
-                <h1>EasyRecharge MM</h1>
-            </div>
-            <button id="modeToggle" class="theme-toggle">🌙</button>
+            <nav class="navbar">
+                <a href="index.html" class="back-btn">
+                    <svg class="icon" data-icon="back" viewBox="0 0 24 24" fill="currentColor"></svg>
+                </a>
+                <img src="https://example.com/logo/easyrecharge-light.svg" alt="EasyRecharge MM" class="logo" id="mainLogo">
+                <button class="theme-toggle" id="themeToggle">🌓</button>
+            </nav>
         </div>
     </header>
 
+    <!-- Main Content -->
     <main class="container">
-        <div class="back-link">
-            <a href="index.html">← Back to Dashboard</a>
+        <div class="page-header text-center mb-2">
+            <h1>Select Service Type</h1>
+            <p>Choose the category of service you want to order</p>
         </div>
 
-        <section class="category-section">
-            <h2>Choose Category</h2>
-            <div class="category-grid">
-                <a href="order_sim.html?category=sim" class="category-card">
-                    <h3>SIM/Data</h3>
-                    <p>Mobile top-up and data packages</p>
-                </a>
-                <a href="order_game.html?category=game" class="category-card">
-                    <h3>Game TopUp</h3>
-                    <p>Game credits and vouchers</p>
-                </a>
-                <a href="order_smm.html?category=smm" class="category-card">
-                    <h3>SMM Services</h3>
-                    <p>Social media marketing</p>
-                </a>
-            </div>
-        </section>
+        <!-- Category Cards -->
+        <div class="card-grid">
+            <a href="order_sim.html" class="category-card">
+                <svg class="category-icon" data-icon="sim" viewBox="0 0 24 24" fill="currentColor"></svg>
+                <h3>SIM & Data Packages</h3>
+                <p>Mobile data plans for MPT, Telenor, Ooredoo</p>
+                <div class="service-count">7 services available</div>
+            </a>
 
-        <section class="info-section">
-            <p>Select your desired service category to proceed with your order. Each category has different requirements and pricing.</p>
-        </section>
+            <a href="order_game.html" class="category-card">
+                <svg class="category-icon" data-icon="game" viewBox="0 0 24 24" fill="currentColor"></svg>
+                <h3>Game TopUp</h3>
+                <p>Diamonds, UC, and credits for popular games</p>
+                <div class="service-count">8 services available</div>
+            </a>
+
+            <a href="order_smm.html" class="category-card">
+                <svg class="category-icon" data-icon="smm" viewBox="0 0 24 24" fill="currentColor"></svg>
+                <h3>SMM Services</h3>
+                <p>Likes, followers, views for social media</p>
+                <div class="service-count">8 services available</div>
+            </a>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="stats-grid mt-2">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/>
+                    </svg>
+                </div>
+                <div class="stat-number">98%</div>
+                <div class="stat-label">Success Rate</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13v6l4.5 2.67-.75 1.23L11 13V7z"/>
+                    </svg>
+                </div>
+                <div class="stat-number">< 5min</div>
+                <div class="stat-label">Average Delivery</div>
+            </div>
+        </div>
     </main>
 
+    <!-- Bottom Navigation -->
     <nav class="bottom-nav">
-        <div class="nav-container">
-            <a href="index.html" class="nav-item">Dashboard</a>
-            <a href="order.html" class="nav-item active">Orders</a>
-            <a href="pay.html" class="nav-item">Exchange</a>
-            <a href="status.html" class="nav-item">Status</a>
+        <div class="container">
+            <div class="nav-items">
+                <a href="index.html" class="nav-item">
+                    <svg class="nav-icon" data-icon="dashboard" viewBox="0 0 24 24" fill="currentColor"></svg>
+                    <span class="nav-label">Dashboard</span>
+                </a>
+                <a href="order.html" class="nav-item active">
+                    <svg class="nav-icon" data-icon="orders" viewBox="0 0 24 24" fill="currentColor"></svg>
+                    <span class="nav-label">Orders</span>
+                </a>
+                <a href="pay.html" class="nav-item">
+                    <svg class="nav-icon" data-icon="exchange" viewBox="0 0 24 24" fill="currentColor"></svg>
+                    <span class="nav-label">Exchange</span>
+                </a>
+                <a href="status.html" class="nav-item">
+                    <svg class="nav-icon" data-icon="status" viewBox="0 0 24 24" fill="currentColor"></svg>
+                    <span class="nav-label">Status</span>
+                </a>
+            </div>
         </div>
     </nav>
-
-    <footer>
-        <div class="footer-bg"></div>
-        <div class="footer-links">
-            <a href="privacy.html">Privacy</a>
-            <a href="faq.html">FAQ</a>
-            <a href="services.html">Products</a>
-        </div>
-    </footer>
 
     <script src="script.js"></script>
 </body>
