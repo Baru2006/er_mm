@@ -3,162 +3,241 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>P2P Exchange - EasyRecharge MM</title>
+    <title>P2P Exchange - Easy Recharge MM</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
-<body data-theme="light">
-    <header class="header">
-        <div class="brand">
-            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiNmZjdiMDAiLz4KPHBhdGggZD0iTTE2IDE1SDE3VjI1SDE2VjE1WiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTIzIDE1SDI0VjI1SDIzVjE1WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+" alt="EasyRecharge MM Logo" class="logo">
-            <h1>EasyRecharge MM</h1>
-        </div>
-        <button id="modeToggle" class="theme-toggle" aria-label="Toggle dark mode">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path class="sun-icon" d="M12 17C14.7614 17 17 14.7614 17 12C17 9.23858 14.7614 7 12 7C9.23858 7 7 9.23858 7 12C7 14.7614 9.23858 17 12 17Z"/>
-                <path class="moon-icon" d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"/>
-            </svg>
-        </button>
-    </header>
-
-    <main class="container">
-        <div class="page-header">
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
             <a href="index.html" class="back-link">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                    <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
                 </svg>
-                Back to Dashboard
+                Back
             </a>
-            <h2>P2P Exchange</h2>
-            <p class="page-subtitle">Exchange between different payment methods</p>
-        </div>
+            <div class="brand">
+                <h1>P2P Exchange</h1>
+            </div>
+            <button class="theme-toggle" id="themeToggle">
+                <span class="theme-icon">🌙</span>
+            </button>
+        </header>
 
-        <form id="p2pForm" class="order-form">
+        <!-- Exchange Form -->
+        <form id="p2pForm" class="form-container">
+            <!-- User Info -->
             <div class="form-group">
                 <label for="userId">User ID</label>
-                <input type="text" id="userId" readonly>
+                <input type="text" id="userId" class="form-control" readonly>
             </div>
 
+            <!-- From Payment -->
             <div class="form-group">
-                <label for="userPhone">Your Phone Number</label>
-                <input type="tel" id="userPhone" placeholder="09XXXXXXXXX">
+                <label for="fromPayment">From Payment *</label>
+                <select id="fromPayment" name="fromPayment" class="form-control" required>
+                    <option value="">Select Payment Method</option>
+                    <option value="KBZ Pay">KBZ Pay</option>
+                    <option value="Wave Money">Wave Money</option>
+                    <option value="CB Pay">CB Pay</option>
+                    <option value="Cash">Cash</option>
+                </select>
             </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="fromPayment">From *</label>
-                    <select id="fromPayment" required>
-                        <option value="">Select From</option>
-                        <option value="Wave">Wave Money</option>
-                        <option value="KBZPay">KBZPay</option>
-                        <option value="AYA">AYA Pay</option>
-                        <option value="CBPay">CB Pay</option>
-                        <option value="Cash">Cash</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="toPayment">To *</label>
-                    <select id="toPayment" required>
-                        <option value="">Select To</option>
-                        <option value="Wave">Wave Money</option>
-                        <option value="KBZPay">KBZPay</option>
-                        <option value="AYA">AYA Pay</option>
-                        <option value="CBPay">CB Pay</option>
-                        <option value="Cash">Cash</option>
-                    </select>
-                </div>
+            <!-- To Payment -->
+            <div class="form-group">
+                <label for="toPayment">To Payment *</label>
+                <select id="toPayment" name="toPayment" class="form-control" required>
+                    <option value="">Select Payment Method</option>
+                    <option value="KBZ Pay">KBZ Pay</option>
+                    <option value="Wave Money">Wave Money</option>
+                    <option value="CB Pay">CB Pay</option>
+                    <option value="Cash">Cash</option>
+                </select>
             </div>
 
+            <!-- Amount -->
             <div class="form-group">
                 <label for="amount">Amount (MMK) *</label>
-                <input type="number" id="amount" placeholder="Enter amount" required min="1000">
+                <input type="number" id="amount" name="amount" class="form-control" placeholder="Enter amount" min="1000" required>
             </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="fee">Exchange Fee (MMK)</label>
-                    <input type="number" id="fee" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="receive">You Receive (MMK)</label>
-                    <input type="number" id="receive" readonly>
-                </div>
+            <!-- Fee & Receive Calculation -->
+            <div class="form-group">
+                <label for="fee">Service Fee</label>
+                <input type="text" id="fee" class="form-control" readonly>
             </div>
 
             <div class="form-group">
-                <label for="paymentNumber">Payment Number</label>
-                <div class="input-with-button">
-                    <input type="text" id="paymentNumber" readonly value="09XXXXXXXXX">
-                    <button type="button" class="btn-copy" onclick="copyText('paymentNumber')">Copy</button>
-                </div>
+                <label for="receive">You Will Receive</label>
+                <input type="text" id="receive" class="form-control" readonly>
             </div>
 
+            <!-- Payment Number -->
+            <div class="form-group">
+                <label>Our Payment Number</label>
+                <div class="payment-number">
+                    <input type="text" id="paymentNumber" class="form-control" value="09XXXXXXX" readonly>
+                    <button type="button" class="copy-btn" onclick="copyText('paymentNumber')">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                        </svg>
+                    </button>
+                </div>
+                <small style="opacity: 0.7; font-size: 0.8rem;">Send amount to this number</small>
+            </div>
+
+            <!-- Your Payment Number -->
+            <div class="form-group">
+                <label for="yourPaymentNumber">Your Payment Number *</label>
+                <input type="text" id="yourPaymentNumber" name="yourPaymentNumber" class="form-control" placeholder="Enter your payment number" required>
+            </div>
+
+            <!-- Transaction ID -->
             <div class="form-group">
                 <label for="transactionId">Transaction ID *</label>
-                <input type="text" id="transactionId" placeholder="Enter your payment transaction ID" required>
+                <input type="text" id="transactionId" name="transactionId" class="form-control" placeholder="Enter transaction ID from your payment" required>
             </div>
 
-            <button type="submit" class="btn-primary btn-submit">Submit Exchange</button>
+            <!-- Submit Button -->
+            <button type="submit" class="submit-btn">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+                Submit Exchange
+            </button>
         </form>
 
-        <div class="info-box">
-            <h4>Exchange Rates</h4>
-            <ul>
-                <li>Exchange Fee: 2% of the amount</li>
-                <li>Minimum Exchange: 1,000 MMK</li>
-                <li>Maximum Exchange: 1,000,000 MMK</li>
-                <li>Processing Time: 5-15 minutes</li>
-            </ul>
-        </div>
-    </main>
-
-    <footer class="footer">
-        <div class="footer-background"></div>
-        <div class="footer-content">
-            <div class="footer-links">
-                <a href="privacy.html">Privacy</a>
-                <a href="faq.html">FAQ</a>
-                <a href="services.html">Products</a>
-            </div>
-            <div class="footer-copyright">
-                &copy; <span id="currentYear"></span> EasyRecharge MM. All rights reserved.
+        <!-- Exchange Rates -->
+        <div class="form-container">
+            <h4>💱 Exchange Rates:</h4>
+            <div style="margin-top: 15px; font-size: 0.9rem;">
+                <p><strong>Service Fee:</strong> 1% (Minimum 100 MMK)</p>
+                <p><strong>Processing Time:</strong> 5-15 minutes</p>
+                <p><strong>Minimum Amount:</strong> 1,000 MMK</p>
+                <p><strong>Maximum Amount:</strong> 500,000 MMK</p>
             </div>
         </div>
-    </footer>
 
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                </svg>
+                <span>Dashboard</span>
+            </a>
+            <a href="order.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M13 2v8h8c0-4.42-3.58-8-8-8zm2 6V4.34c1.7.6 3.05 1.95 3.66 3.66H15zm-8.56 3l-.95-2H2v2h2.22s1.89 4.07 2.12 4.42c-1.1.59-1.84 1.75-1.84 3.08C4.5 20.43 6.07 22 8 22c1.76 0 3.22-1.3 3.46-3h2.08c.24 1.7 1.7 3 3.46 3 1.93 0 3.5-1.57 3.5-3.5 0-1.04-.46-1.97-1.18-2.61C20.37 14.54 21 12.84 21 11H6.44z"/>
+                </svg>
+                <span>Orders</span>
+            </a>
+            <a href="pay.html" class="nav-item active">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
+                </svg>
+                <span>Exchange</span>
+            </a>
+            <a href="status.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
+                    <path d="M7 10h2v7H7zm4-3h2v10h-2zm4-3h2v13h-2z"/>
+                </svg>
+                <span>Status</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Toast Notification -->
     <div id="toast" class="toast"></div>
 
     <script src="script.js"></script>
     <script>
-        // Calculate exchange when amount changes
-        document.getElementById('amount').addEventListener('input', calculateExchange);
-        
-        function calculateExchange() {
-            const amount = parseInt(document.getElementById('amount').value) || 0;
-            const fee = Math.round(amount * 0.02); // 2% fee
-            const receive = amount - fee;
-            
-            document.getElementById('fee').value = fee;
-            document.getElementById('receive').value = receive;
-        }
-
-        // Update payment number based on selected "to" method
-        document.getElementById('toPayment').addEventListener('change', function() {
-            const paymentNumbers = {
-                'Wave': '09 123 456 789',
-                'KBZPay': '09 987 654 321', 
-                'AYA': '09 555 666 777',
-                'CBPay': '09 444 333 222',
-                'Cash': 'N/A - Contact Support'
-            };
-            document.getElementById('paymentNumber').value = paymentNumbers[this.value] || '09XXXXXXXXX';
-        });
-
-        // Initialize form
         document.addEventListener('DOMContentLoaded', function() {
-            initUser();
-            calculateExchange();
+            // Initialize user info
+            const userId = localStorage.getItem('userId');
+            document.getElementById('userId').value = userId;
+            
+            // Initialize amount calculation
+            document.getElementById('amount').addEventListener('input', calculateP2P);
+            
+            // Update payment number based on selection
+            document.getElementById('fromPayment').addEventListener('change', function() {
+                const paymentNumbers = {
+                    'KBZ Pay': '09 123 456 789',
+                    'Wave Money': '09 987 654 321',
+                    'CB Pay': '09 555 666 777',
+                    'Cash': 'N/A - Visit our office'
+                };
+                document.getElementById('paymentNumber').value = paymentNumbers[this.value] || '09XXXXXXX';
+                calculateP2P();
+            });
+            
+            // Form submission
+            document.getElementById('p2pForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitP2PForm();
+            });
+            
+            function calculateP2P() {
+                const amount = parseFloat(document.getElementById('amount').value) || 0;
+                const fee = Math.max(100, amount * 0.01); // 1% fee, min 100 MMK
+                const receive = amount - fee;
+                
+                document.getElementById('fee').value = fee.toLocaleString() + ' MMK';
+                document.getElementById('receive').value = receive.toLocaleString() + ' MMK';
+            }
+            
+            function submitP2PForm() {
+                const formData = new FormData(document.getElementById('p2pForm'));
+                const p2pData = {
+                    action: 'p2p',
+                    data: {
+                        orderId: generateOrderId(),
+                        userId: localStorage.getItem('userId'),
+                        device: detectDevice(),
+                        timestamp: new Date().toISOString(),
+                        fromPayment: formData.get('fromPayment'),
+                        toPayment: formData.get('toPayment'),
+                        amount: formData.get('amount'),
+                        fee: document.getElementById('fee').value,
+                        receive: document.getElementById('receive').value,
+                        paymentNumber: formData.get('yourPaymentNumber'),
+                        transactionId: formData.get('transactionId')
+                    }
+                };
+                
+                // Submit to GAS
+                fetch(GAS_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(p2pData)
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        localStorage.setItem('last_order_id', result.orderId);
+                        showToast('Exchange request submitted!');
+                        setTimeout(() => {
+                            window.location.href = 'status.html';
+                        }, 1500);
+                    } else {
+                        throw new Error(result.error || 'Submission failed');
+                    }
+                })
+                .catch(error => {
+                    console.error('Submission error:', error);
+                    showToast('Failed to submit exchange. Please try again.', 'error');
+                });
+            }
+            
+            // Initial calculation
+            calculateP2P();
         });
     </script>
 </body>
-</html>
+                        </html>
