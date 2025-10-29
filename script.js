@@ -1,410 +1,349 @@
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbxHXmKQ01ClVsGiRElgV0cAd9AkApHcq_TcGveIG9_34UCgzRL1lroBzjdkXqgDNw0O-Q/exec';
-const SERVICE_PRICES = {
-    sim: {
-        'mpt-3gb': { name: 'MPT 3GB/7Days', price: 1500 },
-        'mpt-5gb': { name: 'MPT 5GB/15Days', price: 2500 },
-        'mpt-10gb': { name: 'MPT 10GB/30Days', price: 4500 },
-        'telenor-regular': { name: 'Telenor Regular', price: 1000 },
-        'telenor-data': { name: 'Telenor Data Bundle', price: 1200 },
-        'telenor-social': { name: 'Telenor Social Bundle', price: 800 },
-        'ooredoo-basic': { name: 'Ooredoo Basic', price: 2000 },
-        'ooredoo-premium': { name: 'Ooredoo Premium', price: 3500 },
-        'ooredoo-unlimited': { name: 'Ooredoo Unlimited', price: 6000 }
-    },
-    game: {
-        'freefire-100': { name: 'Free Fire 100 Diamonds', price: 3000 },
-        'freefire-500': { name: 'Free Fire 500 Diamonds', price: 12000 },
-        'freefire-1000': { name: 'Free Fire 1000 Diamonds', price: 22000 },
-        'pubg-60': { name: 'PUBG 60 UC', price: 2000 },
-        'pubg-325': { name: 'PUBG 325 UC', price: 8000 },
-        'pubg-660': { name: 'PUBG 660 UC', price: 15000 },
-        'mlbb-86': { name: 'MLBB 86 Diamonds', price: 2500 },
-        'mlbb-429': { name: 'MLBB 429 Diamonds', price: 10000 },
-        'mlbb-875': { name: 'MLBB 875 Diamonds', price: 18000 }
-    },
-    smm: {
-        'fb-likes': { name: 'Facebook Likes', price: 2000, unit: 1000 },
-        'fb-followers': { name: 'Facebook Followers', price: 3500, unit: 1000 },
-        'fb-comments': { name: 'Facebook Comments', price: 4000, unit: 1000 },
-        'ig-followers': { name: 'Instagram Followers', price: 4000, unit: 1000 },
-        'ig-likes': { name: 'Instagram Likes', price: 2500, unit: 1000 },
-        'ig-views': { name: 'Instagram Views', price: 1500, unit: 1000 },
-        'yt-subscribers': { name: 'YouTube Subscribers', price: 8000, unit: 1000 },
-        'yt-likes': { name: 'YouTube Likes', price: 3000, unit: 1000 },
-        'yt-views': { name: 'YouTube Views', price: 2000, unit: 1000 }
-    }
+// script.js
+/**
+ * Easy Recharge MM - Frontend JavaScript Logic
+ * Includes: Theme Toggle, User ID generation, Form Validation, API Communication
+ */
+
+// ⚠️ STEP 2: UPDATE THIS URL AFTER DEPLOYING YOUR GOOGLE APPS SCRIPT
+const GAS_URL = "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE"; 
+
+const MOCK_PRICES = {
+    'mpt-3gb': 1500, 'mpt-5gb': 2500, 'ooredoo-basic': 2000,
+    'freefire-100': 3000, 'pubg-60uc': 2000, 'pubg-325uc': 8000, 'mlbb-86d': 2500,
+    'fb-likes-1k': 2000, 'ig-followers-1k': 4000, 'yt-views-1k': 2000,
 };
+const P2P_FEE_RATE = 0.02; // 2%
 
-// Theme Management
-function initTheme() {
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    updateThemeIcon(savedTheme);
-}
+/* --- 1. Utility Functions --- */
 
-function toggleTheme() {
-    const currentTheme = document.documentElement.getAttribute('data-theme');
-    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-    
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-    updateThemeIcon(newTheme);
-}
-
-function updateThemeIcon(theme) {
-    const themeIcon = document.querySelector('.theme-icon');
-    if (themeIcon) {
-        themeIcon.textContent = theme === 'light' ? '🌙' : '☀️';
-    }
-}
-
-// User Management
-function initUser() {
-    let userId = localStorage.getItem('userId');
+/**
+ * Generates a unique User ID and stores it in localStorage.
+ * @returns {string} The generated or retrieved User ID.
+ */
+function getUserId() {
+    let userId = localStorage.getItem('easyRechargeUserId');
     if (!userId) {
-        userId = generateUserId();
-        localStorage.setItem('userId', userId);
+        const randomNum = Math.floor(Math.random() * 900000) + 100000;
+        userId = `Guest-${randomNum}`;
+        localStorage.setItem('easyRechargeUserId', userId);
     }
-    
-    document.getElementById('userId').textContent = `User: ${userId}`;
-    
-    // Generate and display user avatar
-    const avatarSvg = generateUserAvatar(userId);
-    const avatarContainer = document.getElementById('userAvatar');
-    if (avatarContainer) {
-        avatarContainer.innerHTML = avatarSvg;
-    }
-    
     return userId;
 }
 
-function generateUserId() {
-    const timestamp = Date.now().toString(36);
-    const random = Math.random().toString(36).substr(2, 5);
-    return `user_${timestamp}_${random}`.toUpperCase();
-}
-
-function generateUserAvatar(userId) {
-    const colors = ['#ff7b00', '#ff5500', '#e56a00', '#cc5f00'];
-    const color = colors[userId.charCodeAt(0) % colors.length];
-    const initial = userId.charAt(0).toUpperCase();
-    
-    return `
-        <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="30" cy="30" r="30" fill="${color}"/>
-            <text x="30" y="38" text-anchor="middle" fill="white" font-family="Poppins" font-size="24" font-weight="600">${initial}</text>
-        </svg>
-    `;
-}
-
-// Device Detection
-function detectDevice() {
-    const userAgent = navigator.userAgent;
-    let device = 'Unknown Device';
-    
-    if (/Android/.test(userAgent)) {
-        device = 'Android Device';
-    } else if (/iPhone|iPad|iPod/.test(userAgent)) {
-        device = 'iOS Device';
-    } else if (/Windows/.test(userAgent)) {
-        device = 'Windows PC';
-    } else if (/Mac/.test(userAgent)) {
-        device = 'Mac';
-    } else if (/Linux/.test(userAgent)) {
-        device = 'Linux';
+/**
+ * Initializes User ID display and avatar.
+ */
+function initUser() {
+    const userId = getUserId();
+    const userIdDisplay = document.getElementById('user-id-display');
+    if (userIdDisplay) {
+        userIdDisplay.textContent = userId;
+        userIdDisplay.dataset.raw = userId;
     }
     
-    const deviceElement = document.getElementById('userDevice');
-    if (deviceElement) {
-        deviceElement.textContent = device;
+    // Simple mock avatar injection (Placeholder)
+    const avatarContainer = document.getElementById('user-avatar-container');
+    if (avatarContainer) {
+        avatarContainer.innerHTML = `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>`;
     }
-    
-    return device;
 }
 
-// Copy to Clipboard
-function copyText(elementId) {
-    const element = document.getElementById(elementId);
-    if (!element) return;
-    
-    const text = element.value || element.textContent;
-    
-    navigator.clipboard.writeText(text).then(() => {
-        showToast('Copied to clipboard!');
-    }).catch(err => {
-        console.error('Failed to copy: ', err);
-        showToast('Failed to copy');
-    });
-}
-
-// Toast Notifications
-function showToast(message, type = 'success') {
-    const toast = document.getElementById('toast');
+/**
+ * Displays a global toast notification.
+ * @param {string} message - The message to display.
+ * @param {string} type - 'success', 'error', or 'info'.
+ */
+function showToast(message, type = 'info') {
+    const toast = document.getElementById('toast-notification');
     if (!toast) return;
+
+    toast.textContent = message;
+    toast.className = 'show'; // Reset classes
     
-    const icon = type === 'success' ? 
-        '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>' :
-        '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
-    
-    toast.innerHTML = `${icon} ${message}`;
-    toast.classList.add('show');
-    
+    // Apply type specific styles (optional, can be done with CSS variables)
+    if (type === 'error') {
+        toast.style.backgroundColor = 'var(--status-cancelled)';
+    } else if (type === 'success') {
+        toast.style.backgroundColor = 'var(--status-success)';
+    } else {
+        toast.style.backgroundColor = '#333';
+    }
+
     setTimeout(() => {
-        toast.classList.remove('show');
+        toast.className = '';
     }, 3000);
 }
 
-// Form Submission
-// script.js ထဲမှာ ဒီ function ကို ပြင်ပါ
-async function submitOrderForm(formId, action) {
-  const form = document.getElementById(formId);
-  if (!form) return;
-  
-  const formData = new FormData(form);
-  
-  // FIX: Make sure we're sending the correct data structure
-  const orderData = {
-    action: action,
-    order: {
-      orderId: generateOrderId(),
-      userId: localStorage.getItem('userId'),
-      device: detectDevice(),
-      timestamp: new Date().toISOString(),
-      ...Object.fromEntries(formData)
+
+/* --- 2. Theme Toggling --- */
+
+/**
+ * Apply theme based on localStorage or system preference.
+ */
+function loadTheme() {
+    const preferredTheme = localStorage.getItem('theme') || 
+                           (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.body.setAttribute('data-theme', preferredTheme);
+    const toggle = document.getElementById('theme-toggle');
+    if (toggle) {
+        toggle.checked = preferredTheme === 'dark';
     }
-  };
-  
-  console.log("Submitting order data:", orderData);
-  
-  try {
-    const response = await fetch(GAS_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(orderData)
-    });
-    
-    const result = await response.json();
-    console.log("Server response:", result);
-    
-    if (result.success) {
-      localStorage.setItem('last_order_id', result.orderId);
-      showToast('Order submitted successfully!');
-      setTimeout(() => {
-        window.location.href = 'status.html';
-      }, 1500);
-    } else {
-      throw new Error(result.error || 'Submission failed');
-    }
-  } catch (error) {
-    console.error('Submission error:', error);
-    showToast('Failed to submit order: ' + error.message, 'error');
-  }
 }
 
-function generateOrderId() {
-    const timestamp = Date.now().toString(36);
-    const random = Math.random().toString(36).substr(2, 6);
-    return `ORD_${timestamp}_${random}`.toUpperCase();
+/**
+ * Toggles the theme between light and dark.
+ */
+function toggleTheme() {
+    const isDark = document.getElementById('theme-toggle').checked;
+    const newTheme = isDark ? 'dark' : 'light';
+    document.body.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
 }
 
-function formatDate(dateString) {
-    return new Date(dateString).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
-}
+/* --- 3. Form Calculations and Validation --- */
 
-function readCategoryFromURL() {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('category');
-}
+/**
+ * Initializes calculation logic for order forms (SIM, Game, SMM).
+ * @param {string} category - 'sim', 'game', or 'smm'.
+ */
+function initOrderFormCalculations(category) {
+    const form = document.getElementById(`order${category.toUpperCase()}Form`);
+    if (!form) return;
 
-// Auto-calculation for order forms
-function initAutoCalculation(category) {
-    const serviceSelect = document.getElementById('service');
+    const serviceSelect = document.getElementById('service-select');
     const quantityInput = document.getElementById('quantity');
-    const priceInput = document.getElementById('price');
-    const totalInput = document.getElementById('total');
-    
-    if (!serviceSelect || !quantityInput || !priceInput || !totalInput) return;
-    
-    function updateTotal() {
-        const service = serviceSelect.value;
-        const quantity = parseInt(quantityInput.value) || 1;
-        
-        if (service && SERVICE_PRICES[category] && SERVICE_PRICES[category][service]) {
-            const price = SERVICE_PRICES[category][service].price;
-            priceInput.value = price.toLocaleString() + ' MMK';
-            
-            const total = price * quantity;
-            totalInput.value = total.toLocaleString() + ' MMK';
-        } else {
-            priceInput.value = '';
-            totalInput.value = '';
-        }
-    }
-    
-    serviceSelect.addEventListener('change', updateTotal);
-    quantityInput.addEventListener('input', updateTotal);
-    
-    // Initialize calculation
-    updateTotal();
-}
+    const totalDisplay = document.getElementById('total-amount');
+    const totalRaw = document.getElementById('total-amount-raw');
+    const submitBtn = document.getElementById('submit-order-btn');
 
-// Dashboard Statistics
-async function loadDashboardStats() {
-    try {
-        const response = await fetch(`${GAS_URL}?action=stats&userId=${localStorage.getItem('userId')}`);
-        const stats = await response.json();
+    const updateCalculations = () => {
+        const selectedService = serviceSelect.value;
+        const qty = parseInt(quantityInput.value) || 0;
         
-        // Update user stats
-        if (stats.userStats) {
-            document.getElementById('totalOrders').textContent = stats.userStats.totalOrders || '0';
-            document.getElementById('totalExchange').textContent = stats.userStats.totalExchange ? `${stats.userStats.totalExchange} MMK` : '0 MMK';
-        }
-        
-        // Update global stats
-        if (stats.globalStats) {
-            document.getElementById('activeUsers').textContent = stats.globalStats.activeUsers || '0';
-            document.getElementById('globalOrders').textContent = stats.globalStats.totalOrders || '0';
-            document.getElementById('globalExchange').textContent = stats.globalStats.totalExchange ? `${stats.globalStats.totalExchange} MMK` : '0 MMK';
-        }
-    } catch (error) {
-        console.error('Failed to load stats:', error);
-    }
-}
+        let unitPrice = MOCK_PRICES[selectedService] || 0;
+        let totalAmount = unitPrice * qty;
 
-// Order Status Management
-async function loadOrderStatus() {
-    const userId = localStorage.getItem('userId');
-    if (!userId) return;
-    
-    try {
-        const response = await fetch(`${GAS_URL}?action=list&userId=${userId}`);
-        const orders = await response.json();
-        
-        displayOrders(orders);
-    } catch (error) {
-        console.error('Failed to load orders:', error);
-        showToast('Failed to load orders', 'error');
-    }
-}
+        totalDisplay.value = `${totalAmount.toLocaleString()} MMK`;
+        totalRaw.value = totalAmount;
 
-function displayOrders(orders) {
-    const container = document.getElementById('ordersContainer');
-    if (!container) return;
-    
-    if (!orders || orders.length === 0) {
-        container.innerHTML = '<p class="text-center">No orders found</p>';
-        return;
-    }
-    
-    const ordersHtml = orders.map(order => `
-        <div class="order-item">
-            <div class="order-header">
-                <h4>${order.OrderID}</h4>
-                <span class="status-badge status-${order.Status?.toLowerCase() || 'pending'}">
-                    ${getStatusIcon(order.Status)}
-                    ${order.Status || 'Pending'}
-                </span>
-            </div>
-            <div class="order-details">
-                <p><strong>Service:</strong> ${order.Service}</p>
-                <p><strong>Total:</strong> ${order.Total} MMK</p>
-                <p><strong>Date:</strong> ${formatDate(order.Timestamp)}</p>
-            </div>
-        </div>
-    `).join('');
-    
-    container.innerHTML = ordersHtml;
-}
-
-function getStatusIcon(status) {
-    const icons = {
-        'Pending': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>',
-        'Processing': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>',
-        'Success': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>',
-        'Cancelled': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>'
+        validateForm(); // Re-validate after calculation
     };
+
+    const validateForm = () => {
+        const isFormValid = form.checkValidity() && parseInt(totalRaw.value) > 0;
+        submitBtn.disabled = !isFormValid;
+    };
+
+    serviceSelect.addEventListener('change', updateCalculations);
+    quantityInput.addEventListener('input', updateCalculations);
+    form.addEventListener('input', validateForm); // General validation on any input change
     
-    return icons[status] || icons['Pending'];
+    // Initial validation and calculation
+    updateCalculations();
+    validateForm();
 }
 
-// Accordion functionality
-function initAccordions() {
-    const accordions = document.querySelectorAll('.accordion-header');
-    accordions.forEach(header => {
-        header.addEventListener('click', () => {
-            const accordion = header.parentElement;
-            accordion.classList.toggle('active');
+
+/**
+ * Initializes calculation and validation for P2P Exchange form.
+ */
+function initP2pExchangeForm() {
+    const form = document.getElementById('p2pExchangeForm');
+    if (!form) return;
+
+    const amountInput = document.getElementById('amount');
+    const fromPayment = document.getElementById('from-payment');
+    const toPayment = document.getElementById('to-payment');
+    const feeDisplay = document.getElementById('fee');
+    const receiveDisplay = document.getElementById('receive-amount');
+    const receiveRaw = document.getElementById('receive-amount-raw');
+    const submitBtn = document.getElementById('submit-exchange-btn');
+    const validationError = document.getElementById('validation-error');
+
+    const updateCalculations = () => {
+        const amount = parseInt(amountInput.value) || 0;
+        
+        let fee = Math.ceil(amount * P2P_FEE_RATE); // Use Math.ceil to round up fee
+        let receiveAmount = amount - fee;
+
+        feeDisplay.value = `${fee.toLocaleString()} MMK`;
+        receiveDisplay.value = `${receiveAmount.toLocaleString()} MMK`;
+        receiveRaw.value = receiveAmount;
+
+        validateForm();
+    };
+
+    const validateForm = () => {
+        const isPaymentSame = fromPayment.value === toPayment.value && fromPayment.value !== "";
+        if (isPaymentSame) {
+            validationError.style.display = 'block';
+        } else {
+            validationError.style.display = 'none';
+        }
+
+        const isAmountValid = parseInt(amountInput.value) >= 1000;
+        const isFormValid = form.checkValidity() && !isPaymentSame && isAmountValid;
+        submitBtn.disabled = !isFormValid;
+    };
+
+    amountInput.addEventListener('input', updateCalculations);
+    fromPayment.addEventListener('change', updateCalculations);
+    toPayment.addEventListener('change', updateCalculations);
+    form.addEventListener('input', validateForm); // General validation
+
+    // Initial setup
+    updateCalculations();
+    validateForm();
+    
+    // Setup form submission for P2P
+    setupOrderSubmission('p2pExchangeForm', 'addP2P', 'p2p');
+}
+
+/* --- 4. API Communication and Submission --- */
+
+const loadingState = document.getElementById('loading-state');
+
+/**
+ * Displays or hides the global loading state.
+ * @param {boolean} show - True to show, false to hide.
+ */
+function toggleLoading(show) {
+    if (loadingState) {
+        loadingState.style.display = show ? 'flex' : 'none';
+    }
+}
+
+/**
+ * Handles communication with the Google Apps Script API.
+ * @param {string} action - The action parameter for the GAS endpoint (e.g., 'addSIM').
+ * @param {object} data - The payload to send to GAS.
+ * @returns {Promise<object>} The JSON response from the GAS script.
+ */
+async function sendRequestToGAS(action, data) {
+    if (GAS_URL.includes("YOUR_GOOGLE_APPS_SCRIPT_URL_HERE")) {
+        showToast("Error: GAS_URL has not been set up yet.", 'error');
+        return { success: false, message: "GAS_URL is not configured." };
+    }
+    
+    const payload = { action, ...data };
+
+    try {
+        toggleLoading(true);
+        const response = await fetch(GAS_URL, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams(payload)
         });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        return result;
+
+    } catch (error) {
+        console.error("API Error:", error);
+        showToast(`Network Error: Cannot connect to server. (${error.message})`, 'error');
+        return { success: false, message: `Network error: ${error.message}` };
+    } finally {
+        toggleLoading(false);
+    }
+}
+
+/**
+ * Sets up the form submission handler.
+ * @param {string} formId - The ID of the HTML form.
+ * @param {string} action - The GAS action to call (e.g., 'addSIM').
+ * @param {string} category - The category for the submission ('sim', 'p2p', etc.).
+ */
+function setupOrderSubmission(formId, action, category) {
+    const form = document.getElementById(formId);
+    if (!form) return;
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        if (!form.checkValidity()) {
+            showToast('Form data is incomplete or invalid.', 'error');
+            return;
+        }
+
+        const formData = new FormData(form);
+        const data = {
+            userId: getUserId(),
+            category: category.toUpperCase(),
+        };
+
+        // Standardizing form data collection
+        for (const [key, value] of formData.entries()) {
+            // Use key mapping for clarity in backend (e.g., totalAmountRaw -> total)
+            if (key === 'totalAmountRaw' || key === 'receiveAmountRaw') {
+                data['total'] = parseInt(value);
+            } else if (key === 'targetInfo' || key === 'receiverAccount') {
+                data['target'] = value;
+            } else {
+                data[key] = value;
+            }
+        }
+        
+        // Remove unnecessary or duplicate keys before sending
+        delete data.totalAmountRaw;
+        delete data.receiveAmountRaw;
+        delete data.targetInfo;
+
+        const result = await sendRequestToGAS(action, data);
+
+        if (result.success) {
+            showToast(`မှာယူမှု အောင်မြင်ပါသည်! Order ID: ${result.orderId}`, 'success');
+            form.reset();
+            // Redirect to status page after successful submission
+            setTimeout(() => {
+                window.location.href = 'status.html';
+            }, 1500);
+        } else {
+            showToast(`မှာယူမှု မအောင်မြင်ပါ: ${result.message}`, 'error');
+        }
     });
 }
 
-// Tab functionality
-function initTabs() {
-    const tabs = document.querySelectorAll('.tab');
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            const tabId = tab.getAttribute('data-tab');
-            
-            // Update active tab
-            tabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            
-            // Show active content
-            const tabContents = document.querySelectorAll('.tab-content');
-            tabContents.forEach(content => content.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-        });
-    });
-}
 
-// Initialize application
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize core features
-    initTheme();
+/* --- 5. Initializers --- */
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Theme initialization
+    loadTheme();
+    document.getElementById('theme-toggle')?.addEventListener('change', toggleTheme);
+    
+    // 2. User ID initialization
     initUser();
-    detectDevice();
     
-    // Initialize page-specific features
-    if (document.getElementById('themeToggle')) {
-        document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+    // 3. Setup form handlers for Order Forms
+    // Note: Individual order_xxx.html files call initOrderFormCalculations and setupOrderSubmission for their forms.
+    
+    // Setup for P2P Form if on pay.html
+    if (document.getElementById('p2pExchangeForm')) {
+        initP2pExchangeForm();
     }
     
-    // Dashboard specific
-    if (window.location.pathname.includes('index.html') || window.location.pathname === '/') {
-        loadDashboardStats();
-    }
-    
-    // Status page specific
+    // 4. Copy button logic (for User ID)
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetId = btn.dataset.copyTarget;
+            const targetElement = document.getElementById(targetId);
+            if (targetElement) {
+                navigator.clipboard.writeText(targetElement.dataset.raw || targetElement.textContent);
+                showToast('User ID ကို ကူးယူပြီးပါပြီ!', 'info');
+            }
+        });
+    });
+
+    // 5. Status page data fetching (Simplified mock/initialization)
     if (window.location.pathname.includes('status.html')) {
-        initTabs();
-        loadOrderStatus();
-    }
-    
-    // FAQ page specific
-    if (window.location.pathname.includes('faq.html')) {
-        initAccordions();
-    }
-    
-    // Order forms specific
-    const category = readCategoryFromURL();
-    if (category && ['sim', 'game', 'smm'].includes(category)) {
-        initAutoCalculation(category);
+        // In a real app, this would trigger GAS.fetchData('list', { userId: getUserId() })
+        // For now, it's just a placeholder.
     }
 });
-
-// Utility function for P2P fee calculation
-function calculateP2PFee(amount) {
-    const fee = Math.max(100, amount * 0.03); // 3% fee, minimum 100 MMK
-    return {
-        fee: fee,
-        receive: amount - fee
-    };
-            }
+            
