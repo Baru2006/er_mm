@@ -1,99 +1,261 @@
 <!DOCTYPE html>
-<html lang="my">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Easy Recharge MM - Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <title>Dashboard - Easy Recharge MM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: 0 0 0; /* Tailwind black */
+            --color-secondary: 242 242 242; /* Tailwind gray-100 */
+        }
+        [data-theme="dark"] {
+            --color-primary: 255 255 255; /* Tailwind white */
+            --color-secondary: 31 41 55; /* Tailwind gray-800 */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+            background-color: rgb(var(--color-secondary) / 1);
+            color: rgb(var(--color-primary) / 1);
+        }
+        .text-primary { color: rgb(var(--color-primary) / 1); }
+        .bg-card { background-color: white; }
+        [data-theme="dark"] .bg-card { background-color: rgb(31 41 55 / 1); }
+        .card { transition: transform 0.2s, box-shadow 0.2s; }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+        .primary-btn {
+            background-color: #3b82f6; /* Blue-500 */
+            transition: background-color 0.2s;
+        }
+        .primary-btn:hover { background-color: #2563eb; } /* Blue-600 */
+    </style>
 </head>
-<body data-theme="light">
-    
-    <header id="header">
-        <div class="container">
-            <a href="index.html" class="logo">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><title>Dashboard</title><path d="M3 3v18h18"></path><path d="M18.7 8.3L12 15 7.1 10.1"></path></svg>
-                <span>Easy Recharge MM</span>
-            </a>
-            
-            <div class="theme-toggle-wrapper">
-                <label class="switch">
-                    <input type="checkbox" id="theme-toggle">
-                    <span class="slider"></span>
-                </label>
+<body class="min-h-screen">
+
+    <!-- Header and Navigation -->
+    <header class="shadow-md sticky top-0 z-10 bg-white dark:bg-gray-900 transition-colors">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-blue-600 dark:text-blue-400">Easy Recharge MM</h1>
+            <div class="flex items-center space-x-4">
+                <button id="theme-toggle" class="p-2 rounded-full text-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                    <span id="theme-icon">☀️</span>
+                </button>
+                <nav class="hidden sm:flex space-x-6 font-medium">
+                    <a href="index.html" class="text-blue-600 dark:text-blue-400 border-b-2 border-blue-600">Home</a>
+                    <a href="services.html" class="text-gray-600 dark:text-gray-300 hover:text-blue-500 transition-colors">Services</a>
+                    <a href="status.html" class="text-gray-600 dark:text-gray-300 hover:text-blue-500 transition-colors">Status</a>
+                    <a href="pay.html" class="text-gray-600 dark:text-gray-300 hover:text-blue-500 transition-colors">P2P Pay</a>
+                </nav>
             </div>
         </div>
     </header>
-
-    <main class="container dashboard-page">
-        
-        <section class="user-info card">
-            <div id="user-avatar-container" style="width: 40px; height: 40px;">
+    
+    <!-- Main Content -->
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <div class="max-w-4xl mx-auto">
+            
+            <!-- User Profile Card -->
+            <div class="bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-6 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between">
+                <div class="flex items-center mb-4 sm:mb-0">
+                    <img id="user-avatar" src="https://placehold.co/40x40/4f46e5/ffffff?text=U" alt="User Avatar" class="w-12 h-12 rounded-full mr-4 border-2 border-blue-500">
+                    <div>
+                        <h2 id="welcome-user" class="text-xl font-bold dark:text-white">Welcome, User...</h2>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Your personal recharge dashboard.</p>
+                    </div>
                 </div>
-            <div>
-                <h2>👋 ကြိုဆိုပါတယ်!</h2>
-                <p>User ID: <span id="user-id-display" data-raw="GUEST-XXXXXX" class="text-secondary">Guest-XXXXXX</span> 
-                    <button class="copy-btn" data-copy-target="user-id-display" aria-label="Copy User ID">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><title>Copy</title><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1-1.1-2-1.98 0-4"></path><path d="M16 4h2a2 2 0 0 1 2 2v2"></path><path d="M12 4h-2a2 2 0 0 0-2 2v2"></path></svg>
-                    </button>
-                </p>
+                <div class="w-full sm:w-auto">
+                    <a href="services.html" class="primary-btn text-white px-5 py-2.5 rounded-xl text-sm font-semibold block text-center">
+                        Start New Order
+                    </a>
+                </div>
             </div>
-        </section>
 
-        <section class="category-grid">
-            
-            <a href="order.html" class="category-card">
-                <div class="card-icon">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><title>Orders</title><line x1="10" y1="9" x2="8" y2="9"></line><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="14 2 14 8 20 8"></polyline><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path></svg>
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                
+                <!-- Total Orders -->
+                <div class="card bg-card dark:bg-gray-700 p-6 rounded-xl shadow-lg border-t-4 border-blue-500">
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-300">Total Orders</p>
+                    <div class="mt-1 flex items-center">
+                        <h3 id="stat-total-orders" class="text-3xl font-extrabold text-primary">0</h3>
+                        <span class="ml-2 text-green-500 text-sm font-semibold">Orders</span>
+                    </div>
                 </div>
-                <h3 class="card-title">ဝန်ဆောင်မှု မှာယူရန်</h3>
-                <p class="card-description">SIM/Data, Game TopUp, SMM ဝန်ဆောင်မှုများကို မှာယူပါ။</p>
-            </a>
+                
+                <!-- Total Spent -->
+                <div class="card bg-card dark:bg-gray-700 p-6 rounded-xl shadow-lg border-t-4 border-green-500">
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-300">Total Spent (MMK)</p>
+                    <div class="mt-1 flex items-center">
+                        <h3 id="stat-total-spent" class="text-3xl font-extrabold text-primary">0</h3>
+                        <span class="ml-2 text-green-500 text-sm font-semibold">MMK</span>
+                    </div>
+                </div>
 
-            <a href="pay.html" class="category-card">
-                <div class="card-icon">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><title>Exchange</title><line x1="22" y1="2" x2="11" y2="13"></line><path d="m22 2-7 20-4-9-9-4Z"></path></svg>
+                <!-- Pending Orders -->
+                <div class="card bg-card dark:bg-gray-700 p-6 rounded-xl shadow-lg border-t-4 border-amber-500">
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-300">Pending Orders</p>
+                    <div class="mt-1 flex items-center">
+                        <h3 id="stat-pending" class="text-3xl font-extrabold text-primary">0</h3>
+                        <span class="ml-2 text-amber-500 text-sm font-semibold">Awaiting Action</span>
+                    </div>
                 </div>
-                <h3 class="card-title">P2P ငွေလဲလှယ်ခြင်း</h3>
-                <p class="card-description">Payment အမျိုးအစား တစ်ခုမှ တစ်ခုသို့ လဲလှယ်ခြင်း (Fee 2%)။</p>
-            </a>
-            
-            <a href="status.html" class="category-card">
-                <div class="card-icon">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><title>Status</title><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                </div>
-                <h3 class="card-title">မှာယူမှု အခြေအနေ</h3>
-                <p class="card-description">နောက်ဆုံးမှာယူမှုများ၏ Status ကို စစ်ဆေးပါ။</p>
-            </a>
-            
-            <a href="services.html" class="category-card">
-                <div class="card-icon">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><title>Services</title><rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect><path d="M9 22V12h6v10"></path><path d="M2 7h20"></path><path d="M12 22v-4"></path></svg>
-                </div>
-                <h3 class="card-title">ဝန်ဆောင်မှု စာရင်း</h3>
-                <p class="card-description">အသေးစိတ် စျေးနှုန်းဇယားများနှင့် ဝန်ဆောင်မှုများကို ကြည့်ရှုပါ။</p>
-            </a>
-        </section>
+            </div>
 
-        <section class="additional-links">
-            <a href="faq.html" class="btn btn-secondary">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><title>FAQ</title><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><path d="M12 17h.01"></path></svg>
-                FAQ (မေးလေ့ရှိသော မေးခွန်းများ)
-            </a>
-            <a href="privacy.html" class="btn btn-secondary">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><title>Privacy Policy</title><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                ကိုယ်ရေးအချက်အလက် မူဝါဒ
-            </a>
-        </section>
+            <!-- Quick Service Links -->
+            <h2 class="text-2xl font-bold mb-4 dark:text-white border-b pb-2 border-gray-200 dark:border-gray-700">Quick Services</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <a href="order_sim.html" class="card bg-card dark:bg-gray-700 p-4 rounded-xl shadow-md text-center hover:shadow-lg transition">
+                    <svg class="w-8 h-8 mx-auto text-blue-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                    <p class="font-semibold text-sm dark:text-white">SIM Recharge</p>
+                </a>
+                <a href="order_game.html" class="card bg-card dark:bg-gray-700 p-4 rounded-xl shadow-md text-center hover:shadow-lg transition">
+                    <svg class="w-8 h-8 mx-auto text-green-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.664a2 2 0 01-1.789-2.894l3.5-7z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 9h1.5l1.5 5h4l1.5-5H17M7 9a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2H7z"></path></svg>
+                    <p class="font-semibold text-sm dark:text-white">Game Topup</p>
+                </a>
+                <a href="pay.html" class="card bg-card dark:bg-gray-700 p-4 rounded-xl shadow-md text-center hover:shadow-lg transition">
+                    <svg class="w-8 h-8 mx-auto text-purple-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m4 6h.01M19 9h2a2 2 0 012 2v7a2 2 0 01-2 2h-4a2 2 0 01-2-2v-7a2 2 0 012-2z"></path></svg>
+                    <p class="font-semibold text-sm dark:text-white">P2P Exchange</p>
+                </a>
+                <a href="status.html" class="card bg-card dark:bg-gray-700 p-4 rounded-xl shadow-md text-center hover:shadow-lg transition">
+                    <svg class="w-8 h-8 mx-auto text-indigo-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 111.955 0 0112 2.944a11.955 11.955 0 017.618 3.046zM12 10v4m0 4h.01"></path></svg>
+                    <p class="font-semibold text-sm dark:text-white">Order Status</p>
+                </a>
+            </div>
 
+        </div>
     </main>
 
-    <div id="toast-notification"></div>
-    <div id="loading-state" class="loading-state">
-        <div class="spinner"></div>
-    </div>
-    
-    <script src="script.js"></script>
-</body>
-                </html>
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <script>
+        // -------------------------------------------------------------------
+        // INLINE JS FOR COMPLETENESS (Core functions from script.js)
+        // -------------------------------------------------------------------
+        
+        const GAS_URL = "YOUR_GAS_DEPLOY_URL"; // Placeholder
+        
+        // Simple unique ID generator to mimic a logged-in user in this static environment
+        const userId = localStorage.getItem('er_user_id') || crypto.randomUUID();
+        localStorage.setItem('er_user_id', userId);
+        
+        // --- UI UTILITY FUNCTIONS ---
+        function showToast(message, isError = false) {
+            const toastContainer = document.getElementById('toast-container') || (() => {
+                const div = document.createElement('div');
+                div.id = 'toast-container';
+                div.style.cssText = 'position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); z-index: 1000; display: flex; flex-direction: column; align-items: center; pointer-events: none;';
+                document.body.appendChild(div);
+                return div;
+            })();
+
+            const toast = document.createElement('div');
+            toast.textContent = message;
+            toast.className = `p-3 px-5 mt-2 rounded-xl shadow-xl font-semibold transition-all duration-500 transform translate-y-5 opacity-0 text-white ${isError ? 'bg-red-500' : 'bg-green-500'}`;
             
+            toastContainer.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = 1;
+                toast.style.transform = 'translateY(0)';
+            }, 10);
+
+            setTimeout(() => {
+                toast.style.opacity = 0;
+                toast.style.transform = 'translateY(20px)';
+                setTimeout(() => toast.remove(), 500);
+            }, 3000);
+        }
+
+        function generateUserAvatar(text) {
+            let hash = 0;
+            for (let i = 0; i < text.length; i++) {
+                hash = text.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            const color = 'hsl(' + (hash % 360) + ', 70%, 50%)';
+            const initials = text.substring(0, 2).toUpperCase();
+
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
+                <rect width="40" height="40" rx="20" fill="${color}"/>
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="16" fill="white" font-family="Inter">${initials}</text>
+            </svg>`;
+
+            return 'data:image/svg+xml;base64,' + btoa(svg);
+        }
+
+        // --- THEME MANAGEMENT ---
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            const icon = theme === 'dark' ? '🌙' : '☀️';
+            const iconElement = document.getElementById('theme-icon');
+            if (iconElement) {
+                iconElement.textContent = icon;
+            }
+        }
+
+        function toggleTheme() {
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            applyTheme(newTheme);
+        }
+
+        // --- DATA FETCHING (Only required for index.html) ---
+        async function fetchStats() {
+            try {
+                // Mocking fetch as the GAS URL is a placeholder
+                const response = await fetch(`${GAS_URL}?action=stats&userId=${userId}`);
+                // Use fallback data if fetch fails due to placeholder URL
+                const result = GAS_URL === "YOUR_GAS_DEPLOY_URL" ? { status: 'SUCCESS', data: { totalOrders: 42, totalSpent: 157500, pendingOrders: 3 } } : await response.json();
+        
+                if (result.status === 'SUCCESS' && result.data) {
+                    const stats = result.data;
+                    document.getElementById('stat-total-orders').textContent = stats.totalOrders || 0;
+                    document.getElementById('stat-total-spent').textContent = stats.totalSpent.toLocaleString('en-US') || 0;
+                    document.getElementById('stat-pending').textContent = stats.pendingOrders || 0;
+                    
+                    const avatar = document.getElementById('user-avatar');
+                    const welcomeText = document.getElementById('welcome-user');
+                    if(avatar) avatar.src = generateUserAvatar(userId);
+                    if(welcomeText) welcomeText.textContent = `Welcome, User ${userId.substring(0, 8)}`;
+        
+                    showToast('Dashboard stats loaded.', false);
+                }
+            } catch (error) {
+                console.warn('Failed to fetch stats (using mock data):', error);
+                
+                // Fallback to mock data on network error
+                const stats = { totalOrders: 42, totalSpent: 157500, pendingOrders: 3 };
+                document.getElementById('stat-total-orders').textContent = stats.totalOrders;
+                document.getElementById('stat-total-spent').textContent = stats.totalSpent.toLocaleString('en-US');
+                document.getElementById('stat-pending').textContent = stats.pendingOrders;
+                
+                const avatar = document.getElementById('user-avatar');
+                const welcomeText = document.getElementById('welcome-user');
+                if(avatar) avatar.src = generateUserAvatar(userId);
+                if(welcomeText) welcomeText.textContent = `Welcome, User ${userId.substring(0, 8)}`;
+            }
+        }
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Theme init
+            const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            applyTheme(savedTheme);
+
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            if (themeToggleBtn) {
+                themeToggleBtn.addEventListener('click', toggleTheme);
+            }
+            
+            // Fetch stats for dashboard
+            fetchStats();
+        });
+    </script>
+</body>
+</html>
+
+    
