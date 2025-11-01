@@ -1,261 +1,185 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="my" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Easy Recharge MM</title>
+    <title>EasyRecharge MM - Dashboard</title>
+    <!-- Load Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --color-primary: 0 0 0; /* Tailwind black */
-            --color-secondary: 242 242 242; /* Tailwind gray-100 */
+    <!-- Custom Stylesheet for Theming and Components -->
+    <link rel="stylesheet" href="style.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    },
+                }
+            }
         }
-        [data-theme="dark"] {
-            --color-primary: 255 255 255; /* Tailwind white */
-            --color-secondary: 31 41 55; /* Tailwind gray-800 */
-        }
-        body {
-            font-family: 'Inter', sans-serif;
-            transition: background-color 0.3s, color 0.3s;
-            background-color: rgb(var(--color-secondary) / 1);
-            color: rgb(var(--color-primary) / 1);
-        }
-        .text-primary { color: rgb(var(--color-primary) / 1); }
-        .bg-card { background-color: white; }
-        [data-theme="dark"] .bg-card { background-color: rgb(31 41 55 / 1); }
-        .card { transition: transform 0.2s, box-shadow 0.2s; }
-        .card:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
-        .primary-btn {
-            background-color: #3b82f6; /* Blue-500 */
-            transition: background-color 0.2s;
-        }
-        .primary-btn:hover { background-color: #2563eb; } /* Blue-600 */
-    </style>
+    </script>
 </head>
-<body class="min-h-screen">
+<body class="bg-background text-text transition-colors duration-300 min-h-screen">
 
-    <!-- Header and Navigation -->
-    <header class="shadow-md sticky top-0 z-10 bg-white dark:bg-gray-900 transition-colors">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
-            <h1 class="text-2xl font-bold text-blue-600 dark:text-blue-400">Easy Recharge MM</h1>
-            <div class="flex items-center space-x-4">
-                <button id="theme-toggle" class="p-2 rounded-full text-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                    <span id="theme-icon">☀️</span>
-                </button>
-                <nav class="hidden sm:flex space-x-6 font-medium">
-                    <a href="index.html" class="text-blue-600 dark:text-blue-400 border-b-2 border-blue-600">Home</a>
-                    <a href="services.html" class="text-gray-600 dark:text-gray-300 hover:text-blue-500 transition-colors">Services</a>
-                    <a href="status.html" class="text-gray-600 dark:text-gray-300 hover:text-blue-500 transition-colors">Status</a>
-                    <a href="pay.html" class="text-gray-600 dark:text-gray-300 hover:text-blue-500 transition-colors">P2P Pay</a>
-                </nav>
-            </div>
-        </div>
+    <!-- DESKTOP HEADER -->
+    <header class="header-desktop sticky top-0 z-30">
+        <div class="text-2xl font-heading font-bold text-primary">EasyRecharge MM</div>
+        <nav class="flex space-x-6 font-semibold">
+            <a href="index.html" class="text-primary hover:text-primary-dark">Home</a>
+            <a href="services.html" class="text-text-secondary hover:text-primary-dark">Services</a>
+            <a href="status.html" class="text-text-secondary hover:text-primary-dark">Status</a>
+            <a href="pay.html" class="text-text-secondary hover:text-primary-dark">P2P Exchange</a>
+        </nav>
+        <button id="theme-toggle" class="p-2 rounded-full bg-card-background hover:bg-border transition-colors">
+            <!-- Icon will be inserted by script.js -->
+        </button>
     </header>
-    
-    <!-- Main Content -->
-    <main class="container mx-auto p-4 sm:p-6 lg:p-8">
-        <div class="max-w-4xl mx-auto">
-            
-            <!-- User Profile Card -->
-            <div class="bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-6 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between">
-                <div class="flex items-center mb-4 sm:mb-0">
-                    <img id="user-avatar" src="https://placehold.co/40x40/4f46e5/ffffff?text=U" alt="User Avatar" class="w-12 h-12 rounded-full mr-4 border-2 border-blue-500">
-                    <div>
-                        <h2 id="welcome-user" class="text-xl font-bold dark:text-white">Welcome, User...</h2>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">Your personal recharge dashboard.</p>
-                    </div>
-                </div>
-                <div class="w-full sm:w-auto">
-                    <a href="services.html" class="primary-btn text-white px-5 py-2.5 rounded-xl text-sm font-semibold block text-center">
-                        Start New Order
-                    </a>
-                </div>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="container mx-auto p-4 md:p-8 pt-4 pb-20 main-content">
+        <h1 class="text-3xl font-heading font-bold mb-6">Dashboard</h1>
+        
+        <!-- 1. USER PROFILE CARD -->
+        <section class="custom-card p-4 flex items-center mb-6 shadow-lg">
+            <img id="user-avatar" class="w-16 h-16 rounded-full object-cover mr-4 ring-2 ring-primary" alt="User Avatar">
+            <div class="flex-grow">
+                <p class="text-lg font-semibold" id="user-username">Hello, User!</p>
+                <p class="text-xs text-text-secondary" id="user-id-display">ID: Loading...</p>
             </div>
+            <a href="services.html" class="btn btn-primary text-sm whitespace-nowrap py-2 px-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                Start New Order
+            </a>
+        </section>
 
-            <!-- Stats Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                
-                <!-- Total Orders -->
-                <div class="card bg-card dark:bg-gray-700 p-6 rounded-xl shadow-lg border-t-4 border-blue-500">
-                    <p class="text-sm font-medium text-gray-500 dark:text-gray-300">Total Orders</p>
-                    <div class="mt-1 flex items-center">
-                        <h3 id="stat-total-orders" class="text-3xl font-extrabold text-primary">0</h3>
-                        <span class="ml-2 text-green-500 text-sm font-semibold">Orders</span>
-                    </div>
-                </div>
-                
-                <!-- Total Spent -->
-                <div class="card bg-card dark:bg-gray-700 p-6 rounded-xl shadow-lg border-t-4 border-green-500">
-                    <p class="text-sm font-medium text-gray-500 dark:text-gray-300">Total Spent (MMK)</p>
-                    <div class="mt-1 flex items-center">
-                        <h3 id="stat-total-spent" class="text-3xl font-extrabold text-primary">0</h3>
-                        <span class="ml-2 text-green-500 text-sm font-semibold">MMK</span>
-                    </div>
-                </div>
-
-                <!-- Pending Orders -->
-                <div class="card bg-card dark:bg-gray-700 p-6 rounded-xl shadow-lg border-t-4 border-amber-500">
-                    <p class="text-sm font-medium text-gray-500 dark:text-gray-300">Pending Orders</p>
-                    <div class="mt-1 flex items-center">
-                        <h3 id="stat-pending" class="text-3xl font-extrabold text-primary">0</h3>
-                        <span class="ml-2 text-amber-500 text-sm font-semibold">Awaiting Action</span>
-                    </div>
-                </div>
+        <!-- 2. STATISTICS GRID -->
+        <h2 class="text-xl font-heading font-semibold mb-4">Your Activity</h2>
+        <section class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+            <!-- Total Orders -->
+            <div class="custom-card p-5 bg-primary/10 border-primary/20">
+                <p class="text-sm font-medium text-text-secondary">Total Orders</p>
+                <p id="stat-total-orders" class="text-3xl font-heading font-bold text-primary mt-1">0</p>
+                <p class="text-xs text-green-500 mt-1 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+                    Data (30s refresh)
+                </p>
             </div>
-
-            <!-- Quick Service Links -->
-            <h2 class="text-2xl font-bold mb-4 dark:text-white border-b pb-2 border-gray-200 dark:border-gray-700">Quick Services</h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <a href="order_sim.html" class="card bg-card dark:bg-gray-700 p-4 rounded-xl shadow-md text-center hover:shadow-lg transition">
-                    <svg class="w-8 h-8 mx-auto text-blue-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                    <p class="font-semibold text-sm dark:text-white">SIM Recharge</p>
-                </a>
-                <a href="order_game.html" class="card bg-card dark:bg-gray-700 p-4 rounded-xl shadow-md text-center hover:shadow-lg transition">
-                    <svg class="w-8 h-8 mx-auto text-green-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.664a2 2 0 01-1.789-2.894l3.5-7z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 9h1.5l1.5 5h4l1.5-5H17M7 9a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2H7z"></path></svg>
-                    <p class="font-semibold text-sm dark:text-white">Game Topup</p>
-                </a>
-                <a href="pay.html" class="card bg-card dark:bg-gray-700 p-4 rounded-xl shadow-md text-center hover:shadow-lg transition">
-                    <svg class="w-8 h-8 mx-auto text-purple-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m4 6h.01M19 9h2a2 2 0 012 2v7a2 2 0 01-2 2h-4a2 2 0 01-2-2v-7a2 2 0 012-2z"></path></svg>
-                    <p class="font-semibold text-sm dark:text-white">P2P Exchange</p>
-                </a>
-                <a href="status.html" class="card bg-card dark:bg-gray-700 p-4 rounded-xl shadow-md text-center hover:shadow-lg transition">
-                    <svg class="w-8 h-8 mx-auto text-indigo-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 111.955 0 0112 2.944a11.955 11.955 0 017.618 3.046zM12 10v4m0 4h.01"></path></svg>
-                    <p class="font-semibold text-sm dark:text-white">Order Status</p>
-                </a>
+            <!-- Total Spent MMK -->
+            <div class="custom-card p-5 bg-orange-500/10 border-orange-500/20">
+                <p class="text-sm font-medium text-text-secondary">Total Spent (MMK)</p>
+                <p id="stat-total-spent" class="text-3xl font-heading font-bold text-orange-500 mt-1">0 MMK</p>
+                <p class="text-xs text-text-secondary mt-1">Lifetime value</p>
             </div>
+            <!-- Pending Orders -->
+            <div class="custom-card p-5 bg-red-500/10 border-red-500/20">
+                <p class="text-sm font-medium text-text-secondary">Pending Orders</p>
+                <p id="stat-pending-orders" class="text-3xl font-heading font-bold text-red-500 mt-1">0</p>
+                <p class="text-xs text-red-500 mt-1">Action required</p>
+            </div>
+        </section>
 
+        <!-- 3. QUICK SERVICES -->
+        <h2 class="text-xl font-heading font-semibold mb-4">Quick Services</h2>
+        <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <!-- SIM Recharge -->
+            <a href="order_sim.html" class="custom-card p-4 text-center hover:shadow-xl">
+                <div class="w-10 h-10 mx-auto mb-2 text-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-full h-full" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                </div>
+                <p class="font-semibold text-sm">SIM Recharge</p>
+            </a>
+            <!-- Game Top-up -->
+            <a href="order_game.html" class="custom-card p-4 text-center hover:shadow-xl">
+                <div class="w-10 h-10 mx-auto mb-2 text-green-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-full h-full" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 01-4 4H8a4 4 0 01-4-4v-1a4 4 0 014-4h4a4 4 0 014 4v1z" /></svg>
+                </div>
+                <p class="font-semibold text-sm">Game Top-up</p>
+            </a>
+            <!-- P2P Exchange -->
+            <a href="pay.html" class="custom-card p-4 text-center hover:shadow-xl">
+                <div class="w-10 h-10 mx-auto mb-2 text-purple-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-full h-full" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
+                </div>
+                <p class="font-semibold text-sm">P2P Exchange</p>
+            </a>
+            <!-- Order Status -->
+            <a href="status.html" class="custom-card p-4 text-center hover:shadow-xl">
+                <div class="w-10 h-10 mx-auto mb-2 text-orange-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-full h-full" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                </div>
+                <p class="font-semibold text-sm">Order Status</p>
+            </a>
+        </section>
+
+        <!-- 4. RECENT ORDERS TABLE -->
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-heading font-semibold">Recent Orders</h2>
+            <button id="view-all-orders" class="text-sm text-primary hover:underline">View All</button>
         </div>
+        
+        <div class="custom-card p-0 overflow-x-auto">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Service</th>
+                        <th>Qty</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="order-history-table-body">
+                    <!-- Orders will be populated by script.js (RealTimeUpdates.fetchUserHistory) -->
+                    <tr><td colspan="5" class="p-4 text-center text-text-secondary">Loading recent orders...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
     </main>
 
-    <!-- Toast Container -->
+    <!-- MOBILE BOTTOM NAVIGATION -->
+    <nav class="nav-mobile">
+        <div class="flex justify-around">
+            <a href="index.html" class="nav-mobile-item active">
+                <svg xmlns="http://www.w3.org/2000/svg" class="nav-mobile-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V10"/></svg>
+                Home
+            </a>
+            <a href="services.html" class="nav-mobile-item">
+                <svg xmlns="http://www.w3.org/2000/svg" class="nav-mobile-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                Services
+            </a>
+            <a href="status.html" class="nav-mobile-item">
+                <svg xmlns="http://www.w3.org/2000/svg" class="nav-mobile-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                Status
+            </a>
+            <a href="pay.html" class="nav-mobile-item">
+                <svg xmlns="http://www.w3.org/2000/svg" class="nav-mobile-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
+                P2P
+            </a>
+            <button id="mobile-theme-toggle" class="nav-mobile-item" onclick="ThemeManager.toggle()">
+                 <!-- Icon will be inserted by script.js -->
+                Theme
+            </button>
+        </div>
+    </nav>
+    
+    <!-- Toast Notification Container -->
     <div id="toast-container"></div>
+    
+    <!-- FOOTER -->
+    <footer class="text-center p-4 text-xs text-text-secondary mt-8">
+        <p>&copy; 2024 EasyRecharge MM. All rights reserved.</p>
+        <div class="mt-2 space-x-4">
+            <a href="faq.html" class="hover:text-primary">FAQ</a>
+            <span class="text-border">|</span>
+            <a href="privacy_policy.html" class="hover:text-primary">Privacy Policy</a>
+        </div>
+    </footer>
 
-    <script>
-        // -------------------------------------------------------------------
-        // INLINE JS FOR COMPLETENESS (Core functions from script.js)
-        // -------------------------------------------------------------------
-        
-        const GAS_URL = "YOUR_GAS_DEPLOY_URL"; // Placeholder
-        
-        // Simple unique ID generator to mimic a logged-in user in this static environment
-        const userId = localStorage.getItem('er_user_id') || crypto.randomUUID();
-        localStorage.setItem('er_user_id', userId);
-        
-        // --- UI UTILITY FUNCTIONS ---
-        function showToast(message, isError = false) {
-            const toastContainer = document.getElementById('toast-container') || (() => {
-                const div = document.createElement('div');
-                div.id = 'toast-container';
-                div.style.cssText = 'position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); z-index: 1000; display: flex; flex-direction: column; align-items: center; pointer-events: none;';
-                document.body.appendChild(div);
-                return div;
-            })();
-
-            const toast = document.createElement('div');
-            toast.textContent = message;
-            toast.className = `p-3 px-5 mt-2 rounded-xl shadow-xl font-semibold transition-all duration-500 transform translate-y-5 opacity-0 text-white ${isError ? 'bg-red-500' : 'bg-green-500'}`;
-            
-            toastContainer.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.style.opacity = 1;
-                toast.style.transform = 'translateY(0)';
-            }, 10);
-
-            setTimeout(() => {
-                toast.style.opacity = 0;
-                toast.style.transform = 'translateY(20px)';
-                setTimeout(() => toast.remove(), 500);
-            }, 3000);
-        }
-
-        function generateUserAvatar(text) {
-            let hash = 0;
-            for (let i = 0; i < text.length; i++) {
-                hash = text.charCodeAt(i) + ((hash << 5) - hash);
-            }
-            const color = 'hsl(' + (hash % 360) + ', 70%, 50%)';
-            const initials = text.substring(0, 2).toUpperCase();
-
-            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
-                <rect width="40" height="40" rx="20" fill="${color}"/>
-                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="16" fill="white" font-family="Inter">${initials}</text>
-            </svg>`;
-
-            return 'data:image/svg+xml;base64,' + btoa(svg);
-        }
-
-        // --- THEME MANAGEMENT ---
-        function applyTheme(theme) {
-            document.documentElement.setAttribute('data-theme', theme);
-            localStorage.setItem('theme', theme);
-            const icon = theme === 'dark' ? '🌙' : '☀️';
-            const iconElement = document.getElementById('theme-icon');
-            if (iconElement) {
-                iconElement.textContent = icon;
-            }
-        }
-
-        function toggleTheme() {
-            const currentTheme = localStorage.getItem('theme') || 'light';
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            applyTheme(newTheme);
-        }
-
-        // --- DATA FETCHING (Only required for index.html) ---
-        async function fetchStats() {
-            try {
-                // Mocking fetch as the GAS URL is a placeholder
-                const response = await fetch(`${GAS_URL}?action=stats&userId=${userId}`);
-                // Use fallback data if fetch fails due to placeholder URL
-                const result = GAS_URL === "YOUR_GAS_DEPLOY_URL" ? { status: 'SUCCESS', data: { totalOrders: 42, totalSpent: 157500, pendingOrders: 3 } } : await response.json();
-        
-                if (result.status === 'SUCCESS' && result.data) {
-                    const stats = result.data;
-                    document.getElementById('stat-total-orders').textContent = stats.totalOrders || 0;
-                    document.getElementById('stat-total-spent').textContent = stats.totalSpent.toLocaleString('en-US') || 0;
-                    document.getElementById('stat-pending').textContent = stats.pendingOrders || 0;
-                    
-                    const avatar = document.getElementById('user-avatar');
-                    const welcomeText = document.getElementById('welcome-user');
-                    if(avatar) avatar.src = generateUserAvatar(userId);
-                    if(welcomeText) welcomeText.textContent = `Welcome, User ${userId.substring(0, 8)}`;
-        
-                    showToast('Dashboard stats loaded.', false);
-                }
-            } catch (error) {
-                console.warn('Failed to fetch stats (using mock data):', error);
-                
-                // Fallback to mock data on network error
-                const stats = { totalOrders: 42, totalSpent: 157500, pendingOrders: 3 };
-                document.getElementById('stat-total-orders').textContent = stats.totalOrders;
-                document.getElementById('stat-total-spent').textContent = stats.totalSpent.toLocaleString('en-US');
-                document.getElementById('stat-pending').textContent = stats.pendingOrders;
-                
-                const avatar = document.getElementById('user-avatar');
-                const welcomeText = document.getElementById('welcome-user');
-                if(avatar) avatar.src = generateUserAvatar(userId);
-                if(welcomeText) welcomeText.textContent = `Welcome, User ${userId.substring(0, 8)}`;
-            }
-        }
-
-        // --- INITIALIZATION ---
-        document.addEventListener('DOMContentLoaded', () => {
-            // Theme init
-            const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-            applyTheme(savedTheme);
-
-            const themeToggleBtn = document.getElementById('theme-toggle');
-            if (themeToggleBtn) {
-                themeToggleBtn.addEventListener('click', toggleTheme);
-            }
-            
-            // Fetch stats for dashboard
-            fetchStats();
-        });
-    </script>
+    <!-- Frontend JavaScript Logic -->
+    <script src="script.js"></script>
 </body>
 </html>
 
-    
