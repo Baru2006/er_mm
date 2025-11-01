@@ -6,136 +6,107 @@
     <title>EasyRecharge MM - Services</title>
     <!-- Load Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Custom Stylesheet for Theming and Components -->
+    <!-- Load custom styles.css -->
     <link rel="stylesheet" href="style.css">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        heading: ['Poppins', 'sans-serif'],
+                    colors: {
+                        'primary-color': 'var(--primary-color)',
+                        'bg-primary': 'var(--bg-primary)',
+                        'bg-secondary': 'var(--bg-secondary)',
+                        'text-primary': 'var(--text-primary)',
+                        'text-secondary': 'var(--text-secondary)',
+                        'border-color': 'var(--border-color)',
                     },
+                    fontFamily: {
+                        heading: ['var(--font-heading)'],
+                        body: ['var(--font-body)'],
+                    }
                 }
             }
         }
     </script>
 </head>
-<body class="bg-background text-text transition-colors duration-300 min-h-screen">
-
-    <!-- DESKTOP HEADER (Identical to index.html) -->
-    <header class="header-desktop sticky top-0 z-30">
-        <div class="text-2xl font-heading font-bold text-primary">EasyRecharge MM</div>
-        <nav class="flex space-x-6 font-semibold">
-            <a href="index.html" class="text-text-secondary hover:text-primary-dark">Home</a>
-            <a href="services.html" class="text-primary hover:text-primary-dark">Services</a>
-            <a href="status.html" class="text-text-secondary hover:text-primary-dark">Status</a>
-            <a href="pay.html" class="text-text-secondary hover:text-primary-dark">P2P Exchange</a>
-        </nav>
-        <button id="theme-toggle" class="p-2 rounded-full bg-card-background hover:bg-border transition-colors">
-            <!-- Icon will be inserted by script.js -->
-        </button>
-    </header>
-
-    <!-- MAIN CONTENT CONTAINER -->
-    <main class="container mx-auto p-4 md:p-8 pt-4 pb-20 main-content">
-        <h1 class="text-3xl font-heading font-bold mb-8 text-center md:text-left">Our Services</h1>
-        
-        <p class="text-center md:text-left text-lg text-text-secondary max-w-2xl mx-auto md:mx-0 mb-8">
-            ကျွန်ုပ်တို့၏ အဓိက ဝန်ဆောင်မှု အမျိုးအစားများကို ရွေးချယ်ပြီး လိုအပ်သော ပစ္စည်း သို့မဟုတ် ဝန်ဆောင်မှုကို အလွယ်တကူ ဝယ်ယူလိုက်ပါ။
-        </p>
-
-        <!-- SERVICE CATEGORIES GRID -->
-        <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            
-            <!-- 1. SIM / DATA RECHARGE -->
-            <a href="order_sim.html" class="service-card group">
-                <div class="service-icon bg-primary/20 text-primary group-hover:bg-primary group-hover:text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
-                </div>
-                <h2 class="text-xl font-heading font-semibold mb-2">SIM & Data Recharge</h2>
-                <p class="text-text-secondary">MPT, Ooredoo, Telenor (Atom) တို့အတွက် Data Package များနှင့် ဖုန်းဘေလ်များ လွယ်ကူလျင်မြန်စွာ ဖြည့်သွင်းပါ။</p>
-                <div class="btn-sm btn-primary mt-4 group-hover:shadow-lg">Order Now &rarr;</div>
-            </a>
-
-            <!-- 2. GAME TOP-UP -->
-            <a href="order_game.html" class="service-card group">
-                <div class="service-icon bg-green-500/20 text-green-500 group-hover:bg-green-500 group-hover:text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 01-4 4H8a4 4 0 01-4-4v-1a4 4 0 014-4h4a4 4 0 014 4v1z" /></svg>
-                </div>
-                <h2 class="text-xl font-heading font-semibold mb-2">Game Top-up</h2>
-                <p class="text-text-secondary">Mobile Legends, PUBG Mobile, Free Fire အစရှိသော ဂိမ်းများအတွက် Diamond, UC, Gold များကို ဈေးနှုန်းချိုသာစွာ ဝယ်ယူပါ။</p>
-                <div class="btn-sm btn-green mt-4 group-hover:shadow-lg">Order Now &rarr;</div>
-            </a>
-
-            <!-- 3. SMM SERVICES -->
-            <a href="order_smm.html" class="service-card group">
-                <div class="service-icon bg-purple-500/20 text-purple-500 group-hover:bg-purple-500 group-hover:text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20v-2m0 2h2m-4.47-8.47l-2.43 2.43 1.258-2.515m3.75-1.042A28.983 28.983 0 0017 12a28.983 28.983 0 00-7.318-2.618M15 8a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-                </div>
-                <h2 class="text-xl font-heading font-semibold mb-2">Social Media Marketing</h2>
-                <p class="text-text-secondary">Facebook, Instagram, YouTube စသည့် Platform များအတွက် Followers, Likes, Views စသော ဝန်ဆောင်မှုများ။</p>
-                <div class="btn-sm btn-purple mt-4 group-hover:shadow-lg">Order Now &rarr;</div>
-            </a>
-
-        </section>
-        
-        <!-- P2P Callout -->
-        <section class="mt-10 custom-card p-6 flex flex-col md:flex-row items-center justify-between bg-yellow-500/10 border-yellow-500/20 shadow-xl">
-            <div class="flex items-center mb-4 md:mb-0">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-yellow-500 mr-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8V9m0 3v1m0 3v1M6 3h12a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V5a2 2 0 012-2z" /></svg>
-                <div>
-                    <h3 class="text-xl font-heading font-semibold text-text">P2P Money Exchange</h3>
-                    <p class="text-text-secondary text-sm">ငွေလွှဲပြောင်းလဲခြင်း ဝန်ဆောင်မှု။</p>
-                </div>
-            </div>
-            <a href="pay.html" class="btn btn-yellow w-full md:w-auto">Start Exchange &rarr;</a>
-        </section>
-
-    </main>
-
-    <!-- MOBILE BOTTOM NAVIGATION (Identical to index.html) -->
-    <nav class="nav-mobile">
-        <div class="flex justify-around">
-            <a href="index.html" class="nav-mobile-item">
-                <svg xmlns="http://www.w3.org/2000/svg" class="nav-mobile-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V10"/></svg>
-                Home
-            </a>
-            <a href="services.html" class="nav-mobile-item active">
-                <svg xmlns="http://www.w3.org/2000/svg" class="nav-mobile-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-                Services
-            </a>
-            <a href="status.html" class="nav-mobile-item">
-                <svg xmlns="http://www.w3.org/2000/svg" class="nav-mobile-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                Status
-            </a>
-            <a href="pay.html" class="nav-mobile-item">
-                <svg xmlns="http://www.w3.org/2000/svg" class="nav-mobile-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
-                P2P
-            </a>
-            <button id="mobile-theme-toggle" class="nav-mobile-item" onclick="ThemeManager.toggle()">
-                 <!-- Icon will be inserted by script.js -->
-                Theme
+<body class="bg-bg-secondary font-body">
+    <div class="container mx-auto p-4 md:p-6 min-h-screen">
+        <!-- HEADER (Desktop Nav) -->
+        <header class="desktop-nav sticky top-0 bg-bg-primary z-40 hidden md:flex items-center justify-between">
+            <h1 class="text-2xl font-bold text-primary-color font-heading">EasyRecharge <span class="text-text-primary">MM</span></h1>
+            <nav class="flex space-x-4">
+                <a href="index.html" class="desktop-nav-link">Home</a>
+                <a href="services.html" class="desktop-nav-link active">Services</a>
+                <a href="status.html" class="desktop-nav-link">Status</a>
+                <a href="pay.html" class="desktop-nav-link">P2P Exchange</a>
+            </nav>
+            <button id="theme-toggle" class="p-2 rounded-full text-text-primary hover:bg-bg-secondary transition-colors">
+                <svg data-theme-icon="light" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                <svg data-theme-icon="dark" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
             </button>
-        </div>
-    </nav>
-    
-    <!-- Toast Notification Container -->
-    <div id="toast-container"></div>
-    
-    <!-- FOOTER -->
-    <footer class="text-center p-4 text-xs text-text-secondary mt-8">
-        <p>&copy; 2024 EasyRecharge MM. All rights reserved.</p>
-        <div class="mt-2 space-x-4">
-            <a href="faq.html" class="hover:text-primary">FAQ</a>
-            <span class="text-border">|</span>
-            <a href="privacy_policy.html" class="hover:text-primary">Privacy Policy</a>
-        </div>
-    </footer>
+        </header>
 
-    <!-- Frontend JavaScript Logic -->
+        <main class="space-y-6 md:mt-4">
+            <h1 class="text-3xl font-bold text-text-primary font-heading pt-4">All Services</h1>
+            <p class="text-text-secondary">သင်လိုအပ်သော ဝန်ဆောင်မှုအမျိုးအစားကို ရွေးချယ်ပါ။</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- 1. SIM/DATA Recharge -->
+                <a href="order_sim.html" class="card-hover card p-6 flex flex-col items-center justify-center space-y-3 border-l-4 border-primary-color">
+                    <svg class="h-12 w-12 text-primary-color" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                    <h2 class="text-xl font-semibold text-text-primary font-heading">SIM / Data Pack</h2>
+                    <p class="text-sm text-text-secondary text-center">ဖုန်းဘေလ်၊ ဖုန်းနံပါတ် သို့မဟုတ် ဒေတာပက်များ ဝယ်ယူပါ။</p>
+                    <span class="btn btn-secondary mt-3 text-sm">Order Now &rarr;</span>
+                </a>
+                
+                <!-- 2. Game Top-up -->
+                <a href="order_game.html" class="card-hover card p-6 flex flex-col items-center justify-center space-y-3 border-l-4 border-status-success">
+                    <svg class="h-12 w-12 text-status-success" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 10h.01M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m7-2h3m-3-3h3m-3 6h3m-2-4h.01" /></svg>
+                    <h2 class="text-xl font-semibold text-text-primary font-heading">Game Top-up</h2>
+                    <p class="text-sm text-text-secondary text-center">Mobile Legends, PUBG, Free Fire စသည့် Game credit များ ဖြည့်သွင်းပါ။</p>
+                    <span class="btn btn-secondary mt-3 text-sm">Order Now &rarr;</span>
+                </a>
+                
+                <!-- 3. SMM Services -->
+                <a href="order_smm.html" class="card-hover card p-6 flex flex-col items-center justify-center space-y-3 border-l-4 border-status-pending">
+                    <svg class="h-12 w-12 text-status-pending" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                    <h2 class="text-xl font-semibold text-text-primary font-heading">SMM Services</h2>
+                    <p class="text-sm text-text-secondary text-center">Social Media (FB, IG, YT) အတွက် Followers, Likes, Views ဝယ်ယူပါ။</p>
+                    <span class="btn btn-secondary mt-3 text-sm">Order Now &rarr;</span>
+                </a>
+
+                <!-- 4. P2P Exchange -->
+                <a href="pay.html" class="card-hover card p-6 flex flex-col items-center justify-center space-y-3 border-l-4 border-purple-500">
+                    <svg class="h-12 w-12 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
+                    <h2 class="text-xl font-semibold text-text-primary font-heading">P2P Exchange</h2>
+                    <p class="text-sm text-text-secondary text-center">ငွေလဲလှယ်ခြင်း ဝန်ဆောင်မှု (KBZ Pay/Wave/Bank ဖြင့် လဲလှယ်ခြင်း)။</p>
+                    <span class="btn btn-secondary mt-3 text-sm">Exchange Now &rarr;</span>
+                </a>
+            </div>
+            
+        </main>
+        
+        <!-- FOOTER & MOBILE NAV -->
+        <footer class="mt-8 text-center text-xs text-text-secondary pt-10 pb-4 md:pb-0"><p>&copy; 2025 EasyRecharge MM.</p></footer>
+    </div>
+    <nav class="mobile-nav md:hidden">
+        <a href="index.html" class="mobile-nav-item">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg><span>Home</span>
+        </a>
+        <a href="services.html" class="mobile-nav-item active">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z" /></svg><span>Services</span>
+        </a>
+        <a href="status.html" class="mobile-nav-item">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span>Status</span>
+        </a>
+        <a href="pay.html" class="mobile-nav-item">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg><span>P2P</span>
+        </a>
+    </nav>
+    <div id="toast-container"></div>
     <script src="script.js"></script>
 </body>
 </html>
 
-    
+                
