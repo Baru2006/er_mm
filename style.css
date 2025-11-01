@@ -1,128 +1,117 @@
-/* -------------------------------------------------------------------------- */
-/* 1. BASE STYLES                                */
-/* -------------------------------------------------------------------------- */
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Poppins:wght@400;600;700&display=swap');
 
-/* Tailwind CSS is assumed to be loaded and provides the foundational utility classes.
-   This file focuses on custom design tokens, themes, and complex components. */
-
+/* --- 1. DESIGN SYSTEM & BASE VARIABLES --- */
 :root {
-    /* TYPOGRAPHY */
-    --font-body: 'Inter', sans-serif;
+    /* Colors */
+    --primary-color: #3b82f6; /* Blue */
+    --primary-hover: #2563eb;
+    --status-pending: #f59e0b; /* Orange */
+    --status-processing: #3b82f6; /* Blue */
+    --status-success: #10b981; /* Green */
+    --status-cancelled: #ef4444; /* Red */
+    --status-p2p: #8b5cf6; /* Purple for P2P */
+
+    /* Typography */
     --font-heading: 'Poppins', sans-serif;
+    --font-body: 'Inter', sans-serif;
 
-    /* COLORS & THEMES - LIGHT MODE DEFAULT */
-    --color-primary: #3b82f6; /* Blue-500 */
-    --color-primary-dark: #2563eb; /* Blue-600 */
-    --color-text: #1f2937; /* Gray-800 */
-    --color-text-secondary: #4b5563; /* Gray-600 */
-    --color-background: #ffffff; /* White */
-    --color-card-background: #f9fafb; /* Gray-50 */
-    --color-border: #e5e7eb; /* Gray-200 */
+    /* Design */
+    --radius-base: 12px;
+    --spacing-base: 8px;
+    --shadow-color-light: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-color-dark: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.15);
 
-    /* STATUS COLORS */
-    --color-status-success: #10b981; /* Green-500 */
-    --color-status-pending: #f59e0b; /* Amber-500 */
-    --color-status-processing: #3b82f6; /* Blue-500 */
-    --color-status-cancelled: #ef4444; /* Red-500 */
-
-    /* SHADOWS */
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    /* Transitions */
+    transition: all 0.3s ease-in-out;
 }
 
-/* -------------------------------------------------------------------------- */
-/* 2. DARK THEME                               */
-/* -------------------------------------------------------------------------- */
+/* --- 2. THEME SYSTEM: LIGHT MODE (Default) --- */
+[data-theme="light"] {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f3f4f6;
+    --text-primary: #1f2937;
+    --text-secondary: #6b7280;
+    --border-color: #e5e7eb;
+    --shadow-color: var(--shadow-color-light);
+}
 
+/* --- 3. THEME SYSTEM: DARK MODE --- */
 [data-theme="dark"] {
-    --color-text: #f3f4f6; /* Gray-100 */
-    --color-text-secondary: #9ca3af; /* Gray-400 */
-    --color-background: #111827; /* Gray-900 */
-    --color-card-background: #1f2937; /* Gray-800 */
-    --color-border: #374151; /* Gray-700 */
-
-    /* Adjust shadow intensity for dark background */
-    --shadow-sm: 0 1px 2px 0 rgba(255, 255, 255, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(255, 255, 255, 0.05), 0 2px 4px -2px rgba(255, 255, 255, 0.05);
-    --shadow-lg: 0 10px 15px -3px rgba(255, 255, 255, 0.05), 0 4px 6px -4px rgba(255, 255, 255, 0.05);
+    --bg-primary: #1f2937;
+    --bg-secondary: #374151;
+    --text-primary: #f3f4f6;
+    --text-secondary: #9ca3af;
+    --border-color: #4b5563;
+    --shadow-color: var(--shadow-color-dark);
 }
 
-/* Global setup */
+/* --- 4. GLOBAL STYLES & RESET --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
 body {
     font-family: var(--font-body);
-    background-color: var(--color-background);
-    color: var(--color-text);
-    transition: background-color 0.3s, color 0.3s;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
     min-height: 100vh;
+    padding-bottom: 72px; /* Space for fixed bottom navigation */
 }
 
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
+    color: var(--text-primary);
 }
 
-/* -------------------------------------------------------------------------- */
-/* 3. COMPONENTS                                */
-/* -------------------------------------------------------------------------- */
+/* --- 5. COMPONENT STYLES --- */
 
-/* GENERAL CONTAINER/CARD STYLES */
-.custom-card {
-    background-color: var(--color-card-background);
-    border: 1px solid var(--color-border);
-    border-radius: 12px; /* Standard Radius */
-    box-shadow: var(--shadow-md);
-    transition: all 0.2s ease-in-out;
-}
-
-.custom-card:hover {
-    box-shadow: var(--shadow-lg);
-    transform: translateY(-2px);
-}
-
-/* BUTTONS */
+/* 5.1 Buttons */
 .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 12px 24px;
-    border-radius: 12px;
+    padding: var(--spacing-base) calc(var(--spacing-base) * 2);
+    border-radius: var(--radius-base);
     font-weight: 600;
-    transition: all 0.2s ease-in-out;
     cursor: pointer;
-    text-align: center;
-    border: none;
-    font-family: var(--font-body);
+    transition: background-color 0.2s, transform 0.1s, opacity 0.2s;
+    border: 2px solid transparent;
+}
+
+.btn:active {
+    transform: scale(0.98);
 }
 
 .btn-primary {
-    background-color: var(--color-primary);
-    color: var(--color-background);
+    background-color: var(--primary-color);
+    color: var(--bg-primary);
 }
 
-.btn-primary:hover {
-    background-color: var(--color-primary-dark);
-    box-shadow: var(--shadow-md);
+.btn-primary:hover:not(:disabled) {
+    background-color: var(--primary-hover);
 }
 
 .btn-secondary {
-    background-color: var(--color-border);
-    color: var(--color-text);
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border-color: var(--border-color);
 }
 
-.btn-secondary:hover {
-    background-color: var(--color-border);
-    filter: brightness(0.95);
+.btn-secondary:hover:not(:disabled) {
+    background-color: var(--border-color);
 }
 
 .btn-danger {
-    background-color: var(--color-status-cancelled);
-    color: var(--color-background);
+    background-color: var(--status-cancelled);
+    color: var(--bg-primary);
 }
 
-.btn-danger:hover {
-    background-color: #c52d2d;
+.btn-danger:hover:not(:disabled) {
+    background-color: #c53030;
 }
 
 .btn:disabled {
@@ -130,238 +119,326 @@ h1, h2, h3, h4, h5, h6 {
     cursor: not-allowed;
 }
 
-/* FORMS & INPUTS */
-.custom-input, .custom-select {
+/* 5.2 Forms & Inputs */
+.input, .select, .textarea {
     width: 100%;
-    padding: 12px;
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
-    background-color: var(--color-background);
-    color: var(--color-text);
+    padding: calc(var(--spacing-base) * 1.5);
+    border-radius: var(--radius-base);
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.custom-input:focus, .custom-select:focus {
+.input:focus, .select:focus, .textarea:focus {
+    border-color: var(--primary-color);
     outline: none;
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); /* Ring Blue-300 */
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 30%, transparent);
 }
 
-/* Validation states */
-.custom-input.is-error {
-    border-color: var(--color-status-cancelled);
+/* Validation States */
+.input.border-red-500, .select.border-red-500 {
+    border-color: var(--status-cancelled);
 }
 
-.custom-input.is-error:focus {
-    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.3); /* Ring Red-300 */
+.input::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.7;
 }
 
-.error-message {
-    color: var(--color-status-cancelled);
-    font-size: 0.875rem;
-    margin-top: 4px;
+/* 5.3 Cards & Containers */
+.card {
+    background-color: var(--bg-primary);
+    border-radius: var(--radius-base);
+    box-shadow: var(--shadow-color);
+    padding: calc(var(--spacing-base) * 3);
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
 }
 
-/* TABLES */
-.custom-table {
+.card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 25px -5px color-mix(in srgb, var(--primary-color) 20%, transparent);
+}
+
+/* 5.4 Tables with striped rows */
+.table-container {
+    overflow-x: auto;
+    width: 100%;
+    border-radius: var(--radius-base);
+    border: 1px solid var(--border-color);
+}
+
+.styled-table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
 }
 
-.custom-table th, .custom-table td {
-    padding: 12px 16px;
+.styled-table th, .styled-table td {
+    padding: calc(var(--spacing-base) * 2);
     text-align: left;
-    border-bottom: 1px solid var(--color-border);
 }
 
-.custom-table th {
-    background-color: var(--color-card-background);
+.styled-table th {
+    background-color: var(--bg-secondary);
+    color: var(--text-secondary);
     font-weight: 600;
-    color: var(--color-text-secondary);
     text-transform: uppercase;
-    font-size: 0.875rem;
+    font-size: 0.8rem;
+    border-bottom: 2px solid var(--border-color);
 }
 
-/* Striped rows for better readability */
-.custom-table tbody tr:nth-child(odd) {
-    background-color: rgba(0, 0, 0, 0.03);
+.styled-table tr {
+    transition: background-color 0.15s ease;
 }
 
-[data-theme="dark"] .custom-table tbody tr:nth-child(odd) {
-    background-color: rgba(255, 255, 255, 0.05);
+.styled-table tbody tr:nth-child(odd) {
+    background-color: color-mix(in srgb, var(--bg-primary) 95%, var(--bg-secondary));
 }
 
-/* STATUS BADGES */
-.status-badge {
+.styled-table tbody tr:hover {
+    background-color: var(--bg-secondary);
+}
+
+/* 5.5 Status Badges */
+.badge {
     display: inline-flex;
     align-items: center;
-    padding: 4px 8px;
-    border-radius: 9999px; /* Full rounded */
+    padding: 0.3rem 0.6rem;
+    border-radius: 9999px;
     font-size: 0.75rem;
     font-weight: 600;
 }
 
-.status-pending {
-    background-color: var(--color-status-pending);
-    color: var(--color-background);
+.badge-pending {
+    background-color: color-mix(in srgb, var(--status-pending) 10%, transparent);
+    color: var(--status-pending);
+}
+.badge-processing {
+    background-color: color-mix(in srgb, var(--status-processing) 10%, transparent);
+    color: var(--status-processing);
+}
+.badge-success {
+    background-color: color-mix(in srgb, var(--status-success) 10%, transparent);
+    color: var(--status-success);
+}
+.badge-cancelled {
+    background-color: color-mix(in srgb, var(--status-cancelled) 10%, transparent);
+    color: var(--status-cancelled);
+}
+.badge-p2p {
+    background-color: color-mix(in srgb, var(--status-p2p) 10%, transparent);
+    color: var(--status-p2p);
 }
 
-.status-processing {
-    background-color: var(--color-status-processing);
-    color: var(--color-background);
-}
-
-.status-success {
-    background-color: var(--color-status-success);
-    color: var(--color-background);
-}
-
-.status-cancelled {
-    background-color: var(--color-status-cancelled);
-    color: var(--color-background);
-}
-
-/* TOAST NOTIFICATIONS */
+/* 5.6 Toast Notifications */
 #toast-container {
     position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 50; /* Above everything */
-    max-width: 300px;
+    bottom: 0;
+    right: 0;
+    padding: calc(var(--spacing-base) * 3);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column-reverse; /* New toasts appear on top */
 }
 
 .toast {
-    padding: 16px;
-    margin-bottom: 10px;
-    border-radius: 12px;
-    box-shadow: var(--shadow-lg);
-    color: var(--color-background);
-    opacity: 0;
-    transform: translateX(100%);
-    transition: all 0.4s ease-in-out;
-}
-
-.toast.show {
+    margin-top: calc(var(--spacing-base) * 2);
+    border-radius: var(--radius-base);
+    box-shadow: var(--shadow-color);
+    animation: slideIn 0.3s ease-out;
     opacity: 1;
-    transform: translateX(0);
+    min-width: 250px;
 }
 
-.toast-success { background-color: var(--color-status-success); }
-.toast-error { background-color: var(--color-status-cancelled); }
-.toast-info { background-color: var(--color-primary); }
+.toast-success {
+    background-color: var(--status-success);
+    color: white;
+}
+.toast-error {
+    background-color: var(--status-cancelled);
+    color: white;
+}
+.toast-warning {
+    background-color: var(--status-pending);
+    color: var(--text-primary);
+}
 
-/* ACCORDIONS (FAQ) */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* 5.7 Accordions (FAQ page) */
 .accordion-item {
-    border: 1px solid var(--color-border);
-    border-radius: 12px;
-    margin-bottom: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-base);
+    margin-bottom: calc(var(--spacing-base) * 2);
     overflow: hidden;
+    transition: all 0.3s ease;
 }
 
 .accordion-header {
-    background-color: var(--color-card-background);
-    padding: 16px;
-    cursor: pointer;
-    font-weight: 600;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: calc(var(--spacing-base) * 2.5);
+    background-color: var(--bg-secondary);
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text-primary);
+    transition: background-color 0.2s;
 }
 
-.accordion-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
-}
-
-.accordion-content.open {
-    max-height: 500px; /* Large enough to fit content */
-    padding: 0 16px 16px 16px;
-    border-top: 1px solid var(--color-border);
+.accordion-header:hover {
+    background-color: color-mix(in srgb, var(--bg-secondary) 80%, var(--border-color));
 }
 
 .accordion-icon {
-    transition: transform 0.3s;
+    width: 24px;
+    height: 24px;
+    transition: transform 0.3s ease;
 }
 
-.accordion-icon.rotate {
+.accordion-content {
+    padding: 0 calc(var(--spacing-base) * 2.5);
+    background-color: var(--bg-primary);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+    color: var(--text-secondary);
+}
+
+.accordion-content.active {
+    padding: calc(var(--spacing-base) * 2.5);
+    padding-top: 0;
+    max-height: 500px; /* Large value to accommodate content */
+}
+
+.accordion-content.active + .accordion-header .accordion-icon {
     transform: rotate(180deg);
 }
 
-
-/* -------------------------------------------------------------------------- */
-/* 4. NAVIGATION & MOBILE                        */
-/* -------------------------------------------------------------------------- */
-
-/* DESKTOP HEADER - Hidden on mobile */
-.header-desktop {
-    display: none;
+/* 5.8 Admin Panel Specific Styles */
+.admin-header {
+    background-color: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    padding: calc(var(--spacing-base) * 3);
 }
 
-/* MOBILE BOTTOM NAV - Visible on mobile */
-.nav-mobile {
+.status-select {
+    padding: 0.5rem;
+    border-radius: 8px;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+[data-theme="dark"] .status-select {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+}
+
+/* --- 6. RESPONSIVE DESIGN & NAVIGATION --- */
+
+/* Fixed Bottom Mobile Navigation (Mobile only) */
+.mobile-nav {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    z-index: 40;
-    background-color: var(--color-card-background);
-    border-top: 1px solid var(--color-border);
-    box-shadow: var(--shadow-lg);
-    padding: 8px 0;
+    width: 100%;
+    height: 72px;
+    background-color: var(--bg-primary);
+    border-top: 1px solid var(--border-color);
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 50;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
 
-.nav-mobile-item {
+.mobile-nav-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 4px;
-    font-size: 0.7rem;
-    color: var(--color-text-secondary);
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    padding: var(--spacing-base);
     transition: color 0.2s;
 }
 
-.nav-mobile-item.active {
-    color: var(--color-primary);
+.mobile-nav-item.active {
+    color: var(--primary-color);
+    font-weight: 600;
 }
 
-.nav-mobile-icon {
-    width: 24px;
-    height: 24px;
-    margin-bottom: 2px;
+.mobile-nav-item:hover {
+    color: var(--primary-hover);
 }
 
-/* RESPONSIVE LAYOUT ADJUSTMENTS */
+/* Desktop Navigation (Hidden on Mobile) */
+.desktop-nav {
+    display: none;
+}
+
+/* Tablet and Desktop Breakpoint */
 @media (min-width: 768px) {
-    /* Tablet & Desktop */
-    .header-desktop {
+    body {
+        padding-bottom: 0; /* Remove padding for fixed bottom nav on larger screens */
+    }
+
+    .mobile-nav {
+        display: none;
+    }
+
+    .desktop-nav {
         display: flex;
-        padding: 16px 32px;
-        align-items: center;
         justify-content: space-between;
-        background-color: var(--color-card-background);
-        border-bottom: 1px solid var(--color-border);
-        box-shadow: var(--shadow-sm);
+        align-items: center;
+        padding: calc(var(--spacing-base) * 2) calc(var(--spacing-base) * 4);
+        background-color: var(--bg-primary);
+        border-bottom: 1px solid var(--border-color);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        position: sticky;
+        top: 0;
+        z-index: 40;
     }
     
-    .nav-mobile {
-        display: none; /* Hide bottom nav on larger screens */
+    .desktop-nav-link {
+        color: var(--text-secondary);
+        padding: calc(var(--spacing-base) * 1) calc(var(--spacing-base) * 2);
+        border-radius: 6px;
+        transition: color 0.2s, background-color 0.2s;
+        font-weight: 500;
     }
 
-    /* Adjust main content padding to accommodate hidden bottom nav */
-    .main-content {
-        padding-bottom: 32px !important;
+    .desktop-nav-link:hover {
+        background-color: var(--bg-secondary);
+        color: var(--text-primary);
     }
-}
+    
+    .desktop-nav-link.active {
+        color: var(--primary-color);
+        border-bottom: 2px solid var(--primary-color);
+    }
 
-@media (min-width: 1024px) {
-    /* Desktop */
+    /* Adjust main content padding on larger screens */
     .container {
-        max-width: 1200px;
-        margin-left: auto;
-        margin-right: auto;
+        max-width: 1280px;
+        margin: auto;
+        padding: calc(var(--spacing-base) * 4);
     }
-}
-
-  
+    
+    /* Toast position adjustment for desktop */
+    #toast-container {
+        bottom: calc(var(--spacing-base) * 4);
+        right: calc(var(--spacing-base) * 4);
+    }
+       }
