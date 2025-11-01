@@ -1,219 +1,182 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="my" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIM/Data Order - Easy Recharge MM</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>EasyRecharge MM - SIM/Data Order</title>
+    <!-- Load Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom Stylesheet for Theming and Components -->
     <link rel="stylesheet" href="style.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
 </head>
-<body>
-    <div class="container">
-        <!-- Header -->
-        <header class="header">
-            <a href="order.html" class="back-link">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
-                </svg>
-                Back
-            </a>
-            <div class="brand">
-                <h1>SIM/Data Order</h1>
-            </div>
-            <button class="theme-toggle" id="themeToggle">
-                <span class="theme-icon">🌙</span>
-            </button>
-        </header>
+<body class="bg-background text-text transition-colors duration-300 min-h-screen">
 
-        <!-- Order Form -->
-        <form id="simOrderForm" class="form-container">
-            <!-- User Info -->
-            <div class="form-group">
-                <label for="userId">User ID</label>
-                <input type="text" id="userId" class="form-control" readonly>
-            </div>
-
-            <div class="form-group">
-                <label for="userDevice">Device</label>
-                <input type="text" id="userDevice" class="form-control" readonly>
-            </div>
-
-            <!-- Service Selection -->
-            <div class="form-group">
-                <label for="service">Service *</label>
-                <select id="service" name="service" class="form-control" required>
-                    <option value="">Select Service</option>
-                    <optgroup label="MPT">
-                        <option value="mpt-3gb">MPT 3GB/7Days - 1,500 MMK</option>
-                        <option value="mpt-5gb">MPT 5GB/15Days - 2,500 MMK</option>
-                        <option value="mpt-10gb">MPT 10GB/30Days - 4,500 MMK</option>
-                    </optgroup>
-                    <optgroup label="Telenor">
-                        <option value="telenor-regular">Telenor Regular - 1,000 MMK</option>
-                        <option value="telenor-data">Telenor Data Bundle - 1,200 MMK</option>
-                        <option value="telenor-social">Telenor Social Bundle - 800 MMK</option>
-                    </optgroup>
-                    <optgroup label="Ooredoo">
-                        <option value="ooredoo-basic">Ooredoo Basic - 2,000 MMK</option>
-                        <option value="ooredoo-premium">Ooredoo Premium - 3,500 MMK</option>
-                        <option value="ooredoo-unlimited">Ooredoo Unlimited - 6,000 MMK</option>
-                    </optgroup>
-                </select>
-            </div>
-
-            <!-- Phone Number -->
-            <div class="form-group">
-                <label for="phone">Phone Number *</label>
-                <input type="tel" id="phone" name="phone" class="form-control" placeholder="09XXXXXXXXX" required>
-            </div>
-
-            <!-- Quantity & Pricing -->
-            <div class="form-group">
-                <label for="quantity">Quantity</label>
-                <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1" max="10">
-            </div>
-
-            <div class="form-group">
-                <label for="price">Price per unit</label>
-                <input type="text" id="price" class="form-control" readonly>
-            </div>
-
-            <div class="form-group">
-                <label for="total">Total Amount</label>
-                <input type="text" id="total" name="total" class="form-control" readonly>
-            </div>
-
-            <!-- Payment Method -->
-            <div class="form-group">
-                <label>Payment Method *</label>
-                <div class="radio-group">
-                    <div class="radio-item">
-                        <input type="radio" id="kpay" name="payment" value="KBZ Pay" required>
-                        <label for="kpay">
-                            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
-                                <circle cx="12" cy="12" r="10" fill="#00a76e"/>
-                                <text x="12" y="16" text-anchor="middle" fill="white" font-size="8" font-weight="bold">K</text>
-                            </svg>
-                            KBZ Pay
-                        </label>
-                    </div>
-                    <div class="radio-item">
-                        <input type="radio" id="wave" name="payment" value="Wave Money" required>
-                        <label for="wave">
-                            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
-                                <circle cx="12" cy="12" r="10" fill="#6b5aed"/>
-                                <text x="12" y="16" text-anchor="middle" fill="white" font-size="8" font-weight="bold">W</text>
-                            </svg>
-                            Wave Money
-                        </label>
-                    </div>
-                    <div class="radio-item">
-                        <input type="radio" id="cb" name="payment" value="CB Pay" required>
-                        <label for="cb">
-                            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
-                                <circle cx="12" cy="12" r="10" fill="#e6007e"/>
-                                <text x="12" y="16" text-anchor="middle" fill="white" font-size="8" font-weight="bold">C</text>
-                            </svg>
-                            CB Pay
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Payment Number -->
-            <div class="form-group">
-                <label>Payment Number</label>
-                <div class="payment-number">
-                    <input type="text" id="paymentNumber" class="form-control" value="09XXXXXXX" readonly>
-                    <button type="button" class="copy-btn" onclick="copyText('paymentNumber')">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
-                        </svg>
-                    </button>
-                </div>
-                <small style="opacity: 0.7; font-size: 0.8rem;">Make payment to this number and enter transaction ID below</small>
-            </div>
-
-            <!-- Transaction ID -->
-            <div class="form-group">
-                <label for="transactionId">Transaction ID *</label>
-                <input type="text" id="transactionId" name="transactionId" class="form-control" placeholder="Enter transaction ID from payment" required>
-            </div>
-
-            <!-- Submit Button -->
-            <button type="submit" class="submit-btn">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                </svg>
-                Submit Order
-            </button>
-        </form>
-
-        <!-- Bottom Navigation -->
-        <nav class="bottom-nav">
-            <a href="index.html" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-                </svg>
-                <span>Dashboard</span>
-            </a>
-            <a href="order.html" class="nav-item active">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M13 2v8h8c0-4.42-3.58-8-8-8zm2 6V4.34c1.7.6 3.05 1.95 3.66 3.66H15zm-8.56 3l-.95-2H2v2h2.22s1.89 4.07 2.12 4.42c-1.1.59-1.84 1.75-1.84 3.08C4.5 20.43 6.07 22 8 22c1.76 0 3.22-1.3 3.46-3h2.08c.24 1.7 1.7 3 3.46 3 1.93 0 3.5-1.57 3.5-3.5 0-1.04-.46-1.97-1.18-2.61C20.37 14.54 21 12.84 21 11H6.44z"/>
-                </svg>
-                <span>Orders</span>
-            </a>
-            <a href="pay.html" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
-                </svg>
-                <span>Exchange</span>
-            </a>
-            <a href="status.html" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
-                    <path d="M7 10h2v7H7zm4-3h2v10h-2zm4-3h2v13h-2z"/>
-                </svg>
-                <span>Status</span>
-            </a>
+    <!-- DESKTOP HEADER (Identical structure for all pages) -->
+    <header class="header-desktop sticky top-0 z-30">
+        <div class="text-2xl font-heading font-bold text-primary">EasyRecharge MM</div>
+        <nav class="flex space-x-6 font-semibold">
+            <a href="index.html" class="text-text-secondary hover:text-primary-dark">Home</a>
+            <a href="services.html" class="text-primary hover:text-primary-dark">Services</a>
+            <a href="status.html" class="text-text-secondary hover:text-primary-dark">Status</a>
+            <a href="pay.html" class="text-text-secondary hover:text-primary-dark">P2P Exchange</a>
         </nav>
-    </div>
+        <button id="theme-toggle" class="p-2 rounded-full bg-card-background hover:bg-border transition-colors">
+            <!-- Icon will be inserted by script.js -->
+        </button>
+    </header>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="toast"></div>
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="container mx-auto p-4 md:p-8 pt-4 pb-20 main-content">
+        <div class="max-w-xl mx-auto">
+            <a href="services.html" class="text-primary hover:text-primary-dark flex items-center mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                Back to Services
+            </a>
+            <h1 class="text-3xl font-heading font-bold mb-2">SIM & Data Recharge</h1>
+            <p class="text-text-secondary mb-6">ဖုန်းနံပါတ်ဖြည့်သွင်းကာ လိုချင်သည့် Data Package သို့မဟုတ် ဖုန်းဘေလ်ကို ရွေးချယ်ပါ။</p>
 
+            <form id="sim-recharge-form" class="space-y-6">
+
+                <!-- 1. Target Phone Number -->
+                <div class="form-group">
+                    <label for="phone_number">Target Phone Number</label>
+                    <input type="tel" id="phone_number" name="target_account" placeholder="09xxxxxxxxx" 
+                           class="form-input" required 
+                           data-validation-type="phone" maxlength="11" oninput="Validation.validateField(this)">
+                    <p class="error-message" id="error-phone_number"></p>
+                </div>
+
+                <!-- 2. Service Selection -->
+                <div class="form-group">
+                    <label for="service_package">Service Package</label>
+                    <select id="service_package" name="service" class="form-select" required onchange="App.updatePriceDisplay('sim')">
+                        <option value="" disabled selected>Select a package</option>
+                        <optgroup label="MPT">
+                            <option value="mpt-3gb" data-price-key="mpt-3gb">MPT 3GB Data - 1500 MMK</option>
+                            <option value="mpt-5gb" data-price-key="mpt-5gb">MPT 5GB Data - 2500 MMK</option>
+                        </optgroup>
+                        <optgroup label="Telenor (Atom)">
+                            <option value="telenor-regular" data-price-key="telenor-regular">Telenor Regular Topup - 1000 MMK</option>
+                        </optgroup>
+                        <optgroup label="Ooredoo">
+                            <option value="ooredoo-data" data-price-key="ooredoo-data">Ooredoo Data Package - 2000 MMK</option>
+                        </optgroup>
+                    </select>
+                    <p class="error-message" id="error-service_package"></p>
+                </div>
+
+                <!-- Hidden Quantity (Fixed at 1) -->
+                <input type="hidden" name="quantity" value="1" id="quantity">
+
+                <!-- 3. Automatic Total Calculation -->
+                <div class="custom-card p-4 bg-primary/10 border-primary/20 flex justify-between items-center shadow-md">
+                    <span class="text-lg font-semibold text-text">Total Amount</span>
+                    <span id="total-amount-display" class="text-2xl font-heading font-bold text-primary">0 MMK</span>
+                    <input type="hidden" name="total_amount" id="total_amount_input" value="0">
+                </div>
+                <p id="min-amount-warning" class="text-sm text-red-500 hidden mt-2">Minimum order amount not met.</p>
+
+
+                <!-- 4. Payment Method -->
+                <div class="form-group">
+                    <label for="payment_method">Payment Method</label>
+                    <select id="payment_method" name="payment_method" class="form-select" required>
+                        <option value="" disabled selected>Select your payment method</option>
+                        <option value="kbzpay">KBZPay</option>
+                        <option value="wavepay">WavePay</option>
+                        <option value="aya">AYA Pay</option>
+                        <option value="uab">UAB Pay</option>
+                    </select>
+                    <p class="error-message" id="error-payment_method"></p>
+                </div>
+
+                <!-- 5. Transaction ID -->
+                <div class="form-group">
+                    <label for="transaction_id">Transaction ID (Required for Verification)</label>
+                    <input type="text" id="transaction_id" name="transaction_id" 
+                           placeholder="Enter your payment reference number (e.g., K-XXXXXXXXX)" 
+                           class="form-input" required 
+                           data-validation-type="required" oninput="Validation.validateField(this)">
+                    <p class="text-xs text-text-secondary mt-1">
+                        ငွေလွှဲပြောင်းပြီးကြောင်း အတည်ပြုရန်အတွက် Transaction ID (သို့မဟုတ် Reference No.) ကို ဂရုစိုက်ဖြည့်ပါ။
+                    </p>
+                    <p class="error-message" id="error-transaction_id"></p>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" id="submit-btn" class="btn btn-primary w-full py-3" disabled>
+                    <span id="submit-text">Submit Order</span>
+                    <span id="loading-spinner" class="spinner-border w-5 h-5 ml-2 hidden"></span>
+                </button>
+
+            </form>
+        </div>
+    </main>
+
+    <!-- MOBILE BOTTOM NAVIGATION (Identical structure for all pages) -->
+    <nav class="nav-mobile">
+        <div class="flex justify-around">
+            <a href="index.html" class="nav-mobile-item">
+                <svg xmlns="http://www.w3.org/2000/svg" class="nav-mobile-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V10"/></svg>
+                Home
+            </a>
+            <a href="services.html" class="nav-mobile-item active">
+                <svg xmlns="http://www.w3.org/2000/svg" class="nav-mobile-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                Services
+            </a>
+            <a href="status.html" class="nav-mobile-item">
+                <svg xmlns="http://www.w3.org/2000/svg" class="nav-mobile-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                Status
+            </a>
+            <a href="pay.html" class="nav-mobile-item">
+                <svg xmlns="http://www.w3.org/2000/svg" class="nav-mobile-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
+                P2P
+            </a>
+            <button id="mobile-theme-toggle" class="nav-mobile-item" onclick="ThemeManager.toggle()">
+                 <!-- Icon will be inserted by script.js -->
+                Theme
+            </button>
+        </div>
+    </nav>
+    
+    <!-- Toast Notification Container -->
+    <div id="toast-container"></div>
+
+    <!-- Frontend JavaScript Logic -->
     <script src="script.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize user info
-            const userId = localStorage.getItem('userId');
-            document.getElementById('userId').value = userId;
-            
-            // Initialize device detection
-            const device = detectDevice();
-            document.getElementById('userDevice').value = device;
-            
-            // Initialize auto-calculation
-            initAutoCalculation('sim');
-            
-            // Form submission
-            document.getElementById('simOrderForm').addEventListener('submit', function(e) {
+        // Initialize form-specific logic after script.js is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('sim-recharge-form');
+            App.updatePriceDisplay('sim'); // Initial calculation
+
+            form.addEventListener('submit', (e) => {
                 e.preventDefault();
-                submitOrderForm('simOrderForm', 'order');
+                App.handleFormSubmission(form, 'sim', 'Orders');
             });
-            
-            // Update payment number based on selection
-            document.querySelectorAll('input[name="payment"]').forEach(radio => {
-                radio.addEventListener('change', function() {
-                    const paymentNumbers = {
-                        'KBZ Pay': '09 123 456 789',
-                        'Wave Money': '09 987 654 321', 
-                        'CB Pay': '09 555 666 777'
-                    };
-                    document.getElementById('paymentNumber').value = paymentNumbers[this.value] || '09XXXXXXX';
-                });
+
+            // Re-validate fields on load to enable/disable button based on initial state
+            form.querySelectorAll('input, select').forEach(field => {
+                 field.addEventListener('input', () => {
+                     Validation.validateForm(form);
+                 });
             });
+            Validation.validateForm(form); // Initial validation check
         });
     </script>
 </body>
-                                                                             </html>
+</html>
+
+                            
