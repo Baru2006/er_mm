@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | EasyRecharge MM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="min-h-screen bg-gray-100 dark:bg-gray-900 font-inter transition-colors duration-300">
+    <!-- Navbar (Reused Component) -->
+    <header class="bg-white dark:bg-gray-800 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-indigo-600 dark:text-indigo-400">Admin Panel</h1>
+            <div class="flex items-center space-x-4">
+                <button id="theme-toggle" class="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150">
+                    <i data-lucide="sun-medium" class="w-6 h-6 theme-icon-light"></i>
+                    <i data-lucide="moon" class="w-6 h-6 theme-icon-dark hidden"></i>
+                </button>
+                <a href="./index.html" class="px-4 py-2 bg-indigo-500 text-white rounded-xl shadow-lg hover:bg-indigo-600 transition duration-150 text-sm">
+                    Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-8xl mx-auto p-4 sm:p-6 lg:p-8">
+
+        <!-- Header and Controls -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+            <div class="mb-4 md:mb-0">
+                <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white">Order Management</h2>
+                <p id="last-refresh" class="text-sm text-gray-500 dark:text-gray-400 mt-1">Last refreshed: --:--:--</p>
+            </div>
+            <div class="flex space-x-3">
+                <button id="manual-refresh-btn" class="flex items-center px-4 py-2 bg-yellow-500 text-white font-semibold rounded-xl hover:bg-yellow-600 transition duration-150 shadow-md">
+                    <i data-lucide="rotate-cw" class="w-4 h-4 mr-2"></i> Manual Refresh
+                </button>
+            </div>
+        </div>
+
+        <!-- Search and Filter Section -->
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg mb-6">
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-3 border-b pb-2 border-gray-200 dark:border-gray-700">Filters</h3>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="col-span-1 md:col-span-2">
+                    <label for="search-input" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Search (ID, User, Target)</label>
+                    <div class="relative">
+                        <input type="text" id="search-input" placeholder="Enter Order ID, User ID, or Target..." class="w-full form-input">
+                        <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute right-3 top-1/2 transform -translate-y-1/2"></i>
+                    </div>
+                </div>
+                <div>
+                    <label for="filter-status" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
+                    <select id="filter-status" class="w-full form-select">
+                        <option value="">All Statuses</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Processing">Processing</option>
+                        <option value="Success">Success</option>
+                        <option value="Cancelled">Cancelled</option>
+                        <option value="P2P Pending">P2P Pending</option>
+                        <option value="P2P Completed">P2P Completed</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="filter-service" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Service Type</label>
+                    <select id="filter-service" class="w-full form-select">
+                        <option value="">All Services</option>
+                        <option value="SIM">SIM/Data</option>
+                        <option value="Game">Game Top-up</option>
+                        <option value="SMM">SMM Services</option>
+                        <option value="P2P">P2P Exchange</option>
+                    </select>
+                </div>
+            </div>
+            <button id="apply-filter-btn" class="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-xl shadow-md hover:bg-indigo-700 transition duration-150">
+                Apply Filters
+            </button>
+        </div>
+
+        <!-- Orders Table -->
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg overflow-x-auto min-h-64 relative">
+            <div id="loading-spinner" class="absolute inset-0 bg-white/70 dark:bg-gray-800/70 flex items-center justify-center rounded-xl hidden z-10">
+                <svg class="animate-spin h-8 w-8 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+            </div>
+
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead class="bg-gray-50 dark:bg-gray-700">
+                    <tr>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">ID</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">User/Type</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Target</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Amount</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Payment / TX ID</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Time</th>
+                        <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
+                        <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="order-list" class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                    <!-- Order rows will be injected here by script.js's renderAdminDashboard -->
+                    <tr id="initial-loading-row"><td colspan="8" class="text-center py-6 text-gray-500 dark:text-gray-400">Loading orders...</td></tr>
+                </tbody>
+            </table>
+            
+            <div id="no-orders-message" class="text-center py-6 text-gray-500 dark:text-gray-400 hidden">
+                No orders found matching the criteria.
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Global Notification/Toast (Reused) -->
+    <div id="toast-notification" class="fixed bottom-5 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-xl text-white shadow-lg transition-opacity duration-300 opacity-0 z-50" style="min-width: 250px;"></div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+    <script src="./script.js"></script>
+</body>
+</html>
+
+              
