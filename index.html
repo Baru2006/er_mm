@@ -1,202 +1,150 @@
 <!DOCTYPE html>
-<html lang="my" data-theme="light">
+<html lang="my" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EasyRecharge MM - Dashboard</title>
-    <!-- Load Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load custom styles.css (for theme variables and components) -->
-    <link rel="stylesheet" href="style.css">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'primary-color': 'var(--primary-color)',
-                        'bg-primary': 'var(--bg-primary)',
-                        'bg-secondary': 'var(--bg-secondary)',
-                        'text-primary': 'var(--text-primary)',
-                        'text-secondary': 'var(--text-secondary)',
-                        'border-color': 'var(--border-color)',
-                        'status-pending': 'var(--status-pending)',
-                        'status-success': 'var(--status-success)',
-                        'status-cancelled': 'var(--status-cancelled)',
-                    },
-                    fontFamily: {
-                        heading: ['var(--font-heading)'],
-                        body: ['var(--font-body)'],
-                    }
-                }
-            }
+  <meta charset="UTF-g">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EasyRecharge MM - Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            heading: ['Poppins', 'sans-serif'],
+          },
+          colors: {
+            primary: 'var(--color-primary)',
+          }
         }
-    </script>
-    <!-- Heroicons/Feather icons are used via inline SVG -->
+      }
+    }
+  </script>
 </head>
-<body class="bg-bg-secondary font-body">
-    <div class="container mx-auto p-4 md:p-6 min-h-screen">
-        <!-- 1. HEADER (Desktop Navigation) -->
-        <header class="desktop-nav sticky top-0 bg-bg-primary z-40 hidden md:flex items-center justify-between">
-            <h1 class="text-2xl font-bold text-primary-color font-heading">EasyRecharge <span class="text-text-primary">MM</span></h1>
-            <nav class="flex space-x-4">
-                <a href="index.html" class="desktop-nav-link active">Home</a>
-                <a href="services.html" class="desktop-nav-link">Services</a>
-                <a href="status.html" class="desktop-nav-link">Status</a>
-                <a href="pay.html" class="desktop-nav-link">P2P Exchange</a>
-            </nav>
-            <button id="theme-toggle" class="p-2 rounded-full text-text-primary hover:bg-bg-secondary transition-colors">
-                <svg data-theme-icon="light" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-                <svg data-theme-icon="dark" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                </svg>
-            </button>
-        </header>
+<body class="bg-gray-100 dark:bg-gray-900" id="dashboard-page">
 
-        <main id="main-dashboard" class="space-y-6 md:mt-4">
-            
-            <header class="flex justify-between items-center md:hidden pt-4">
-                <h1 class="text-2xl font-bold text-primary-color font-heading">EasyRecharge</h1>
-                <button id="theme-toggle" class="p-2 rounded-full text-text-primary hover:bg-bg-secondary transition-colors">
-                    <svg data-theme-icon="light" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                    </svg>
-                    <svg data-theme-icon="dark" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                    </svg>
-                </button>
-            </header>
+  <div id="toast-container"></div>
 
-            <!-- 2. USER PROFILE CARD -->
-            <div id="user-profile-card" class="card p-4 flex items-center justify-between mt-4">
-                <div id="user-profile-card-content" class="flex items-center">
-                    <!-- Content injected by script.js: Avatar and User ID -->
-                </div>
-                <a href="services.html" class="btn btn-primary text-sm shadow-lg">
-                    Start New Order
-                </a>
-            </div>
-
-            <!-- 3. STATISTICS GRID -->
-            <h2 class="text-xl font-semibold text-text-primary font-heading pt-2">My Activity</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <!-- Total Orders -->
-                <div class="card p-4 flex flex-col justify-between h-32 bg-primary-color/10 border-primary-color/30">
-                    <div class="flex items-center justify-between">
-                        <p class="text-sm font-medium text-text-secondary">Total Orders</p>
-                        <svg class="h-6 w-6 text-primary-color" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
-                    </div>
-                    <p id="total-orders-stat" class="text-3xl font-bold text-text-primary pt-1">0</p>
-                    <p class="text-xs text-text-secondary">All time</p>
-                </div>
-                <!-- Total Spent MMK -->
-                <div class="card p-4 flex flex-col justify-between h-32 bg-green-500/10 border-green-500/30">
-                    <div class="flex items-center justify-between">
-                        <p class="text-sm font-medium text-text-secondary">Total Spent (MMK)</p>
-                        <svg class="h-6 w-6 text-status-success" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z" /></svg>
-                    </div>
-                    <p id="total-spent-stat" class="text-3xl font-bold text-text-primary pt-1">0</p>
-                    <p class="text-xs text-text-secondary">MMK</p>
-                </div>
-                <!-- Pending Orders -->
-                <div class="card p-4 flex flex-col justify-between h-32 bg-status-pending/10 border-status-pending/30">
-                    <div class="flex items-center justify-between">
-                        <p class="text-sm font-medium text-text-secondary">Pending Orders</p>
-                        <svg class="h-6 w-6 text-status-pending" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                    </div>
-                    <p id="pending-orders-stat" class="text-3xl font-bold text-text-primary pt-1">0</p>
-                    <p class="text-xs text-text-secondary">Currently active</p>
-                </div>
-            </div>
-
-            <!-- 4. QUICK SERVICES -->
-            <h2 class="text-xl font-semibold text-text-primary font-heading pt-2">Quick Services</h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <!-- SIM Recharge -->
-                <a href="order_sim.html" class="card-hover text-center p-4 card flex flex-col items-center justify-center">
-                    <svg class="h-10 w-10 text-primary-color mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
-                    <span class="text-sm font-medium text-text-primary">SIM Recharge</span>
-                </a>
-                <!-- Game Top-up -->
-                <a href="order_game.html" class="card-hover text-center p-4 card flex flex-col items-center justify-center">
-                    <svg class="h-10 w-10 text-primary-color mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 10h.01M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m7-2h3m-3-3h3m-3 6h3m-2-4h.01" /></svg>
-                    <span class="text-sm font-medium text-text-primary">Game Top-up</span>
-                </a>
-                <!-- P2P Exchange -->
-                <a href="pay.html" class="card-hover text-center p-4 card flex flex-col items-center justify-center">
-                    <svg class="h-10 w-10 text-primary-color mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
-                    <span class="text-sm font-medium text-text-primary">P2P Exchange</span>
-                </a>
-                <!-- Order Status -->
-                <a href="status.html" class="card-hover text-center p-4 card flex flex-col items-center justify-center">
-                    <svg class="h-10 w-10 text-primary-color mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
-                    <span class="text-sm font-medium text-text-primary">Order Status</span>
-                </a>
-            </div>
-
-            <!-- 5. RECENT ORDERS TABLE -->
-            <div class="pt-4">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-xl font-semibold text-text-primary font-heading">Recent Orders</h2>
-                    <a href="status.html" class="text-sm text-primary-color hover:underline">View All &rarr;</a>
-                </div>
-                
-                <div class="table-container card p-0">
-                    <table class="styled-table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Service</th>
-                                <th>Amount</th>
-                                <th>Payment</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="recent-orders-table-body">
-                            <!-- Rows injected by script.js -->
-                            <tr><td colspan="5" class="p-4 text-center text-text-secondary">Loading recent orders...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-        </main>
-        
-        <!-- 6. FOOTER -->
-        <footer class="mt-8 text-center text-xs text-text-secondary pt-10 pb-4 md:pb-0">
-            <p>&copy; 2025 EasyRecharge MM. All rights reserved.</p>
-            <p><a href="privacy_policy.html" class="hover:text-primary-color transition-colors">Privacy Policy</a> | <a href="faq.html" class="hover:text-primary-color transition-colors">FAQ</a></p>
-        </footer>
-
-    </div>
-    
-    <!-- MOBILE NAVIGATION (Fixed Bottom) -->
-    <nav class="mobile-nav md:hidden">
-        <a href="index.html" class="mobile-nav-item active">
-            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-            <span>Home</span>
-        </a>
-        <a href="services.html" class="mobile-nav-item">
-            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z" /></svg>
-            <span>Services</span>
-        </a>
-        <a href="status.html" class="mobile-nav-item">
-            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-            <span>Status</span>
-        </a>
-        <a href="pay.html" class="mobile-nav-item">
-            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
-            <span>P2P</span>
-        </a>
+  <header class="top-header sticky top-0 z-40 bg-white dark:bg-gray-800 shadow">
+    <nav class="main-container flex items-center justify-between py-4">
+      <div class="flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8 text-primary">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+        </svg>
+        <span class="text-xl font-heading font-bold text-gray-900 dark:text-white">EasyRecharge MM</span>
+      </div>
+      <button id="theme-toggle" class="btn-icon p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700" aria-label="Toggle theme">
+        <span id="theme-icon"></span>
+      </button>
     </nav>
-    
-    <!-- Toast Notification Container -->
-    <div id="toast-container"></div>
-    
-    <!-- Load Main JavaScript File -->
-    <script src="script.js"></script>
+  </header>
+
+  <main class="main-container py-6 space-y-6">
+
+    <section class="card bg-white dark:bg-gray-800 p-5">
+      <div class="flex items-center gap-4">
+        <img id="user-avatar" class="w-16 h-16 rounded-full border-2 border-primary" src="https://placehold.co/64x64/3b82f6/white?text=User" alt="User Avatar">
+        <div>
+          <h1 id="welcome-message" class="text-xl font-semibold text-gray-800 dark:text-white">Welcome, User...</h1>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Start a new order or check your status.</p>
+        </div>
+      </div>
+      <a href="services.html" class="btn btn-primary w-full mt-5">Start New Order</a>
+    </section>
+
+    <section class="grid grid-cols-3 gap-4">
+      <div class="card stats-card bg-white dark:bg-gray-800 p-4 rounded-lg">
+        <h3 class="stats-card-title text-sm font-medium text-gray-500 dark:text-gray-400">Total Orders</h3>
+        <p id="stats-total-orders" class="stats-card-value text-2xl font-bold text-gray-900 dark:text-white">0</p>
+      </div>
+      <div class="card stats-card bg-white dark:bg-gray-800 p-4 rounded-lg">
+        <h3 class="stats-card-title text-sm font-medium text-gray-500 dark:text-gray-400">Total Spent</h3>
+        <p id="stats-total-spent" class="stats-card-value text-2xl font-bold text-gray-900 dark:text-white">0 MMK</p>
+      </div>
+      <div class="card stats-card bg-white dark:bg-gray-800 p-4 rounded-lg">
+        <h3 class="stats-card-title text-sm font-medium text-gray-500 dark:text-gray-400">Pending</h3>
+        <p id="stats-pending-orders" class="stats-card-value text-2xl font-bold text-orange-500">0</p>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-heading font-semibold text-gray-900 dark:text-white mb-4">Quick Services</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <a href="order_sim.html" class="card bg-white dark:bg-gray-800 p-4 rounded-lg text-center hover:shadow-lg transition-all">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-primary mx-auto mb-2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+          </svg>
+          <span class="font-semibold text-sm text-gray-700 dark:text-gray-200">SIM Recharge</span>
+        </a>
+        <a href="order_game.html" class="card bg-white dark:bg-gray-800 p-4 rounded-lg text-center hover:shadow-lg transition-all">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-primary mx-auto mb-2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+          </svg>
+          <span class="font-semibold text-sm text-gray-700 dark:text-gray-200">Game Top-up</span>
+        </a>
+        <a href="pay.html" class="card bg-white dark:bg-gray-800 p-4 rounded-lg text-center hover:shadow-lg transition-all">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-primary mx-auto mb-2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
+          </svg>
+          <span class="font-semibold text-sm text-gray-700 dark:text-gray-200">P2P Exchange</span>
+        </a>
+        <a href="status.html" class="card bg-white dark:bg-gray-800 p-4 rounded-lg text-center hover:shadow-lg transition-all">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-primary mx-auto mb-2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span class="font-semibold text-sm text-gray-700 dark:text-gray-200">Order Status</span>
+        </a>
+      </div>
+    </section>
+
+    <section>
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-heading font-semibold text-gray-900 dark:text-white">Recent Orders</h2>
+        <a href="status.html" class="text-sm font-medium text-primary hover:underline">View All</a>
+      </div>
+      <div class="card bg-white dark:bg-gray-800 p-0 rounded-lg overflow-hidden">
+        <div class="table-wrapper">
+          <table class="w-full">
+            <thead>
+              <tr>
+                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">ID</th>
+                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Service</th>
+                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Amount</th>
+                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Status</th>
+              </tr>
+            </thead>
+            <tbody id="recent-orders-table" class="divide-y divide-gray-200 dark:divide-gray-700">
+              <tr><td colspan="4" class="p-4 text-center text-gray-500 dark:text-gray-400">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <nav class="bottom-nav md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 grid grid-cols-4">
+    <a href="index.html" class="flex flex-col items-center p-3 text-primary">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>
+      <span class="text-xs font-medium">Home</span>
+    </a>
+    <a href="services.html" class="flex flex-col items-center p-3 text-gray-600 dark:text-gray-300">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25A2.25 2.25 0 0113.5 8.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" /></svg>
+      <span class="text-xs font-medium">Services</span>
+    </a>
+    <a href="status.html" class="flex flex-col items-center p-3 text-gray-600 dark:text-gray-300">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+      <span class="text-xs font-medium">Status</span>
+    </a>
+    <a href="faq.html" class="flex flex-col items-center p-3 text-gray-600 dark:text-gray-300">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" /></svg>
+      <span class="text-xs font-medium">Support</span>
+    </a>
+  </nav>
+
+  <script src="script.js" defer></script>
 </body>
 </html>
 
-    
+      
