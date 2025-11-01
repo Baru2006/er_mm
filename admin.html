@@ -1,100 +1,89 @@
 <!DOCTYPE html>
-<html lang="my" data-theme="light">
+<html lang="my" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EasyRecharge MM - Admin Panel</title>
-    <!-- Load Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load custom styles.css (for theme variables and components) -->
-    <link rel="stylesheet" href="style.css">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'primary-color': 'var(--primary-color)',
-                        'bg-primary': 'var(--bg-primary)',
-                        'bg-secondary': 'var(--bg-secondary)',
-                        'text-primary': 'var(--text-primary)',
-                        'text-secondary': 'var(--text-secondary)',
-                        'border-color': 'var(--border-color)',
-                        'status-pending': 'var(--status-pending)',
-                        'status-success': 'var(--status-success)',
-                        'status-cancelled': 'var(--status-cancelled)',
-                    },
-                    fontFamily: {
-                        heading: ['var(--font-heading)'],
-                        body: ['var(--font-body)'],
-                    }
-                }
-            }
+  <meta charset="UTF-g">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - EasyRecharge MM</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            heading: ['Poppins', 'sans-serif'],
+          },
+          colors: {
+            primary: 'var(--color-primary)',
+          }
         }
-    </script>
+      }
+    }
+  </script>
 </head>
-<body class="bg-bg-secondary font-body">
-    <div class="container mx-auto p-4 md:p-6 min-h-screen">
+<body class="bg-gray-100 dark:bg-gray-900" id="admin-page">
 
-        <!-- ADMIN HEADER -->
-        <header class="admin-header flex justify-between items-center mb-6 sticky top-0 md:relative z-30 p-4 -mx-4 md:mx-0 rounded-b-lg md:rounded-lg">
-            <h1 class="text-3xl font-bold text-text-primary font-heading">Admin <span class="text-primary-color">Panel</span></h1>
-            <div class="flex items-center space-x-3">
-                <button id="theme-toggle" class="p-2 rounded-full text-text-primary hover:bg-bg-secondary transition-colors">
-                    <svg data-theme-icon="light" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                    </svg>
-                    <svg data-theme-icon="dark" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                    </svg>
-                </button>
-            </div>
-        </header>
+  <div id="toast-container"></div>
 
-        <main id="admin-panel" class="space-y-6">
+  <header class="top-header sticky top-0 z-40 bg-white dark:bg-gray-800 shadow">
+    <nav class="main-container flex items-center justify-between py-4">
+      <div class="flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8 text-primary">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+        </svg>
+        <span class="text-xl font-heading font-bold text-gray-900 dark:text-white">Admin Panel</span>
+      </div>
+      <button id="theme-toggle" class="btn-icon p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700" aria-label="Toggle theme">
+        <span id="theme-icon"></span>
+      </button>
+    </nav>
+  </header>
 
-            <!-- 3. SEARCH & REFRESH BAR -->
-            <div class="card p-4 flex flex-col md:flex-row gap-4 justify-between items-center">
-                <input id="admin-search" type="text" placeholder="Search by Order ID, User ID, or Phone..." class="input max-w-full md:max-w-md" />
-                <div class="flex items-center space-x-3 w-full md:w-auto justify-end">
-                    <span class="text-sm text-text-secondary whitespace-nowrap">Last Update: <span id="last-update-timestamp" class="font-semibold">N/A</span></span>
-                    <button id="manual-refresh-button" class="btn btn-secondary px-3 py-2 text-sm shadow-sm">
-                        <svg class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.995 8.995 0 0020 12c0-2.405-.658-4.664-1.802-6.5L14 12V6.5m-1 4.5l-4-4-4 4" /></svg>
-                        Refresh
-                    </button>
-                </div>
-            </div>
-
-            <!-- 1. ORDER MANAGEMENT TABLE -->
-            <h2 class="text-xl font-semibold text-text-primary font-heading pt-2">All Orders Overview</h2>
-
-            <div class="table-container card p-0">
-                <table class="styled-table">
-                    <thead>
-                        <tr>
-                            <th>Order ID</th>
-                            <th>User ID</th>
-                            <th>Service</th>
-                            <th>Target Info</th>
-                            <th>Amount</th>
-                            <th>Payment</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="admin-orders-table-body">
-                        <!-- Rows injected by script.js -->
-                        <tr><td colspan="7" class="p-4 text-center text-text-secondary">Loading all orders...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-
-        </main>
+  <main class="main-container py-6">
+    <div class="mb-4 p-4 card bg-white dark:bg-gray-800 rounded-lg">
+      <div class="flex flex-col md:flex-row gap-4">
+        <div class="flex-grow">
+          <label for="admin-search" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Search Orders</label>
+          <input type="search" id="admin-search" class="form-input mt-1" placeholder="Search by Order ID, User ID, Phone...">
+        </div>
+        <div class="flex-shrink-0">
+          <button id="admin-refresh-btn" class="btn btn-secondary w-full md:w-auto mt-6">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+            Refresh
+          </button>
+        </div>
+      </div>
+      <p id="admin-last-update" class="text-xs text-gray-500 dark:text-gray-400 mt-2">Auto-refreshing every 10s...</p>
     </div>
-    
-    <!-- Toast Notification Container -->
-    <div id="toast-container"></div>
-    
-    <!-- Load Main JavaScript File -->
-    <script src="script.js"></script>
+
+    <div class="card bg-white dark:bg-gray-800 rounded-lg overflow-hidden">
+      <div class="admin-table-wrapper table-wrapper">
+        <table class="w-full min-w-[1200px]">
+          <thead class="bg-gray-50 dark:bg-gray-700 sticky top-0">
+            <tr>
+              <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Order ID</th>
+              <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">User</th>
+              <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Service</th>
+              <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Target</th>
+              <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Qty</th>
+              <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Total</th>
+              <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">TXID</th>
+              <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Timestamp</th>
+              <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Status</th>
+            </tr>
+          </thead>
+          <tbody id="admin-table-body" class="divide-y divide-gray-200 dark:divide-gray-700">
+            <tr><td colspan="9" class="p-6 text-center text-gray-500 dark:text-gray-400">Loading orders...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <script src="script.js" defer></script>
 </body>
 </html>
 
