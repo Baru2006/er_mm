@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  const GAS_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL';
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbwWung41cWPoBhf0PjE8n_FXwnA-cervOajGiycBOscGM8vW9qrzulD9HOkUk9aBdA3JA/exec';
   
   const SERVICE_PRICES = {
     sim: {
