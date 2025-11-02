@@ -1,216 +1,108 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="my" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy - Easy Recharge MM</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-g">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy - EasyRecharge MM</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            heading: ['Poppins', 'sans-serif'],
+          },
+          colors: {
+            primary: 'var(--color-primary)',
+          }
+        }
+      }
+    }
+  </script>
 </head>
-<body>
-    <div class="container">
-        <!-- Header -->
-        <header class="header">
-            <a href="index.html" class="back-link">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
-                </svg>
-                Back
-            </a>
-            <div class="brand">
-                <h1>Privacy Policy</h1>
-            </div>
-            <button class="theme-toggle" id="themeToggle">
-                <span class="theme-icon">🌙</span>
-            </button>
-        </header>
+<body class="bg-gray-100 dark:bg-gray-900">
 
-        <!-- Privacy Policy Content -->
-        <div class="form-container">
-            <div class="service-header">
-                <div class="service-icon">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
-                    </svg>
-                </div>
-                <div class="service-info">
-                    <h3>Privacy & Data Protection</h3>
-                    <p>How we handle your information</p>
-                </div>
-            </div>
+  <div id="toast-container"></div>
 
-            <div style="margin-top: 20px;">
-                <!-- Data Collection -->
-                <div style="margin-bottom: 25px;">
-                    <h4>📊 Data We Collect</h4>
-                    <p>We collect only necessary information to provide our services:</p>
-                    <ul style="padding-left: 20px; margin: 10px 0;">
-                        <li><strong>Order Information:</strong> Service details, payment method, transaction IDs</li>
-                        <li><strong>User Identification:</strong> Automatically generated user ID</li>
-                        <li><strong>Device Information:</strong> Device type for optimization</li>
-                        <li><strong>Contact Details:</strong> Phone numbers, game IDs, social media handles as required by services</li>
-                    </ul>
-                </div>
+  <header class="top-header sticky top-0 z-40 bg-white dark:bg-gray-800 shadow">
+    <nav class="main-container flex items-center justify-between py-4">
+      <a href="index.html" class="flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8 text-primary">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+        </svg>
+        <span class="text-xl font-heading font-bold text-gray-900 dark:text-white">EasyRecharge MM</span>
+      </a>
+      <button id="theme-toggle" class="btn-icon p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700" aria-label="Toggle theme">
+        <span id="theme-icon"></span>
+      </button>
+    </nav>
+  </header>
 
-                <!-- Data Storage -->
-                <div style="margin-bottom: 25px;">
-                    <h4>💾 Data Storage</h4>
-                    <p>Your data is securely stored in:</p>
-                    <ul style="padding-left: 20px; margin: 10px 0;">
-                        <li><strong>Google Sheets:</strong> Order details and transaction records</li>
-                        <li><strong>Local Storage:</strong> Your user ID and theme preference in your browser</li>
-                    </ul>
-                    <p>We implement appropriate security measures to protect your data from unauthorized access.</p>
-                </div>
+  <main class="main-container py-6">
+    <div class="max-w-2xl mx-auto card bg-white dark:bg-gray-800 p-6 md:p-8 rounded-lg">
+      <h1 class="text-2xl font-heading font-bold text-gray-900 dark:text-white mb-4">Privacy Policy</h1>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Last updated: November 2, 2025</p>
 
-                <!-- Data Usage -->
-                <div style="margin-bottom: 25px;">
-                    <h4>🎯 How We Use Your Data</h4>
-                    <p>Your information is used exclusively for:</p>
-                    <ul style="padding-left: 20px; margin: 10px 0;">
-                        <li>Processing your orders and payments</li>
-                        <li>Providing customer support</li>
-                        <li>Service improvement and optimization</li>
-                        <li>Legal compliance and fraud prevention</li>
-                    </ul>
-                </div>
+      <div class="prose prose-lg dark:prose-invert max-w-none text-gray-700 dark:text-gray-300 space-y-4">
+        <p>This Privacy Policy describes how EasyRecharge MM ("we", "us", or "our") collects, uses, and protects your information when you use our service.</p>
 
-                <!-- Notifications -->
-                <div style="margin-bottom: 25px;">
-                    <h4>🔔 Notification System</h4>
-                    <p>When you place an order, we send notifications to our admin team through:</p>
-                    <ul style="padding-left: 20px; margin: 10px 0;">
-                        <li><strong>Email:</strong> Order details to admin email</li>
-                        <li><strong>Telegram:</strong> Instant notifications to admin chat</li>
-                    </ul>
-                    <p>These notifications help us process your orders quickly and efficiently.</p>
-                </div>
+        <h2 class="font-heading font-semibold">1. Information We Collect</h2>
+        <ul class="list-disc pl-5 space-y-2">
+          <li><strong>User ID:</strong> We generate and store a random, anonymous User ID in your browser's Local Storage to identify your orders. We do not collect personal names or emails.</li>
+          <li><strong>Order Details:</strong> We collect information necessary to fulfill your order, such as target phone numbers, game IDs, or social media links.</li>
+          <li><strong>Technical Data:</strong> We may store your theme preference (light/dark mode) in Local Storage. We do not use tracking cookies.</li>
+        </ul>
 
-                <!-- Third Parties -->
-                <div style="margin-bottom: 25px;">
-                    <h4>🔒 Third-Party Services</h4>
-                    <p>We use trusted third-party services:</p>
-                    <ul style="padding-left: 20px; margin: 10px 0;">
-                        <li><strong>Google Apps Script:</strong> Backend processing and data storage</li>
-                        <li><strong>Google Sheets:</strong> Secure data management</li>
-                        <li><strong>Telegram API:</strong> For instant notifications (optional)</li>
-                    </ul>
-                    <p><strong>We do not sell or share your data with third-party advertisers or marketers.</strong></p>
-                </div>
+        <h2 class="font-heading font-semibold">2. How We Use Information</h2>
+        <p>Your information is used solely for the following purposes:</p>
+        <ul class="list-disc pl-5 space-y-2">
+          <li>To process and fulfill your orders.</li>
+          <li>To provide you with order status updates.</li>
+          <li>To offer customer support if you contact us.</li>
+          <li>To improve our service and prevent fraud.</li>
+        </ul>
 
-                <!-- User Rights -->
-                <div style="margin-bottom: 25px;">
-                    <h4>👤 Your Rights</h4>
-                    <p>You have the right to:</p>
-                    <ul style="padding-left: 20px; margin: 10px 0;">
-                        <li>Access your order history</li>
-                        <li>Request order cancellation (subject to terms)</li>
-                        <li>Contact us about data concerns</li>
-                        <li>Clear your local data by clearing browser storage</li>
-                    </ul>
-                </div>
+        <h2 class="font-heading font-semibold">3. Data Storage and Security</h2>
+        <ul class="list-disc pl-5 space-y-2">
+          <li>Your order data is stored securely in a private Google Sheet.</li>
+          <li>Access to this data is restricted to authorized administrative personnel only.</li>
+          <li>We do not share, sell, or rent your personal information to any third parties.</li>
+        </ul>
 
-                <!-- Data Retention -->
-                <div style="margin-bottom: 25px;">
-                    <h4>⏰ Data Retention</h4>
-                    <p>We retain your data for:</p>
-                    <ul style="padding-left: 20px; margin: 10px 0;">
-                        <li><strong>Active Orders:</strong> Until order completion + 30 days</li>
-                        <li><strong>Order History:</strong> 2 years for record-keeping</li>
-                        <li><strong>User ID:</strong> Until browser data is cleared</li>
-                    </ul>
-                </div>
+        <h2 class="font-heading font-semibold">4. Local Storage</h2>
+        <p>Our service uses your browser's Local Storage to store your anonymous User ID and theme preference. This is necessary for the website to function correctly. This data is stored only on your device and is not a "cookie."</p>
 
-                <!-- Security -->
-                <div style="margin-bottom: 25px;">
-                    <h4>🛡️ Security Measures</h4>
-                    <p>We implement several security measures:</p>
-                    <ul style="padding-left: 20px; margin: 10px 0;">
-                        <li>Secure HTTPS connections</li>
-                        <li>Limited data collection (only what's necessary)</li>
-                        <li>Regular security reviews</li>
-                        <li>Secure backend processing</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- Contact Information -->
-        <div class="form-container">
-            <h3>📞 Contact Us</h3>
-            <p>If you have any questions about this Privacy Policy or your data:</p>
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;">
-                <div style="text-align: center; padding: 15px; background: rgba(255, 123, 0, 0.1); border-radius: var(--radius);">
-                    <div style="width: 40px; height: 40px; background: var(--gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; color: white;">
-                        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-                            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.89 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
-                        </svg>
-                    </div>
-                    <h4>Email</h4>
-                    <p style="font-size: 0.9rem;">support@easyrecharge.mm</p>
-                </div>
-
-                <div style="text-align: center; padding: 15px; background: rgba(255, 123, 0, 0.1); border-radius: var(--radius);">
-                    <div style="width: 40px; height: 40px; background: var(--gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; color: white;">
-                        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-                            <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12zm-6-5l-3 3-3-3 3-3 3 3z"/>
-                        </svg>
-                    </div>
-                    <h4>Telegram</h4>
-                    <p style="font-size: 0.9rem;">@EasyRechargeMM_Support</p>
-                </div>
-            </div>
-
-            <div style="margin-top: 20px; padding: 15px; background: rgba(255, 123, 0, 0.05); border-radius: var(--radius); border-left: 4px solid var(--primary);">
-                <p style="margin: 0; font-size: 0.9rem;">
-                    <strong>Note:</strong> This privacy policy may be updated periodically. 
-                    We recommend checking this page for the latest information about our privacy practices.
-                </p>
-            </div>
-        </div>
-
-        <!-- Last Updated -->
-        <div class="form-container text-center">
-            <p style="opacity: 0.7; font-size: 0.9rem;">
-                <strong>Last Updated:</strong> January 2024<br>
-                <strong>Version:</strong> 1.0
-            </p>
-        </div>
-
-        <!-- Bottom Navigation -->
-        <nav class="bottom-nav">
-            <a href="index.html" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-                </svg>
-                <span>Dashboard</span>
-            </a>
-            <a href="order.html" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M13 2v8h8c0-4.42-3.58-8-8-8zm2 6V4.34c1.7.6 3.05 1.95 3.66 3.66H15zm-8.56 3l-.95-2H2v2h2.22s1.89 4.07 2.12 4.42c-1.1.59-1.84 1.75-1.84 3.08C4.5 20.43 6.07 22 8 22c1.76 0 3.22-1.3 3.46-3h2.08c.24 1.7 1.7 3 3.46 3 1.93 0 3.5-1.57 3.5-3.5 0-1.04-.46-1.97-1.18-2.61C20.37 14.54 21 12.84 21 11H6.44z"/>
-                </svg>
-                <span>Orders</span>
-            </a>
-            <a href="pay.html" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
-                </svg>
-                <span>Exchange</span>
-            </a>
-            <a href="status.html" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
-                    <path d="M7 10h2v7H7zm4-3h2v10h-2zm4-3h2v13h-2z"/>
-                </svg>
-                <span>Status</span>
-            </a>
-        </nav>
+        <h2 class="font-heading font-semibold">5. Policy Changes</h2>
+        <p>We may update this privacy policy from time to time. Any changes will be posted on this page with an updated "Last updated" date. We encourage you to review this policy periodically.</p>
+        
+        <h2 class="font-heading font-semibold">Contact Information</h2>
+        <p>If you have any questions about this Privacy Policy, please contact us at: <a href="mailto:support@easyrecharge.mm" class="text-primary hover:underline">support@easyrecharge.mm</a></p>
+      </div>
     </div>
+  </main>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="toast"></div>
+  <nav class="bottom-nav md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 grid grid-cols-4">
+    <a href="index.html" class="flex flex-col items-center p-3 text-gray-600 dark:text-gray-300">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>
+      <span class="text-xs font-medium">Home</span>
+    </a>
+    <a href="services.html" class="flex flex-col items-center p-3 text-gray-600 dark:text-gray-300">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25A2.25 2.25 0 0113.5 8.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" /></svg>
+      <span class="text-xs font-medium">Services</span>
+    </a>
+    <a href="status.html" class="flex flex-col items-center p-3 text-gray-600 dark:text-gray-300">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+      <span class="text-xs font-medium">Status</span>
+    </a>
+    <a href="faq.html" class="flex flex-col items-center p-3 text-gray-600 dark:text-gray-300">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" /></svg>
+      <span class="text-xs font-medium">Support</span>
+    </a>
+  </nav>
 
-    <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
+
