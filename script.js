@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  const GAS_URL = 'https://script.google.com/macros/s/AKfycbwWung41cWPoBhf0PjE8n_FXwnA-cervOajGiycBOscGM8vW9qrzulD9HOkUk9aBdA3JA/exec';
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbzi8QWL3oQUJzxzvOZrMT5rlEz6hpCoI3cATJnBYIHNLaJTUDaChYe908I6qIzBVd3iew/exec';
   
   const SERVICE_PRICES = {
     sim: {
@@ -87,7 +87,7 @@
   function initUser() {
     let userId = localStorage.getItem('userId');
     if (!userId) {
-      userId = crypto.randomUUID();
+      userId = 'user_' + Math.random().toString(36).substr(2, 9);
       localStorage.setItem('userId', userId);
     }
     
@@ -139,33 +139,48 @@
     let retries = 3;
     while (retries > 0) {
       try {
+        console.log('Sending request to:', GAS_URL);
+        console.log('Payload:', payload);
+        
         const response = await fetch(GAS_URL, {
           method: 'POST',
-          mode: 'cors',
-          redirect: 'follow',
-          headers: { 'Content-Type': 'text/plain' },
+          headers: { 
+            'Content-Type': 'application/json'
+          },
           body: JSON.stringify(payload)
         });
 
+        console.log('Response status:', response.status);
+        
         if (!response.ok) {
-          throw new Error(`Network response was not ok: ${response.statusText}`);
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
         
-        const result = await response.json();
+        const text = await response.text();
+        console.log('Raw response:', text);
+        
+        let result;
+        try {
+          result = JSON.parse(text);
+        } catch (parseError) {
+          console.error('JSON parse error:', parseError);
+          throw new Error('Invalid JSON response from server');
+        }
         
         if (result.status === 'success') {
           return result.data;
         } else {
-          throw new Error(result.message || 'API error');
+          throw new Error(result.message || 'API returned error');
         }
 
       } catch (error) {
+        console.error(`API Error (${retries} retries left):`, error);
         retries--;
         if (retries === 0) {
-          console.error('API Error:', error);
           showToast(`Error: ${error.message}`, 'error');
+          throw error;
         }
-        await new Promise(res => setTimeout(res, 1000 * (3 - retries)));
+        await new Promise(res => setTimeout(res, 1000));
       }
     }
     return null;
@@ -178,17 +193,28 @@
     let retries = 3;
     while (retries > 0) {
       try {
+        console.log('Sending GET request to:', url.toString());
+        
         const response = await fetch(url, {
           method: 'GET',
-          mode: 'cors',
-          redirect: 'follow',
         });
 
+        console.log('GET Response status:', response.status);
+        
         if (!response.ok) {
-          throw new Error(`Network response was not ok: ${response.statusText}`);
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
         
-        const result = await response.json();
+        const text = await response.text();
+        console.log('GET Raw response:', text);
+        
+        let result;
+        try {
+          result = JSON.parse(text);
+        } catch (parseError) {
+          console.error('JSON parse error:', parseError);
+          throw new Error('Invalid JSON response from server');
+        }
         
         if (result.status === 'success') {
           return result.data;
@@ -196,9 +222,9 @@
           throw new Error(result.message || 'API error');
         }
       } catch (error) {
+        console.error(`GET API Error (${retries} retries left):`, error);
         retries--;
         if (retries === 0) {
-          console.error('API Error:', error);
           showToast(`Error: ${error.message}`, 'error');
         }
         await new Promise(res => setTimeout(res, 1000 * (3 - retries)));
@@ -245,13 +271,17 @@
 
   function initSimForm() {
     const form = document.getElementById('order-sim-form');
+    if (!form) return;
+    
     const serviceSelect = form.querySelector('#sim-service');
     const totalDisplay = form.querySelector('#total-amount');
 
     function updateSimPrice() {
       const selectedService = serviceSelect.value;
       const total = calculateTotal('sim', selectedService, 1);
-      totalDisplay.textContent = `${total.toLocaleString()} MMK`;
+      if (totalDisplay) {
+        totalDisplay.textContent = `${total.toLocaleString()} MMK`;
+      }
     }
 
     serviceSelect.addEventListener('change', updateSimPrice);
@@ -279,20 +309,28 @@
         txid: formData.get('txid')
       };
 
-      const result = await fetchAPI(data);
-      setButtonLoading(button, false);
-
-      if (result) {
-        showToast(`Order ${result.orderId} submitted successfully!`, 'success');
-        form.reset();
-        updateSimPrice();
-        window.location.href = 'status.html';
+      try {
+        const result = await fetchAPI(data);
+        if (result) {
+          showToast(`Order ${result.orderId} submitted successfully!`, 'success');
+          form.reset();
+          updateSimPrice();
+          setTimeout(() => {
+            window.location.href = 'status.html';
+          }, 1500);
+        }
+      } catch (error) {
+        console.error('Order submission failed:', error);
+      } finally {
+        setButtonLoading(button, false);
       }
     });
   }
 
   function initGameForm() {
     const form = document.getElementById('order-game-form');
+    if (!form) return;
+    
     const serviceSelect = form.querySelector('#game-package');
     const quantityInput = form.querySelector('#game-quantity');
     const totalDisplay = form.querySelector('#total-amount');
@@ -301,7 +339,9 @@
       const selectedService = serviceSelect.value;
       const quantity = quantityInput.value || 1;
       const total = calculateTotal('game', selectedService, quantity);
-      totalDisplay.textContent = `${total.toLocaleString()} MMK`;
+      if (totalDisplay) {
+        totalDisplay.textContent = `${total.toLocaleString()} MMK`;
+      }
     }
 
     serviceSelect.addEventListener('change', updateGamePrice);
@@ -331,20 +371,28 @@
         txid: formData.get('txid')
       };
 
-      const result = await fetchAPI(data);
-      setButtonLoading(button, false);
-
-      if (result) {
-        showToast(`Order ${result.orderId} submitted successfully!`, 'success');
-        form.reset();
-        updateGamePrice();
-        window.location.href = 'status.html';
+      try {
+        const result = await fetchAPI(data);
+        if (result) {
+          showToast(`Order ${result.orderId} submitted successfully!`, 'success');
+          form.reset();
+          updateGamePrice();
+          setTimeout(() => {
+            window.location.href = 'status.html';
+          }, 1500);
+        }
+      } catch (error) {
+        console.error('Order submission failed:', error);
+      } finally {
+        setButtonLoading(button, false);
       }
     });
   }
 
   function initSmmForm() {
     const form = document.getElementById('order-smm-form');
+    if (!form) return;
+    
     const platformSelect = form.querySelector('#smm-platform');
     const serviceSelect = form.querySelector('#smm-service');
     const quantityInput = form.querySelector('#smm-quantity');
@@ -371,13 +419,17 @@
 
     function updateSmmServices() {
       const platform = platformSelect.value;
+      if (!serviceSelect) return;
+      
       serviceSelect.innerHTML = '';
-      platformServices[platform].forEach(service => {
-        const option = document.createElement('option');
-        option.value = service.value;
-        option.textContent = service.text;
-        serviceSelect.appendChild(option);
-      });
+      if (platformServices[platform]) {
+        platformServices[platform].forEach(service => {
+          const option = document.createElement('option');
+          option.value = service.value;
+          option.textContent = service.text;
+          serviceSelect.appendChild(option);
+        });
+      }
       updateSmmPrice();
     }
 
@@ -387,8 +439,8 @@
       const pricePerUnit = SERVICE_PRICES.smm[service] || 0;
       const total = pricePerUnit * quantity;
 
-      priceDisplay.textContent = `${pricePerUnit.toLocaleString()} MMK / 100 units`;
-      totalDisplay.textContent = `${total.toLocaleString()} MMK`;
+      if (priceDisplay) priceDisplay.textContent = `${pricePerUnit.toLocaleString()} MMK / 100 units`;
+      if (totalDisplay) totalDisplay.textContent = `${total.toLocaleString()} MMK`;
     }
 
     platformSelect.addEventListener('change', updateSmmServices);
@@ -422,20 +474,28 @@
         txid: formData.get('txid')
       };
 
-      const result = await fetchAPI(data);
-      setButtonLoading(button, false);
-
-      if (result) {
-        showToast(`Order ${result.orderId} submitted successfully!`, 'success');
-        form.reset();
-        updateSmmServices();
-        window.location.href = 'status.html';
+      try {
+        const result = await fetchAPI(data);
+        if (result) {
+          showToast(`Order ${result.orderId} submitted successfully!`, 'success');
+          form.reset();
+          updateSmmServices();
+          setTimeout(() => {
+            window.location.href = 'status.html';
+          }, 1500);
+        }
+      } catch (error) {
+        console.error('Order submission failed:', error);
+      } finally {
+        setButtonLoading(button, false);
       }
     });
   }
 
   function initP2PForm() {
     const form = document.getElementById('p2p-exchange-form');
+    if (!form) return;
+    
     const amountSentInput = form.querySelector('#p2p-amount');
     const feeDisplay = form.querySelector('#p2p-fee');
     const receiveDisplay = form.querySelector('#p2p-receive');
@@ -445,8 +505,8 @@
       const fee = amount * 0.02;
       const receive = amount - fee;
 
-      feeDisplay.textContent = `${fee.toLocaleString()} MMK (2%)`;
-      receiveDisplay.textContent = `${receive.toLocaleString()} MMK`;
+      if (feeDisplay) feeDisplay.textContent = `${fee.toLocaleString()} MMK (2%)`;
+      if (receiveDisplay) receiveDisplay.textContent = `${receive.toLocaleString()} MMK`;
     }
 
     amountSentInput.addEventListener('input', updateP2PPrice);
@@ -479,14 +539,20 @@
         txid: formData.get('txid')
       };
 
-      const result = await fetchAPI(data);
-      setButtonLoading(button, false);
-
-      if (result) {
-        showToast(`Exchange ${result.orderId} submitted!`, 'success');
-        form.reset();
-        updateP2PPrice();
-        window.location.href = 'status.html';
+      try {
+        const result = await fetchAPI(data);
+        if (result) {
+          showToast(`Exchange ${result.orderId} submitted!`, 'success');
+          form.reset();
+          updateP2PPrice();
+          setTimeout(() => {
+            window.location.href = 'status.html';
+          }, 1500);
+        }
+      } catch (error) {
+        console.error('Order submission failed:', error);
+      } finally {
+        setButtonLoading(button, false);
       }
     });
 
@@ -521,9 +587,13 @@
       });
       
       if (data) {
-        document.getElementById('stats-total-orders').textContent = data.totalOrders;
-        document.getElementById('stats-total-spent').textContent = `${data.totalSpent.toLocaleString()} MMK`;
-        document.getElementById('stats-pending-orders').textContent = data.pendingOrders;
+        const totalOrdersEl = document.getElementById('stats-total-orders');
+        const totalSpentEl = document.getElementById('stats-total-spent');
+        const pendingOrdersEl = document.getElementById('stats-pending-orders');
+        
+        if (totalOrdersEl) totalOrdersEl.textContent = data.totalOrders || 0;
+        if (totalSpentEl) totalSpentEl.textContent = `${(data.totalSpent || 0).toLocaleString()} MMK`;
+        if (pendingOrdersEl) pendingOrdersEl.textContent = data.pendingOrders || 0;
       }
     }
     
@@ -535,8 +605,8 @@
       });
       
       const tableBody = document.getElementById('recent-orders-table');
-      if (data && tableBody) {
-        if (data.length === 0) {
+      if (tableBody) {
+        if (!data || data.length === 0) {
           tableBody.innerHTML = `<tr><td colspan="4" class="text-center py-4">No recent orders.</td></tr>`;
           return;
         }
@@ -544,9 +614,9 @@
         tableBody.innerHTML = data
           .map(order => `
             <tr>
-              <td class="py-3 px-4">${order.orderId.substring(0, 8)}...</td>
-              <td class="py-3 px-4">${order.service}</td>
-              <td class="py-3 px-4">${order.total.toLocaleString()} MMK</td>
+              <td class="py-3 px-4">${(order.orderId || '').substring(0, 8)}...</td>
+              <td class="py-3 px-4">${order.service || 'N/A'}</td>
+              <td class="py-3 px-4">${(order.total || 0).toLocaleString()} MMK</td>
               <td class="py-3 px-4">${renderStatusBadge(order.status)}</td>
             </tr>
           `)
@@ -557,7 +627,7 @@
     fetchStats();
     fetchRecentOrders();
     
-    clearInterval(statsRefreshInterval);
+    if (statsRefreshInterval) clearInterval(statsRefreshInterval);
     statsRefreshInterval = setInterval(() => {
       fetchStats();
       fetchRecentOrders();
@@ -579,24 +649,28 @@
         filter: filter
       });
       
-      lastUpdate.textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
+      if (lastUpdate) {
+        lastUpdate.textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
+      }
+      
+      if (!tableBody) return;
       
       if (!data || data.length === 0) {
         tableBody.innerHTML = '';
-        emptyState.classList.remove('hidden');
+        if (emptyState) emptyState.classList.remove('hidden');
         return;
       }
       
-      emptyState.classList.add('hidden');
+      if (emptyState) emptyState.classList.add('hidden');
       tableBody.innerHTML = data
         .map(order => `
           <tr>
-            <td class="py-3 px-4">${order.orderId}</td>
-            <td class="py-3 px-4">${order.service}</td>
+            <td class="py-3 px-4">${order.orderId || 'N/A'}</td>
+            <td class="py-3 px-4">${order.service || 'N/A'}</td>
             <td class="py-3 px-4">${order.quantity || 1}</td>
-            <td class="py-3 px-4">${order.total.toLocaleString()} MMK</td>
-            <td class="py-3 px-4">${order.payment}</td>
-          <td class="py-3 px-4">${renderStatusBadge(order.status)}</td>
+            <td class="py-3 px-4">${(order.total || 0).toLocaleString()} MMK</td>
+            <td class="py-3 px-4">${order.payment || 'N/A'}</td>
+            <td class="py-3 px-4">${renderStatusBadge(order.status)}</td>
           </tr>
         `)
         .join('');
@@ -611,11 +685,13 @@
       });
     });
 
-    refreshBtn.addEventListener('click', () => fetchOrders(currentFilter));
+    if (refreshBtn) {
+      refreshBtn.addEventListener('click', () => fetchOrders(currentFilter));
+    }
 
     fetchOrders(currentFilter);
     
-    clearInterval(autoRefreshInterval);
+    if (autoRefreshInterval) clearInterval(autoRefreshInterval);
     autoRefreshInterval = setInterval(() => fetchOrders(currentFilter), 15000);
   }
 
@@ -662,12 +738,14 @@
 
     async function fetchAdminData() {
       const data = await fetchAPIGet({ action: 'adminData' });
-      lastUpdate.textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
+      if (lastUpdate) {
+        lastUpdate.textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
+      }
       
       if (data && data.orders) {
         allOrders = data.orders.map(order => ({
           ...order,
-          timestamp: new Date(order.timestamp)
+          timestamp: new Date(order.timestamp || new Date())
         })).sort((a, b) => b.timestamp - a.timestamp);
         
         renderAdminTable();
@@ -675,8 +753,10 @@
     }
 
     function renderAdminTable() {
+      if (!tableBody) return;
+      
       const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
-      const searchTerm = searchInput.value.toLowerCase();
+      const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
       
       const filteredOrders = allOrders.filter(order => {
         return !searchTerm ||
@@ -709,12 +789,12 @@
               const isNew = order.timestamp > fiveMinutesAgo;
               return `
                 <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
-                  <td class="p-3">${order.orderId} ${isNew ? '<span class="new-badge">NEW</span>' : ''}</td>
-                  <td class="p-3">${order.userId.substring(0, 8)}...</td>
-                  <td class="p-3">${order.service}</td>
+                  <td class="p-3">${order.orderId || 'N/A'} ${isNew ? '<span class="new-badge">NEW</span>' : ''}</td>
+                  <td class="p-3">${(order.userId || '').substring(0, 8)}...</td>
+                  <td class="p-3">${order.service || 'N/A'}</td>
                   <td class="p-3">${order.target || 'N/A'}</td>
                   <td class="p-3">${order.quantity || 1}</td>
-                  <td class="p-3">${order.total.toLocaleString()} MMK</td>
+                  <td class="p-3">${(order.total || 0).toLocaleString()} MMK</td>
                   <td class="p-3">${order.txid || 'N/A'}</td>
                   <td class="p-3">${order.timestamp.toLocaleString()}</td>
                   <td class="p-3">
@@ -754,23 +834,30 @@
       }
     }
     
-    tableBody.addEventListener('change', (e) => {
-      if (e.target.classList.contains('status-select')) {
-        const { orderId, sheet } = e.target.dataset;
-        const newStatus = e.target.value;
-        updateOrderStatus(orderId, sheet, newStatus);
-      }
-    });
+    if (tableBody) {
+      tableBody.addEventListener('change', (e) => {
+        if (e.target.classList.contains('status-select')) {
+          const { orderId, sheet } = e.target.dataset;
+          const newStatus = e.target.value;
+          updateOrderStatus(orderId, sheet, newStatus);
+        }
+      });
+    }
 
-    refreshBtn.addEventListener('click', fetchAdminData);
-    searchInput.addEventListener('input', () => {
-      clearTimeout(searchInput.timer);
-      searchInput.timer = setTimeout(renderAdminTable, 300);
-    });
+    if (refreshBtn) {
+      refreshBtn.addEventListener('click', fetchAdminData);
+    }
+    
+    if (searchInput) {
+      searchInput.addEventListener('input', () => {
+        clearTimeout(searchInput.timer);
+        searchInput.timer = setTimeout(renderAdminTable, 300);
+      });
+    }
 
     fetchAdminData();
     
-    clearInterval(adminRefreshInterval);
+    if (adminRefreshInterval) clearInterval(adminRefreshInterval);
     adminRefreshInterval = setInterval(fetchAdminData, 10000);
   }
 
