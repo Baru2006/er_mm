@@ -1,296 +1,136 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="my" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FAQ - Easy Recharge MM</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-g">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ & Support - EasyRecharge MM</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            heading: ['Poppins', 'sans-serif'],
+          },
+          colors: {
+            primary: 'var(--color-primary)',
+          }
+        }
+      }
+    }
+  </script>
 </head>
-<body>
-    <div class="container">
-        <!-- Header -->
-        <header class="header">
-            <a href="index.html" class="back-link">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
-                </svg>
-                Back
-            </a>
-            <div class="brand">
-                <h1>FAQ</h1>
-            </div>
-            <button class="theme-toggle" id="themeToggle">
-                <span class="theme-icon">🌙</span>
-            </button>
-        </header>
+<body class="bg-gray-100 dark:bg-gray-900" id="faq-page">
 
-        <!-- Page Title -->
-        <div class="text-center mb-20">
-            <h2>Frequently Asked Questions</h2>
-            <p>Find answers to common questions about our services</p>
+  <div id="toast-container"></div>
+
+  <header class="top-header sticky top-0 z-40 bg-white dark:bg-gray-800 shadow">
+    <nav class="main-container flex items-center justify-between py-4">
+      <a href="index.html" class="flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8 text-primary">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+        </svg>
+        <span class="text-xl font-heading font-bold text-gray-900 dark:text-white">EasyRecharge MM</span>
+      </a>
+      <button id="theme-toggle" class="btn-icon p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700" aria-label="Toggle theme">
+        <span id="theme-icon"></span>
+      </button>
+    </nav>
+  </header>
+
+  <main class="main-container py-6">
+    <div class="max-w-2xl mx-auto">
+      <h1 class="text-2xl font-heading font-bold text-gray-900 dark:text-white mb-6">Frequently Asked Questions</h1>
+
+      <div class="card bg-white dark:bg-gray-800 rounded-lg overflow-hidden divide-y divide-gray-200 dark:divide-gray-700">
+        
+        <div class="accordion-item">
+          <button class="accordion-header w-full">
+            <span>What is the processing time for orders?</span>
+            <svg class="accordion-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </button>
+          <div class="accordion-content">
+            <p>SIM/Data orders are typically processed within 5-15 minutes. Game/SMM orders can take from 15 minutes up to 2 hours. P2P exchanges are usually completed within 10 minutes.</p>
+          </div>
         </div>
 
-        <!-- FAQ Accordion -->
-        <div class="accordion-container">
-            <!-- Ordering Questions -->
-            <div class="accordion">
-                <button class="accordion-header">
-                    <span>How do I place an order?</span>
-                    <svg class="accordion-icon" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/>
-                    </svg>
-                </button>
-                <div class="accordion-content">
-                    <p>To place an order:</p>
-                    <ol style="padding-left: 20px; margin: 10px 0;">
-                        <li>Go to "Orders" in the bottom navigation</li>
-                        <li>Select your service category (SIM/Data, Game TopUp, or SMM)</li>
-                        <li>Fill in the required details</li>
-                        <li>Choose your payment method</li>
-                        <li>Make payment to the provided number</li>
-                        <li>Enter the transaction ID and submit</li>
-                    </ol>
-                </div>
-            </div>
-
-            <div class="accordion">
-                <button class="accordion-header">
-                    <span>What payment methods do you accept?</span>
-                    <svg class="accordion-icon" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/>
-                    </svg>
-                </button>
-                <div class="accordion-content">
-                    <p>We accept the following payment methods:</p>
-                    <ul style="padding-left: 20px; margin: 10px 0;">
-                        <li>KBZ Pay</li>
-                        <li>Wave Money</li>
-                        <li>CB Pay</li>
-                    </ul>
-                    <p>Make sure to use the correct payment number shown in the order form and always include your transaction ID.</p>
-                </div>
-            </div>
-
-            <!-- Delivery Questions -->
-            <div class="accordion">
-                <button class="accordion-header">
-                    <span>How long does delivery take?</span>
-                    <svg class="accordion-icon" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/>
-                    </svg>
-                </button>
-                <div class="accordion-content">
-                    <p>Delivery times vary by service:</p>
-                    <ul style="padding-left: 20px; margin: 10px 0;">
-                        <li><strong>SIM/Data:</strong> Instant to 5 minutes</li>
-                        <li><strong>Game TopUp:</strong> 5-15 minutes</li>
-                        <li><strong>SMM Services:</strong> 1-24 hours (gradual delivery)</li>
-                        <li><strong>P2P Exchange:</strong> 5-15 minutes</li>
-                    </ul>
-                    <p>If your order is delayed, please check the order status or contact support.</p>
-                </div>
-            </div>
-
-            <div class="accordion">
-                <button class="accordion-header">
-                    <span>What should I do if my order is delayed?</span>
-                    <svg class="accordion-icon" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/>
-                    </svg>
-                </button>
-                <div class="accordion-content">
-                    <p>If your order is taking longer than expected:</p>
-                    <ol style="padding-left: 20px; margin: 10px 0;">
-                        <li>Check your order status in the "Status" section</li>
-                        <li>Ensure you entered the correct details (phone number, game ID, etc.)</li>
-                        <li>Verify your payment was successful</li>
-                        <li>Contact our support team with your order ID</li>
-                    </ol>
-                    <p>Most delays are resolved within 30 minutes of reporting.</p>
-                </div>
-            </div>
-
-            <!-- Technical Questions -->
-            <div class="accordion">
-                <button class="accordion-header">
-                    <span>Why is my transaction ID important?</span>
-                    <svg class="accordion-icon" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/>
-                    </svg>
-                </button>
-                <div class="accordion-content">
-                    <p>The transaction ID is crucial because:</p>
-                    <ul style="padding-left: 20px; margin: 10px 0;">
-                        <li>It verifies your payment was received</li>
-                        <li>It helps us track your order quickly</li>
-                        <li>It's required for order processing</li>
-                        <li>It's used for customer support inquiries</li>
-                    </ul>
-                    <p>Always save your transaction ID until your order is completed.</p>
-                </div>
-            </div>
-
-            <div class="accordion">
-                <button class="accordion-header">
-                    <span>Can I cancel my order after payment?</span>
-                    <svg class="accordion-icon" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/>
-                    </svg>
-                </button>
-                <div class="accordion-content">
-                    <p>Order cancellation depends on the order status:</p>
-                    <ul style="padding-left: 20px; margin: 10px 0;">
-                        <li><strong>Pending:</strong> Can be cancelled with full refund</li>
-                        <li><strong>Processing:</strong> May be cancelled with partial refund</li>
-                        <li><strong>Completed:</strong> Cannot be cancelled</li>
-                    </ul>
-                    <p>Contact support immediately if you need to cancel an order. Refunds are processed within 24 hours.</p>
-                </div>
-            </div>
-
-            <!-- Account Questions -->
-            <div class="accordion">
-                <button class="accordion-header">
-                    <span>How is my user ID generated?</span>
-                    <svg class="accordion-icon" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/>
-                    </svg>
-                </button>
-                <div class="accordion-content">
-                    <p>Your user ID is automatically generated when you first visit our website and is stored in your browser. This helps us:</p>
-                    <ul style="padding-left: 20px; margin: 10px 0;">
-                        <li>Track your orders efficiently</li>
-                        <li>Provide personalized service</li>
-                        <li>Maintain your order history</li>
-                        <li>Generate your unique avatar</li>
-                    </ul>
-                    <p>Your user ID remains the same unless you clear your browser data.</p>
-                </div>
-            </div>
-
-            <div class="accordion">
-                <button class="accordion-header">
-                    <span>What happens if I clear my browser data?</span>
-                    <svg class="accordion-icon" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/>
-                    </svg>
-                </button>
-                <div class="accordion-content">
-                    <p>If you clear your browser data:</p>
-                    <ul style="padding-left: 20px; margin: 10px 0;">
-                        <li>Your user ID will be reset</li>
-                        <li>Your order history will still be available via order IDs</li>
-                        <li>Your theme preference will be reset</li>
-                        <li>A new avatar will be generated</li>
-                    </ul>
-                    <p>You can still track old orders using your order IDs and transaction IDs.</p>
-                </div>
-            </div>
-
-            <!-- Support Questions -->
-            <div class="accordion">
-                <button class="accordion-header">
-                    <span>How can I contact customer support?</span>
-                    <svg class="accordion-icon" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/>
-                    </svg>
-                </button>
-                <div class="accordion-content">
-                    <p>You can contact our support team through:</p>
-                    <ul style="padding-left: 20px; margin: 10px 0;">
-                        <li><strong>Email:</strong> support@easyrecharge.mm</li>
-                        <li><strong>Telegram:</strong> @EasyRechargeMM_Support</li>
-                        <li><strong>Phone:</strong> 09-123-456-789 (9AM-9PM)</li>
-                    </ul>
-                    <p>When contacting support, please provide:</p>
-                    <ol style="padding-left: 20px; margin: 10px 0;">
-                        <li>Your order ID</li>
-                        <li>Transaction ID</li>
-                        <li>Service type</li>
-                        <li>Detailed description of the issue</li>
-                    </ol>
-                </div>
-            </div>
-
-            <div class="accordion">
-                <button class="accordion-header">
-                    <span>What is your refund policy?</span>
-                    <svg class="accordion-icon" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/>
-                    </svg>
-                </button>
-                <div class="accordion-content">
-                    <p>Our refund policy ensures fair treatment for all customers:</p>
-                    <ul style="padding-left: 20px; margin: 10px 0;">
-                        <li><strong>Full refund:</strong> If service is not delivered within promised time</li>
-                        <li><strong>Partial refund:</strong> If service is partially delivered</li>
-                        <li><strong>No refund:</strong> For completed services or user errors</li>
-                    </ul>
-                    <p>Refund requests must be made within 7 days of order placement. Contact support with your order details to initiate a refund.</p>
-                </div>
-            </div>
+        <div class="accordion-item">
+          <button class="accordion-header w-full">
+            <span>What are your service hours?</span>
+            <svg class="accordion-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </button>
+          <div class="accordion-content">
+            <p>Our automated system is available 24/7. Customer support hours are from 9:00 AM to 10:00 PM (Myanmar Time) daily.</p>
+          </div>
+        </div>
+        
+        <div class="accordion-item">
+          <button class="accordion-header w-full">
+            <span>How do I contact customer support?</span>
+            <svg class="accordion-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </button>
+          <div class="accordion-content">
+            <p>You can contact our support team via email at <a href="mailto:support@easyrecharge.mm" class="text-primary hover:underline">support@easyrecharge.mm</a> or through our official Facebook page.</p>
+          </div>
         </div>
 
-        <!-- Additional Help -->
-        <div class="form-container">
-            <h3>Still Need Help?</h3>
-            <p>If you couldn't find the answer to your question, our support team is ready to assist you.</p>
-            <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <a href="mailto:support@easyrecharge.mm" class="submit-btn" style="text-decoration: none; text-align: center; flex: 1;">
-                    Email Support
-                </a>
-                <a href="https://t.me/EasyRechargeMM_Support" class="submit-btn" style="text-decoration: none; text-align: center; flex: 1; background: var(--gradient);">
-                    Telegram
-                </a>
-            </div>
+        <div class="accordion-item">
+          <button class="accordion-header w-full">
+            <span>What is the fee for P2P exchange?</span>
+            <svg class="accordion-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </button>
+          <div class="accordion-content">
+            <p>We charge a competitive 2% fee on the total amount you send for P2P exchange services.</p>
+          </div>
         </div>
 
-        <!-- Bottom Navigation -->
-        <nav class="bottom-nav">
-            <a href="index.html" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-                </svg>
-                <span>Dashboard</span>
-            </a>
-            <a href="order.html" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M13 2v8h8c0-4.42-3.58-8-8-8zm2 6V4.34c1.7.6 3.05 1.95 3.66 3.66H15zm-8.56 3l-.95-2H2v2h2.22s1.89 4.07 2.12 4.42c-1.1.59-1.84 1.75-1.84 3.08C4.5 20.43 6.07 22 8 22c1.76 0 3.22-1.3 3.46-3h2.08c.24 1.7 1.7 3 3.46 3 1.93 0 3.5-1.57 3.5-3.5 0-1.04-.46-1.97-1.18-2.61C20.37 14.54 21 12.84 21 11H6.44z"/>
-                </svg>
-                <span>Orders</span>
-            </a>
-            <a href="pay.html" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
-                </svg>
-                <span>Exchange</span>
-            </a>
-            <a href="status.html" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
-                    <path d="M7 10h2v7H7zm4-3h2v10h-2zm4-3h2v13h-2z"/>
-                </svg>
-                <span>Status</span>
-            </a>
-        </nav>
+        <div class="accordion-item">
+          <button class="accordion-header w-full">
+            <span>Which payment methods are supported?</span>
+            <svg class="accordion-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </button>
+          <div class="accordion-content">
+            <p>We accept KBZPay, WavePay, AYAPay, and UABPay for all services. For P2P, we support exchanges to Local Bank, Crypto (USDT), and PayPal.</p>
+          </div>
+        </div>
+
+      </div>
     </div>
+  </main>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="toast"></div>
+  <nav class="bottom-nav md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 grid grid-cols-4">
+    <a href="index.html" class="flex flex-col items-center p-3 text-gray-600 dark:text-gray-300">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>
+      <span class="text-xs font-medium">Home</span>
+    </a>
+    <a href="services.html" class="flex flex-col items-center p-3 text-gray-600 dark:text-gray-300">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25A2.25 2.25 0 0113.5 8.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" /></svg>
+      <span class="text-xs font-medium">Services</span>
+    </a>
+    <a href="status.html" class="flex flex-col items-center p-3 text-gray-600 dark:text-gray-300">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+      <span class="text-xs font-medium">Status</span>
+    </a>
+    <a href="faq.html" class="flex flex-col items-center p-3 text-primary">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" /></svg>
+      <span class="text-xs font-medium">Support</span>
+    </a>
+  </nav>
 
-    <script src="script.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize accordions
-            const accordions = document.querySelectorAll('.accordion-header');
-            accordions.forEach(header => {
-                header.addEventListener('click', () => {
-                    const accordion = header.parentElement;
-                    accordion.classList.toggle('active');
-                });
-            });
-        });
-    </script>
+  <script src="script.js" defer></script>
 </body>
-    </html>
+</html>
+
+                
