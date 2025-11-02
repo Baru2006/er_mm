@@ -1,287 +1,131 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="my" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMM Services - Easy Recharge MM</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-g">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SMM Services - EasyRecharge MM</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            heading: ['Poppins', 'sans-serif'],
+          },
+          colors: {
+            primary: 'var(--color-primary)',
+          }
+        }
+      }
+    }
+  </script>
 </head>
-<body>
-    <div class="container">
-        <!-- Header -->
-        <header class="header">
-            <a href="order.html" class="back-link">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
-                </svg>
-                Back
-            </a>
-            <div class="brand">
-                <h1>SMM Services</h1>
-            </div>
-            <button class="theme-toggle" id="themeToggle">
-                <span class="theme-icon">🌙</span>
-            </button>
-        </header>
+<body class="bg-gray-100 dark:bg-gray-900">
 
-        <!-- Order Form -->
-        <form id="smmOrderForm" class="form-container">
-            <!-- User Info -->
-            <div class="form-group">
-                <label for="userId">User ID</label>
-                <input type="text" id="userId" class="form-control" readonly>
-            </div>
+  <div id="toast-container"></div>
 
-            <div class="form-group">
-                <label for="userDevice">Device</label>
-                <input type="text" id="userDevice" class="form-control" readonly>
-            </div>
+  <header class="top-header sticky top-0 z-40 bg-white dark:bg-gray-800 shadow">
+    <nav class="main-container flex items-center justify-between py-4">
+      <a href="index.html" class="flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8 text-primary">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+        </svg>
+        <span class="text-xl font-heading font-bold text-gray-900 dark:text-white">EasyRecharge MM</span>
+      </a>
+      <button id="theme-toggle" class="btn-icon p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700" aria-label="Toggle theme">
+        <span id="theme-icon"></span>
+      </button>
+    </nav>
+  </header>
 
-            <!-- Platform Selection -->
-            <div class="form-group">
-                <label for="platform">Platform *</label>
-                <select id="platform" name="platform" class="form-control" required>
-                    <option value="">Select Platform</option>
-                    <option value="facebook">Facebook</option>
-                    <option value="instagram">Instagram</option>
-                    <option value="youtube">YouTube</option>
-                    <option value="tiktok">TikTok</option>
-                </select>
-            </div>
+  <main class="main-container py-6">
+    <div class="max-w-lg mx-auto">
+      <a href="services.html" class="inline-flex items-center gap-1 text-sm text-primary hover:underline mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+        </svg>
+        Back to Services
+      </a>
+      <h1 class="text-2xl font-heading font-bold text-gray-900 dark:text-white mb-6">SMM Panel Services</h1>
 
-            <!-- Service Selection -->
-            <div class="form-group">
-                <label for="service">Service *</label>
-                <select id="service" name="service" class="form-control" required>
-                    <option value="">Select Service</option>
-                    <optgroup label="Facebook">
-                        <option value="fb-likes">Facebook Likes - 2,000 MMK/1,000</option>
-                        <option value="fb-followers">Facebook Followers - 3,500 MMK/1,000</option>
-                        <option value="fb-comments">Facebook Comments - 4,000 MMK/1,000</option>
-                    </optgroup>
-                    <optgroup label="Instagram">
-                        <option value="ig-followers">Instagram Followers - 4,000 MMK/1,000</option>
-                        <option value="ig-likes">Instagram Likes - 2,500 MMK/1,000</option>
-                        <option value="ig-views">Instagram Views - 1,500 MMK/1,000</option>
-                    </optgroup>
-                    <optgroup label="YouTube">
-                        <option value="yt-subscribers">YouTube Subscribers - 8,000 MMK/1,000</option>
-                        <option value="yt-likes">YouTube Likes - 3,000 MMK/1,000</option>
-                        <option value="yt-views">YouTube Views - 2,000 MMK/1,000</option>
-                    </optgroup>
-                </select>
-            </div>
-
-            <!-- Target Link/Username -->
-            <div class="form-group">
-                <label for="target">Target Link/Username *</label>
-                <input type="url" id="target" name="target" class="form-control" placeholder="https://facebook.com/username or @username" required>
-            </div>
-
-            <!-- Quantity & Pricing -->
-            <div class="form-group">
-                <label for="quantity">Quantity (Units)</label>
-                <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1" max="100">
-                <small style="opacity: 0.7; font-size: 0.8rem;">1 unit = 1000 followers/likes/views</small>
-            </div>
-
-            <div class="form-group">
-                <label for="price">Price per unit</label>
-                <input type="text" id="price" class="form-control" readonly>
-            </div>
-
-            <div class="form-group">
-                <label for="total">Total Amount</label>
-                <input type="text" id="total" name="total" class="form-control" readonly>
-            </div>
-
-            <!-- Payment Method -->
-            <div class="form-group">
-                <label>Payment Method *</label>
-                <div class="radio-group">
-                    <div class="radio-item">
-                        <input type="radio" id="kpay-smm" name="payment" value="KBZ Pay" required>
-                        <label for="kpay-smm">
-                            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
-                                <circle cx="12" cy="12" r="10" fill="#00a76e"/>
-                                <text x="12" y="16" text-anchor="middle" fill="white" font-size="8" font-weight="bold">K</text>
-                            </svg>
-                            KBZ Pay
-                        </label>
-                    </div>
-                    <div class="radio-item">
-                        <input type="radio" id="wave-smm" name="payment" value="Wave Money" required>
-                        <label for="wave-smm">
-                            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
-                                <circle cx="12" cy="12" r="10" fill="#6b5aed"/>
-                                <text x="12" y="16" text-anchor="middle" fill="white" font-size="8" font-weight="bold">W</text>
-                            </svg>
-                            Wave Money
-                        </label>
-                    </div>
-                    <div class="radio-item">
-                        <input type="radio" id="cb-smm" name="payment" value="CB Pay" required>
-                        <label for="cb-smm">
-                            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
-                                <circle cx="12" cy="12" r="10" fill="#e6007e"/>
-                                <text x="12" y="16" text-anchor="middle" fill="white" font-size="8" font-weight="bold">C</text>
-                            </svg>
-                            CB Pay
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Payment Number -->
-            <div class="form-group">
-                <label>Payment Number</label>
-                <div class="payment-number">
-                    <input type="text" id="paymentNumber" class="form-control" value="09XXXXXXX" readonly>
-                    <button type="button" class="copy-btn" onclick="copyText('paymentNumber')">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
-                        </svg>
-                    </button>
-                </div>
-                <small style="opacity: 0.7; font-size: 0.8rem;">Make payment to this number and enter transaction ID below</small>
-            </div>
-
-            <!-- Transaction ID -->
-            <div class="form-group">
-                <label for="transactionId">Transaction ID *</label>
-                <input type="text" id="transactionId" name="transactionId" class="form-control" placeholder="Enter transaction ID from payment" required>
-            </div>
-
-            <!-- Submit Button -->
-            <button type="submit" class="submit-btn">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                </svg>
-                Submit Order
-            </button>
-        </form>
-
-        <!-- SMM Instructions -->
-        <div class="form-container">
-            <h4>📋 Service Information:</h4>
-            <ul style="padding-left: 20px; margin-top: 10px; font-size: 0.9rem;">
-                <li>Delivery starts within 24 hours</li>
-                <li>Services are delivered gradually</li>
-                <li>High-quality real accounts</li>
-                <li>Drop protection included</li>
-                <li>24/7 customer support</li>
-            </ul>
+      <form id="order-smm-form" class="card bg-white dark:bg-gray-800 p-6 rounded-lg space-y-5">
+        <div>
+          <label for="smm-platform" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Platform</label>
+          <select id="smm-platform" name="platform" class="form-select mt-1" required>
+            <option value="fb">Facebook</option>
+            <option value="ig">Instagram</option>
+            <option value="yt">YouTube</option>
+          </select>
         </div>
 
-        <!-- Bottom Navigation -->
-        <nav class="bottom-nav">
-            <a href="index.html" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-                </svg>
-                <span>Dashboard</span>
-            </a>
-            <a href="order.html" class="nav-item active">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M13 2v8h8c0-4.42-3.58-8-8-8zm2 6V4.34c1.7.6 3.05 1.95 3.66 3.66H15zm-8.56 3l-.95-2H2v2h2.22s1.89 4.07 2.12 4.42c-1.1.59-1.84 1.75-1.84 3.08C4.5 20.43 6.07 22 8 22c1.76 0 3.22-1.3 3.46-3h2.08c.24 1.7 1.7 3 3.46 3 1.93 0 3.5-1.57 3.5-3.5 0-1.04-.46-1.97-1.18-2.61C20.37 14.54 21 12.84 21 11H6.44z"/>
-                </svg>
-                <span>Orders</span>
-            </a>
-            <a href="pay.html" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
-                </svg>
-                <span>Exchange</span>
-            </a>
-            <a href="status.html" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
-                    <path d="M7 10h2v7H7zm4-3h2v10h-2zm4-3h2v13h-2z"/>
-                </svg>
-                <span>Status</span>
-            </a>
-        </nav>
+        <div>
+          <label for="smm-service" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Service</label>
+          <select id="smm-service" name="service" class="form-select mt-1" required data-validate="notEmpty" data-error-message="Please select a service."></select>
+          <span class="error-message text-xs"></span>
+        </div>
+
+        <div>
+          <label for="smm-link" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Target Page/Link</label>
+          <input type="url" id="smm-link" name="link" class="form-input mt-1" placeholder="https://www.facebook.com/..." required data-validate="url" data-error-message="Please enter a valid URL.">
+          <span class="error-message text-xs"></span>
+        </div>
+
+        <div>
+          <label for="smm-quantity" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Quantity (x100 units)</label>
+          <input type="number" id="smm-quantity" name="quantity" class="form-input mt-1" value="1" min="1" required>
+          <span id="price-per-unit" class="text-xs text-gray-500 dark:text-gray-400 mt-1">... MMK / 100 units</span>
+        </div>
+
+        <div class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-between">
+          <span class="font-medium text-gray-700 dark:text-gray-300">Total Amount:</span>
+          <span id="total-amount" class="font-bold text-xl text-primary">... MMK</span>
+        </div>
+
+        <div>
+          <label for="smm-payment" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Payment Method</label>
+          <select id="smm-payment" name="payment" class="form-select mt-1" required data-validate="notEmpty" data-error-message="Please select a payment method.">
+            <option value="KBZPay">KBZPay</option>
+            <option value="WavePay">WavePay</option>
+            <option value="AYAPay">AYA Pay</option>
+            <option value="UABPay">UAB Pay</option>
+          </select>
+          <span class="error-message text-xs"></span>
+        </div>
+        
+        <div>
+          <label for="smm-txid" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Transaction ID</label>
+          <input type="text" id="smm-txid" name="txid" class="form-input mt-1" placeholder="Payment screenshot TXID" required data-validate="txid" data-error-message="Transaction ID is required.">
+          <span class="error-message text-xs"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full text-lg">Submit Order</button>
+      </form>
     </div>
+  </main>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="toast"></div>
+  <nav class="bottom-nav md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 grid grid-cols-4">
+    <a href="index.html" class="flex flex-col items-center p-3 text-gray-600 dark:text-gray-300">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>
+      <span class="text-xs font-medium">Home</span>
+    </a>
+    <a href="services.html" class="flex flex-col items-center p-3 text-primary">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25A2.25 2.25 0 0113.5 8.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" /></svg>
+      <span class="text-xs font-medium">Services</span>
+    </a>
+    <a href="status.html" class="flex flex-col items-center p-3 text-gray-600 dark:text-gray-300">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+      <span class="text-xs font-medium">Status</span>
+    </a>
+    <a href="faq.html" class="flex flex-col items-center p-3 text-gray-600 dark:text-gray-300">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" /></svg>
+      <span class="text-xs font-medium">Support</span>
+    </a>
+  </nav>
 
-    <script src="script.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize user info
-            const userId = localStorage.getItem('userId');
-            document.getElementById('userId').value = userId;
-            
-            // Initialize device detection
-            const device = detectDevice();
-            document.getElementById('userDevice').value = device;
-            
-            // Initialize auto-calculation
-            initAutoCalculation('smm');
-            
-            // Form submission
-            document.getElementById('smmOrderForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                submitOrderForm('smmOrderForm', 'order_smm');
-            });
-            
-            // Update payment number based on selection
-            document.querySelectorAll('input[name="payment"]').forEach(radio => {
-                radio.addEventListener('change', function() {
-                    const paymentNumbers = {
-                        'KBZ Pay': '09 123 456 789',
-                        'Wave Money': '09 987 654 321',
-                        'CB Pay': '09 555 666 777'
-                    };
-                    document.getElementById('paymentNumber').value = paymentNumbers[this.value] || '09XXXXXXX';
-                });
-            });
-            
-            // Update services based on platform selection
-            document.getElementById('platform').addEventListener('change', function() {
-                const serviceSelect = document.getElementById('service');
-                const platform = this.value;
-                
-                // Clear existing options except the first one
-                serviceSelect.innerHTML = '<option value="">Select Service</option>';
-                
-                if (platform === 'facebook') {
-                    serviceSelect.innerHTML += `
-                        <optgroup label="Facebook">
-                            <option value="fb-likes">Facebook Likes - 2,000 MMK/1,000</option>
-                            <option value="fb-followers">Facebook Followers - 3,500 MMK/1,000</option>
-                            <option value="fb-comments">Facebook Comments - 4,000 MMK/1,000</option>
-                        </optgroup>
-                    `;
-                } else if (platform === 'instagram') {
-                    serviceSelect.innerHTML += `
-                        <optgroup label="Instagram">
-                            <option value="ig-followers">Instagram Followers - 4,000 MMK/1,000</option>
-                            <option value="ig-likes">Instagram Likes - 2,500 MMK/1,000</option>
-                            <option value="ig-views">Instagram Views - 1,500 MMK/1,000</option>
-                        </optgroup>
-                    `;
-                } else if (platform === 'youtube') {
-                    serviceSelect.innerHTML += `
-                        <optgroup label="YouTube">
-                            <option value="yt-subscribers">YouTube Subscribers - 8,000 MMK/1,000</option>
-                            <option value="yt-likes">YouTube Likes - 3,000 MMK/1,000</option>
-                            <option value="yt-views">YouTube Views - 2,000 MMK/1,000</option>
-                        </optgroup>
-                    `;
-                } else if (platform === 'tiktok') {
-                    serviceSelect.innerHTML += `
-                        <optgroup label="TikTok">
-                            <option value="tt-followers">TikTok Followers - 5,000 MMK/1,000</option>
-                            <option value="tt-likes">TikTok Likes - 2,000 MMK/1,000</option>
-                            <option value="tt-views">TikTok Views - 1,000 MMK/1,000</option>
-                        </optgroup>
-                    `;
-                }
-            });
-        });
-    </script>
+  <script src="script.js" defer></script>
 </body>
 </html>
+
+    
