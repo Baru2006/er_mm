@@ -1,0 +1,18 @@
+{
+  "name": "easyrecharge-mm-vercel",
+  "version": "1.0.0",
+  "description": "Myanmar Mobile Recharge Service with Vercel and Google Sheets",
+  "private": true,
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "google-auth-library": "^9.14.0",
+    "google-spreadsheet": "^4.1.2"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}
