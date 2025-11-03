@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="my" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - EasyRecharge MM</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter and Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Font Awesome for Icons (Alternative to inline SVG) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-body transition-colors duration-300">
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-5 right-5 z-50 space-y-3"></div>
+
+    <div class="flex flex-col md:flex-row min-h-screen">
+        
+        <!-- Mobile Header (Visible on mobile only) -->
+        <header class="md:hidden bg-white dark:bg-gray-800 shadow-md p-4 flex justify-between items-center sticky top-0 z-40">
+            <a href="index.html" class="text-2xl font-bold font-heading text-primary">EasyRecharge</a>
+            <div class="flex items-center space-x-3">
+                <button id="theme-toggle-mobile" class="text-xl">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button id="mobile-menu-btn" class="text-2xl">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Sidebar / Navigation -->
+        <nav id="sidebar" class="bg-white dark:bg-gray-800 shadow-lg w-64 min-h-screen p-6 hidden md:flex flex-col fixed md:relative transform -translate-x-full md:translate-x-0 transition-transform duration-300 z-50">
+            <a href="index.html" class="text-3xl font-bold font-heading text-primary mb-8">EasyRecharge</a>
+            
+            <ul class="space-y-3">
+                <li><a href="index.html" class="nav-link active"><i class="fas fa-home w-6"></i> Dashboard</a></li>
+                <li><a href="services.html" class="nav-link"><i class="fas fa-th-large w-6"></i> Services</a></li>
+                <li><a href="status.html" class="nav-link"><i class="fas fa-history w-6"></i> Order Status</a></li>
+                <li><a href="pay.html" class="nav-link"><i class="fas fa-exchange-alt w-6"></i> P2P Exchange</a></li>
+                <li><a href="faq.html" class="nav-link"><i class="fas fa-question-circle w-6"></i> FAQ & Support</a></li>
+            </ul>
+            
+            <div class="mt-auto">
+                <div class="flex items-center justify-between">
+                    <span class="text-sm text-gray-500">Dark Mode</span>
+                    <button id="theme-toggle" class="relative inline-flex items-center h-6 rounded-full w-11 transition-colors bg-gray-200 dark:bg-gray-700">
+                        <span class="inline-block w-4 h-4 transform bg-white rounded-full transition-transform translate-x-1 dark:translate-x-6"></span>
+                    </button>
+                </div>
+                <a href="admin.html" class="nav-link mt-4 text-sm"><i class="fas fa-cog w-6"></i> Admin Panel</a>
+            </div>
+        </nav>
+        
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-overlay" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden" aria-hidden="true"></div>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-4 md:p-8 overflow-y-auto">
+            
+            <!-- Header -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+                <div>
+                    <h1 class="text-3xl font-bold font-heading">Dashboard</h1>
+                    <p class="text-gray-500 dark:text-gray-400">Welcome back! Here's your summary.</p>
+                </div>
+                <!-- User Profile Card -->
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm flex items-center space-x-3 mt-4 sm:mt-0">
+                    <img id="user-avatar" src="https://ui-avatars.com/api/?name=User&background=3b82f6&color=fff&rounded=true" alt="User Avatar" class="w-12 h-12 rounded-full">
+                    <div>
+                        <span class="font-semibold">User ID:</span>
+                        <div class="flex items-center">
+                            <code id="user-id-display" class="text-xs text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 p-1 rounded">Loading...</code>
+                            <button id="copy-user-id" class="ml-2 text-gray-400 hover:text-primary" title="Copy User ID">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6">
+                <!-- Total Orders -->
+                <div class="stat-card bg-blue-500 dark:bg-blue-600">
+                    <div class="stat-icon bg-blue-600 dark:bg-blue-700">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div>
+                        <p class="stat-title">Total Orders</p>
+                        <p id="stat-total-orders" class="stat-value">...</p>
+                    </div>
+                </div>
+                <!-- Total Spent -->
+                <div class="stat-card bg-green-500 dark:bg-green-600">
+                    <div class="stat-icon bg-green-600 dark:bg-green-700">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div>
+                        <p class="stat-title">Total Spent (Ks)</p>
+                        <p id="stat-total-spent" class="stat-value">...</p>
+                    </div>
+                </div>
+                <!-- Pending Orders -->
+                <div class="stat-card bg-yellow-500 dark:bg-yellow-600">
+                    <div class="stat-icon bg-yellow-600 dark:bg-yellow-700">
+                        <i class="fas fa-hourglass-half"></i>
+                    </div>
+                    <div>
+                        <p class="stat-title">Pending Orders</p>
+                        <p id="stat-pending-orders" class="stat-value">...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Services Grid -->
+            <h2 class="text-2xl font-bold font-heading mb-4">Quick Services</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
+                <a href="order_sim.html" class="service-card">
+                    <i class="fas fa-sim-card text-3xl text-primary"></i>
+                    <span class="font-semibold mt-2">SIM Recharge</span>
+                </a>
+                <a href="order_game.html" class="service-card">
+                    <i class="fas fa-gamepad text-3xl text-purple-500"></i>
+                    <span class="font-semibold mt-2">Game Top-up</span>
+                </a>
+                <a href="order_smm.html" class="service-card">
+                    <i class="fas fa-bolt text-3xl text-yellow-500"></i>
+                    <span class="font-semibold mt-2">SMM Services</span>
+                </a>
+                <a href="pay.html" class="service-card">
+                    <i class="fas fa-exchange-alt text-3xl text-green-500"></i>
+                    <span class="font-semibold mt-2">P2P Exchange</span>
+                </a>
+            </div>
+
+            <!-- Recent Orders Table -->
+            <h2 class="text-2xl font-bold font-heading mb-4">Recent Orders</h2>
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full min-w-max">
+                        <thead class="bg-gray-50 dark:bg-gray-700 text-left">
+                            <tr>
+                                <th class="table-header">Order ID</th>
+                                <th class="table-header">Service</th>
+                                <th class="table-header">Total (Ks)</th>
+                                <th class="table-header">Status</th>
+                                <th class="table-header">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recent-orders-table" class="divide-y divide-gray-200 dark:divide-gray-700">
+                            <!-- Loading State -->
+                            <tr>
+                                <td colspan="5" class="p-6 text-center text-gray-500">
+                                    <i class="fas fa-spinner fa-spin mr-2"></i> Loading recent orders...
+                                </td>
+                            </tr>
+                            <!-- Empty State (template) -->
+                            <!--
+                            <tr>
+                                <td colspan="5" class="p-6 text-center text-gray-500">
+                                    <i class="fas fa-box-open mr-2"></i> No recent orders found.
+                                </td>
+                            </tr>
+                            -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="p-4 bg-gray-50 dark:bg-gray-700 border-t border-gray-100 dark:border-gray-600">
+                    <a href="status.html" class="text-sm font-medium text-primary hover:underline">
+                        View All Orders <i class="fas fa-arrow-right ml-1"></i>
+                    </a>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Core JavaScript -->
+    <script src="js/price-config.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
+
+              
