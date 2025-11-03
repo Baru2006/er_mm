@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  const GAS_URL = 'https://script.google.com/macros/s/AKfycbzi8QWL3oQUJzxzvOZrMT5rlEz6hpCoI3cATJnBYIHNLaJTUDaChYe908I6qIzBVd3iew/exec';
+  const API_BASE = window.location.origin;
   
   const SERVICE_PRICES = {
     sim: {
@@ -135,102 +135,103 @@
     }
   }
 
+  // NEW API FUNCTIONS FOR VERCEL
   async function fetchAPI(payload) {
-    let retries = 3;
-    while (retries > 0) {
-      try {
-        console.log('Sending request to:', GAS_URL);
-        console.log('Payload:', payload);
-        
-        const response = await fetch(GAS_URL, {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(payload)
-        });
+    try {
+      console.log('Sending order to Vercel API:', payload);
+      
+      const response = await fetch(`${API_BASE}/api/submit-order`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
 
-        console.log('Response status:', response.status);
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const text = await response.text();
-        console.log('Raw response:', text);
-        
-        let result;
-        try {
-          result = JSON.parse(text);
-        } catch (parseError) {
-          console.error('JSON parse error:', parseError);
-          throw new Error('Invalid JSON response from server');
-        }
-        
-        if (result.status === 'success') {
-          return result.data;
-        } else {
-          throw new Error(result.message || 'API returned error');
-        }
-
-      } catch (error) {
-        console.error(`API Error (${retries} retries left):`, error);
-        retries--;
-        if (retries === 0) {
-          showToast(`Error: ${error.message}`, 'error');
-          throw error;
-        }
-        await new Promise(res => setTimeout(res, 1000));
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
+      
+      const result = await response.json();
+      
+      if (result.status === 'success') {
+        return result.data;
+      } else {
+        throw new Error(result.data?.message || 'API error');
+      }
+
+    } catch (error) {
+      console.error('API Error:', error);
+      showToast(`Error: ${error.message}`, 'error');
+      throw error;
     }
-    return null;
   }
 
   async function fetchAPIGet(params) {
-    const url = new URL(GAS_URL);
-    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-    
-    let retries = 3;
-    while (retries > 0) {
-      try {
-        console.log('Sending GET request to:', url.toString());
-        
-        const response = await fetch(url, {
-          method: 'GET',
-        });
+    try {
+      const url = `${API_BASE}/api/get-orders?${new URLSearchParams(params)}`;
+      console.log('Fetching orders from Vercel API:', url);
+      
+      const response = await fetch(url);
 
-        console.log('GET Response status:', response.status);
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const text = await response.text();
-        console.log('GET Raw response:', text);
-        
-        let result;
-        try {
-          result = JSON.parse(text);
-        } catch (parseError) {
-          console.error('JSON parse error:', parseError);
-          throw new Error('Invalid JSON response from server');
-        }
-        
-        if (result.status === 'success') {
-          return result.data;
-        } else {
-          throw new Error(result.message || 'API error');
-        }
-      } catch (error) {
-        console.error(`GET API Error (${retries} retries left):`, error);
-        retries--;
-        if (retries === 0) {
-          showToast(`Error: ${error.message}`, 'error');
-        }
-        await new Promise(res => setTimeout(res, 1000 * (3 - retries)));
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
+      
+      const result = await response.json();
+      
+      if (result.status === 'success') {
+        return result.data;
+      } else {
+        throw new Error(result.data?.message || 'API error');
+      }
+    } catch (error) {
+      console.error('API Error:', error);
+      showToast(`Error: ${error.message}`, 'error');
+      throw error;
     }
-    return null;
+  }
+
+  async function fetchStatsAPI(userId) {
+    try {
+      const response = await fetch(`${API_BASE}/api/get-stats?userId=${userId}`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      
+      if (result.status === 'success') {
+        return result.data;
+      } else {
+        throw new Error(result.data?.message || 'API error');
+      }
+    } catch (error) {
+      console.error('Stats API Error:', error);
+      throw error;
+    }
+  }
+
+  async function fetchAdminDataAPI() {
+    try {
+      const response = await fetch(`${API_BASE}/api/admin`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      
+      if (result.status === 'success') {
+        return result.data;
+      } else {
+        throw new Error(result.data?.message || 'API error');
+      }
+    } catch (error) {
+      console.error('Admin API Error:', error);
+      throw error;
+    }
   }
 
   function validateField(input, rule) {
@@ -581,10 +582,7 @@
 
   function initDashboard() {
     async function fetchStats() {
-      const data = await fetchAPIGet({
-        action: 'stats',
-        userId: localStorage.getItem('userId')
-      });
+      const data = await fetchStatsAPI(localStorage.getItem('userId'));
       
       if (data) {
         const totalOrdersEl = document.getElementById('stats-total-orders');
@@ -599,7 +597,6 @@
     
     async function fetchRecentOrders() {
       const data = await fetchAPIGet({
-        action: 'list',
         userId: localStorage.getItem('userId'),
         limit: 5
       });
@@ -609,7 +606,7 @@
         if (!data || data.length === 0) {
           tableBody.innerHTML = `<tr><td colspan="4" class="text-center py-4">No recent orders.</td></tr>`;
           return;
-        }
+                    }
         
         tableBody.innerHTML = data
           .map(order => `
@@ -644,7 +641,6 @@
 
     async function fetchOrders(filter = 'all') {
       const data = await fetchAPIGet({
-        action: 'list',
         userId: localStorage.getItem('userId'),
         filter: filter
       });
@@ -737,7 +733,7 @@
     let allOrders = [];
 
     async function fetchAdminData() {
-      const data = await fetchAPIGet({ action: 'adminData' });
+      const data = await fetchAdminDataAPI();
       if (lastUpdate) {
         lastUpdate.textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
       }
