@@ -1,0 +1,7 @@
+{
+  "name": "er_mm",
+  "version": "1.0.0", 
+  "dependencies": {
+    "googleapis": "^126.0.1"
+  }
+}
