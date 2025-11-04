@@ -1,3 +1,4 @@
+/* EasyRecharge MM - Custom Styles */
 :root {
     --primary: #3b82f6;
     --success: #10b981;
@@ -8,158 +9,89 @@
     --border: #e5e7eb;
 }
 
-/* Toast Notifications */
-.toast {
-    padding: 12px 16px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    min-width: 300px;
-    max-width: 400px;
-    animation: slideIn 0.3s ease-out;
-}
-
-.toast.success {
-    background-color: #d1fae5;
-    color: #065f46;
-    border-left: 4px solid #10b981;
-}
-
-.toast.error {
-    background-color: #fee2e2;
-    color: #991b1b;
-    border-left: 4px solid #ef4444;
-}
-
-.toast.warning {
-    background-color: #fef3c7;
-    color: #92400e;
-    border-left: 4px solid #f59e0b;
-}
-
-.toast.info {
-    background-color: #dbeafe;
-    color: #1e40af;
-    border-left: 4px solid #3b82f6;
-}
-
-@keyframes slideIn {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-/* Service Cards */
-.service-card {
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
+/* Custom Styles */
 .service-card:hover {
     transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
 }
 
 /* Form Styles */
 .form-input {
-    width: 100%;
-    padding: 12px 16px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-size: 14px;
-    transition: all 0.3s ease;
-}
-
-.form-input:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200;
 }
 
 .form-input.error {
-    border-color: var(--error);
+    @apply border-red-500 focus:ring-red-500;
+}
+
+.form-input.success {
+    @apply border-green-500 focus:ring-green-500;
+}
+
+/* Button Styles */
+.btn-primary {
+    @apply bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+}
+
+.btn-secondary {
+    @apply bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2;
+}
+
+.btn-success {
+    @apply bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 focus:ring-2 focus:ring-green-500 focus:ring-offset-2;
 }
 
 /* Status Badges */
 .status-badge {
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 500;
-    text-transform: capitalize;
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
 }
 
 .status-pending {
-    background-color: #fef3c7;
-    color: #92400e;
+    @apply bg-yellow-100 text-yellow-800;
 }
 
 .status-processing {
-    background-color: #dbeafe;
-    color: #1e40af;
+    @apply bg-blue-100 text-blue-800;
 }
 
 .status-completed {
-    background-color: #d1fae5;
-    color: #065f46;
+    @apply bg-green-100 text-green-800;
 }
 
 .status-cancelled {
-    background-color: #fee2e2;
-    color: #991b1b;
+    @apply bg-red-100 text-red-800;
 }
 
-/* Accordion Styles */
-.accordion-item {
-    border-bottom: 1px solid var(--border);
+/* Toast Notifications */
+.toast-success {
+    @apply bg-green-500 text-white;
 }
 
-.accordion-header {
-    padding: 16px 0;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.toast-error {
+    @apply bg-red-500 text-white;
 }
 
-.accordion-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease;
+.toast-warning {
+    @apply bg-yellow-500 text-white;
 }
 
-.accordion-content.active {
-    max-height: 500px;
+.toast-info {
+    @apply bg-blue-500 text-white;
 }
 
-.accordion-icon {
-    transition: transform 0.3s ease;
-}
-
-.accordion-icon.rotated {
-    transform: rotate(180deg);
-}
-
-/* Loading States */
-.loading {
-    opacity: 0.6;
-    pointer-events: none;
-}
-
+/* Loading Spinner */
 .loading-spinner {
-    border: 2px solid #f3f3f3;
-    border-top: 2px solid var(--primary);
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3b82f6;
     border-radius: 50%;
-    width: 20px;
-    height: 20px;
+    width: 40px;
+    height: 40px;
     animation: spin 1s linear infinite;
-    display: inline-block;
 }
 
 @keyframes spin {
@@ -167,38 +99,86 @@
     100% { transform: rotate(360deg); }
 }
 
-/* Admin Table */
-.admin-table {
-    width: 100%;
-    border-collapse: collapse;
+/* Accordion Styles */
+.accordion-item {
+    @apply border-b border-gray-200;
 }
 
-.admin-table th,
-.admin-table td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid var(--border);
+.accordion-header {
+    @apply flex justify-between items-center py-4 px-4 cursor-pointer hover:bg-gray-50 transition-colors;
+}
+
+.accordion-content {
+    @apply overflow-hidden transition-all duration-300;
+}
+
+.accordion-content.hidden {
+    max-height: 0;
+    opacity: 0;
+}
+
+.accordion-content:not(.hidden) {
+    max-height: 500px;
+    opacity: 1;
+}
+
+/* Table Styles */
+.admin-table {
+    @apply w-full bg-white rounded-lg overflow-hidden shadow-sm;
 }
 
 .admin-table th {
-    background-color: #f9fafb;
-    font-weight: 600;
-    color: var(--text);
+    @apply bg-gray-50 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider;
 }
 
-/* Responsive Design */
+.admin-table td {
+    @apply px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-t border-gray-200;
+}
+
+/* Mobile Responsive */
 @media (max-width: 768px) {
     .container {
-        padding-left: 16px;
-        padding-right: 16px;
-    }
-    
-    .toast {
-        min-width: 280px;
-        max-width: 320px;
+        @apply px-3;
     }
     
     .admin-table {
-        font-size: 14px;
+        @apply text-xs;
     }
-        }
+    
+    .admin-table th,
+    .admin-table td {
+        @apply px-3 py-2;
+    }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Print Styles */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .dark-mode-support {
+        @apply bg-gray-900 text-white;
+    }
+    }
