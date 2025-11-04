@@ -1,0 +1,102 @@
+/*
+ * ----------------------------------------------------
+ * EasyRecharge-MM Project - style.css
+ * ----------------------------------------------------
+ * Note: Uses Tailwind CSS CDN for utility classes.
+ * This file adds custom components and design system overrides.
+ */
+
+/* 1. Design System & Variables */
+:root {
+    --primary: #3b82f6;   /* Blue-500 */
+    --success: #10b981;   /* Emerald-500 */
+    --warning: #f59e0b;   /* Amber-500 */
+    --error: #ef4444;     /* Red-500 */
+    --background: #f9fafb; /* Gray-50 */
+    --card-bg: #ffffff;
+    --text-primary: #1f2937; /* Gray-800 */
+    --text-secondary: #6b7280; /* Gray-500 */
+    --border: #e5e7eb;    /* Gray-200 */
+    --font-myanmar: 'Padauk', 'Noto Sans Myanmar', sans-serif;
+}
+
+body {
+    font-family: var(--font-myanmar);
+    background-color: var(--background);
+    color: var(--text-primary);
+}
+
+/* 2. Custom Components & Overrides */
+
+/* Header & Navigation */
+.nav-link {
+    @apply text-lg font-medium text-gray-700 hover:text-primary transition duration-150 ease-in-out px-3 py-2 rounded-lg;
+}
+.nav-link.active {
+    @apply bg-primary text-white hover:text-white;
+}
+
+/* Service Cards (used in index.html Quick Services & services.html) */
+.service-card {
+    @apply bg-card-bg shadow-lg rounded-xl p-6 flex flex-col items-center text-center transition-all duration-300 ease-in-out border border-border hover:border-primary hover:shadow-xl;
+}
+.service-card-icon {
+    @apply text-5xl mb-3 text-primary;
+}
+
+/* Status Badges */
+.status-badge {
+    @apply text-xs font-semibold px-2.5 py-0.5 rounded-full;
+}
+.status-badge.pending {
+    @apply bg-yellow-100 text-warning;
+}
+.status-badge.processing {
+    @apply bg-blue-100 text-primary;
+}
+.status-badge.success {
+    @apply bg-green-100 text-success;
+}
+.status-badge.cancelled {
+    @apply bg-red-100 text-error;
+}
+
+/* Form Elements */
+.form-input {
+    @apply w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition duration-150;
+}
+.btn-primary {
+    @apply w-full py-3 px-6 bg-primary text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition duration-150 disabled:bg-gray-400;
+}
+.btn-secondary {
+    @apply w-full py-3 px-6 bg-gray-200 text-text-primary font-semibold rounded-lg shadow-sm hover:bg-gray-300 transition duration-150;
+}
+
+/* Toast Notifications */
+#toast-container {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 50;
+    width: 300px;
+}
+.toast {
+    @apply p-4 mb-3 rounded-lg shadow-xl text-white font-medium transition-opacity duration-300 ease-in-out opacity-0;
+}
+.toast.success {
+    @apply bg-success;
+}
+.toast.error {
+    @apply bg-error;
+}
+
+/* 3. Admin Panel Table (Responsiveness) */
+.admin-table-container {
+    @apply overflow-x-auto;
+}
+.admin-table {
+    @apply w-full text-left whitespace-nowrap;
+}
+.admin-table th, .admin-table td {
+    @apply px-4 py-3 border-b border-border;
+}
