@@ -1,143 +1,176 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="my">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Services - EasyRecharge MM</title>
+    <title>ဝန်ဆောင်မှုများ - EasyRecharge MM</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-50">
+    <!-- Header -->
     <header class="bg-white shadow-sm">
         <div class="container mx-auto px-4 py-3">
             <div class="flex justify-between items-center">
                 <div class="flex items-center space-x-2">
-                    <div class="w-8 h-8 bg-blue-600 rounded-full"></div>
-                    <a href="index.html" class="text-xl font-bold text-gray-800">EasyRecharge MM</a>
+                    <a href="index.html" class="flex items-center space-x-2">
+                        <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-bolt text-white text-lg"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold text-gray-800">EasyRecharge MM</h1>
+                            <p class="text-xs text-gray-500">Mobile Recharge & Top-up</p>
+                        </div>
+                    </a>
                 </div>
                 <nav class="hidden md:flex space-x-6">
-                    <a href="index.html" class="text-gray-600 hover:text-blue-600">Dashboard</a>
-                    <a href="services.html" class="text-blue-600 font-medium">Services</a>
-                    <a href="status.html" class="text-gray-600 hover:text-blue-600">Orders</a>
-                    <a href="faq.html" class="text-gray-600 hover:text-blue-600">Help</a>
+                    <a href="index.html" class="text-gray-600 hover:text-blue-600">ပင်မစာမျက်နှာ</a>
+                    <a href="services.html" class="text-blue-600 font-medium">ဝန်ဆောင်မှုများ</a>
+                    <a href="status.html" class="text-gray-600 hover:text-blue-600">အမှာစာများ</a>
+                    <a href="faq.html" class="text-gray-600 hover:text-blue-600">အကူအညီ</a>
                 </nav>
                 <button class="md:hidden text-gray-600">
-                    <i class="fas fa-bars"></i>
+                    <i class="fas fa-bars text-xl"></i>
                 </button>
             </div>
         </div>
     </header>
 
+    <!-- Main Content -->
     <main class="container mx-auto px-4 py-8">
-        <div class="text-center mb-12">
-            <h1 class="text-3xl font-bold text-gray-800 mb-4">Our Services</h1>
-            <p class="text-gray-600 max-w-2xl mx-auto">Choose from our wide range of digital services designed for Myanmar users</p>
+        <!-- Page Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">ဝန်ဆောင်မှုများ</h1>
+            <p class="text-gray-600">လိုချင်သော ဝန်ဆောင်မှုကို ရွေးချယ်ပါ</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Services Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
             <!-- SIM Recharge -->
-            <a href="order_sim.html" class="service-card bg-white rounded-xl shadow-sm p-8 hover:shadow-lg transition-all duration-300 border border-gray-100">
-                <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-sim-card text-blue-600 text-2xl"></i>
-                </div>
-                <h3 class="text-xl font-semibold text-gray-800 text-center mb-3">SIM Recharge</h3>
-                <p class="text-gray-600 text-center mb-4">Mobile data packages and top-ups for all major Myanmar carriers</p>
-                <div class="text-center">
-                    <span class="inline-flex items-center text-blue-600 font-medium">
-                        Order Now <i class="fas fa-arrow-right ml-2"></i>
-                    </span>
+            <a href="order_sim.html" class="service-card group">
+                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group-hover:border-blue-200">
+                    <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-blue-500 transition-colors duration-300">
+                        <i class="fas fa-sim-card text-blue-600 text-2xl group-hover:text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">SIM Recharge</h3>
+                    <p class="text-gray-600 mb-4">ဒေတာ / ဖုန်းဘေလ် / အင်တာနက်ပက်ကေ့ချ်များ</p>
+                    <div class="flex items-center text-blue-600 font-medium">
+                        <span>အမှာစာပေးရန်</span>
+                        <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform duration-300"></i>
+                    </div>
                 </div>
             </a>
 
             <!-- Game Top-up -->
-            <a href="order_game.html" class="service-card bg-white rounded-xl shadow-sm p-8 hover:shadow-lg transition-all duration-300 border border-gray-100">
-                <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-gamepad text-purple-600 text-2xl"></i>
-                </div>
-                <h3 class="text-xl font-semibold text-gray-800 text-center mb-3">Game Top-up</h3>
-                <p class="text-gray-600 text-center mb-4">Instant diamond and credit top-ups for popular mobile games</p>
-                <div class="text-center">
-                    <span class="inline-flex items-center text-purple-600 font-medium">
-                        Order Now <i class="fas fa-arrow-right ml-2"></i>
-                    </span>
+            <a href="order_game.html" class="service-card group">
+                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group-hover:border-green-200">
+                    <div class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-green-500 transition-colors duration-300">
+                        <i class="fas fa-gamepad text-green-600 text-2xl group-hover:text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Game Top-up</h3>
+                    <p class="text-gray-600 mb-4">Free Fire, PUBG, Mobile Legends စသည့် ဂိမ်းကဒ်များ</p>
+                    <div class="flex items-center text-green-600 font-medium">
+                        <span>အမှာစာပေးရန်</span>
+                        <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform duration-300"></i>
+                    </div>
                 </div>
             </a>
 
             <!-- SMM Services -->
-            <a href="order_smm.html" class="service-card bg-white rounded-xl shadow-sm p-8 hover:shadow-lg transition-all duration-300 border border-gray-100">
-                <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-bolt text-yellow-600 text-2xl"></i>
-                </div>
-                <h3 class="text-xl font-semibold text-gray-800 text-center mb-3">SMM Services</h3>
-                <p class="text-gray-600 text-center mb-4">Boost your social media presence with likes, followers, and views</p>
-                <div class="text-center">
-                    <span class="inline-flex items-center text-yellow-600 font-medium">
-                        Order Now <i class="fas fa-arrow-right ml-2"></i>
-                    </span>
+            <a href="order_smm.html" class="service-card group">
+                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group-hover:border-purple-200">
+                    <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-purple-500 transition-colors duration-300">
+                        <i class="fas fa-bolt text-purple-600 text-2xl group-hover:text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">SMM Services</h3>
+                    <p class="text-gray-600 mb-4">Facebook, Instagram, YouTube Followers, Likes, Views များ</p>
+                    <div class="flex items-center text-purple-600 font-medium">
+                        <span>အမှာစာပေးရန်</span>
+                        <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform duration-300"></i>
+                    </div>
                 </div>
             </a>
 
             <!-- P2P Exchange -->
-            <a href="pay.html" class="service-card bg-white rounded-xl shadow-sm p-8 hover:shadow-lg transition-all duration-300 border border-gray-100">
-                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-exchange-alt text-green-600 text-2xl"></i>
-                </div>
-                <h3 class="text-xl font-semibold text-gray-800 text-center mb-3">P2P Exchange</h3>
-                <p class="text-gray-600 text-center mb-4">Secure peer-to-peer digital currency exchange with low fees</p>
-                <div class="text-center">
-                    <span class="inline-flex items-center text-green-600 font-medium">
-                        Exchange Now <i class="fas fa-arrow-right ml-2"></i>
-                    </span>
+            <a href="pay.html" class="service-card group">
+                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group-hover:border-orange-200">
+                    <div class="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-orange-500 transition-colors duration-300">
+                        <i class="fas fa-exchange-alt text-orange-600 text-2xl group-hover:text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">P2P Exchange</h3>
+                    <p class="text-gray-600 mb-4">KBZPay, WavePay, AYA Pay, UAB Pay အပြန်အလှန်ငွေလွှဲခြင်း</p>
+                    <div class="flex items-center text-orange-600 font-medium">
+                        <span>ငွေလွှဲရန်</span>
+                        <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform duration-300"></i>
+                    </div>
                 </div>
             </a>
 
             <!-- Order Status -->
-            <a href="status.html" class="service-card bg-white rounded-xl shadow-sm p-8 hover:shadow-lg transition-all duration-300 border border-gray-100">
-                <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-clipboard-list text-orange-600 text-2xl"></i>
-                </div>
-                <h3 class="text-xl font-semibold text-gray-800 text-center mb-3">Order Status</h3>
-                <p class="text-gray-600 text-center mb-4">Track your orders in real-time with automatic status updates</p>
-                <div class="text-center">
-                    <span class="inline-flex items-center text-orange-600 font-medium">
-                        Check Status <i class="fas fa-arrow-right ml-2"></i>
-                    </span>
+            <a href="status.html" class="service-card group">
+                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group-hover:border-indigo-200">
+                    <div class="w-16 h-16 bg-indigo-100 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-indigo-500 transition-colors duration-300">
+                        <i class="fas fa-clipboard-list text-indigo-600 text-2xl group-hover:text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Order Status</h3>
+                    <p class="text-gray-600 mb-4">အမှာစာများ၏ အခြေအနေကို စစ်ဆေးခြင်း နှင့် မှတ်တမ်းကြည့်ခြင်း</p>
+                    <div class="flex items-center text-indigo-600 font-medium">
+                        <span>စစ်ဆေးရန်</span>
+                        <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform duration-300"></i>
+                    </div>
                 </div>
             </a>
 
             <!-- FAQ & Support -->
-            <a href="faq.html" class="service-card bg-white rounded-xl shadow-sm p-8 hover:shadow-lg transition-all duration-300 border border-gray-100">
-                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-question-circle text-red-600 text-2xl"></i>
-                </div>
-                <h3 class="text-xl font-semibold text-gray-800 text-center mb-3">FAQ & Support</h3>
-                <p class="text-gray-600 text-center mb-4">Get answers to common questions and contact support</p>
-                <div class="text-center">
-                    <span class="inline-flex items-center text-red-600 font-medium">
-                        Get Help <i class="fas fa-arrow-right ml-2"></i>
-                    </span>
+            <a href="faq.html" class="service-card group">
+                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group-hover:border-red-200">
+                    <div class="w-16 h-16 bg-red-100 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-red-500 transition-colors duration-300">
+                        <i class="fas fa-question-circle text-red-600 text-2xl group-hover:text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">FAQ & Support</h3>
+                    <p class="text-gray-600 mb-4">အမေးများသောမေးခွန်းများ နှင့် အကူအညီရယူခြင်း</p>
+                    <div class="flex items-center text-red-600 font-medium">
+                        <span>ကြည့်ရန်</span>
+                        <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform duration-300"></i>
+                    </div>
                 </div>
             </a>
         </div>
+
+        <!-- Quick Stats -->
+        <div class="max-w-6xl mx-auto mt-12 bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">ဝန်ဆောင်မှုအကြောင်း</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                <div>
+                    <div class="text-2xl font-bold text-blue-600">၂၄/၇</div>
+                    <p class="text-gray-600">ဝန်ဆောင်မှုပေးခြင်း</p>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold text-green-600">၅-၁၀ မိနစ်</div>
+                    <p class="text-gray-600">အမြန်ဆုံးဆောင်ရွက်ခြင်း</p>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold text-purple-600">၁၀၀%</div>
+                    <p class="text-gray-600">စိတ်ချရမှု</p>
+                </div>
+            </div>
+        </div>
     </main>
 
+    <!-- Footer -->
     <footer class="bg-white border-t border-gray-200 mt-12">
         <div class="container mx-auto px-4 py-6">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="mb-4 md:mb-0">
-                    <p class="text-gray-600">&copy; 2024 EasyRecharge MM. All rights reserved.</p>
-                </div>
-                <div class="flex space-x-6">
-                    <a href="privacy_policy.html" class="text-gray-600 hover:text-blue-600">Privacy Policy</a>
-                    <a href="faq.html" class="text-gray-600 hover:text-blue-600">FAQ</a>
-                    <a href="#" class="text-gray-600 hover:text-blue-600">Contact</a>
+            <div class="text-center">
+                <p class="text-gray-600">&copy; 2024 EasyRecharge MM. All rights reserved.</p>
+                <div class="flex justify-center space-x-4 mt-2">
+                    <a href="privacy_policy.html" class="text-gray-500 hover:text-blue-600 text-sm">Privacy Policy</a>
+                    <a href="faq.html" class="text-gray-500 hover:text-blue-600 text-sm">FAQ & Support</a>
                 </div>
             </div>
         </div>
     </footer>
 
-    <div id="toastContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
     <script src="script.js"></script>
 </body>
-                      </html>
+            </html>
