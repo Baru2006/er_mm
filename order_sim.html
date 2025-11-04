@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIM/Data ဖြည့်သွင်း - EasyRecharge MM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="style.css">
+    <style>@import url('https://fonts.googleapis.com/css2?family=Padauk:wght@400;700&display=swap');</style>
+</head>
+<body class="bg-gray-50">
+
+    <div id="toast-container"></div>
+
+    <header class="bg-white shadow-md sticky top-0 z-10">...</header> <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <a href="services.html" class="text-primary hover:text-blue-600 mb-4 inline-block"><i class="fas fa-arrow-left mr-2"></i> ဝန်ဆောင်မှုများသို့</a>
+        <div class="bg-white p-6 sm:p-8 shadow-xl rounded-xl border border-gray-100">
+            <h1 class="text-3xl font-bold mb-6 text-text-primary text-center">SIM/Data ဖြည့်သွင်းရန်</h1>
+            <p class="text-center text-gray-500 mb-8">ကျေးဇူးပြု၍ ဖုန်းနံပါတ်နှင့် လိုအပ်သည့် ဝန်ဆောင်မှုများကို ရွေးချယ်ပါ။</p>
+
+            <form id="sim-recharge-form" class="space-y-6">
+                <div>
+                    <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">လက်ခံမည့် ဖုန်းနံပါတ် <span class="text-red-500">*</span></label>
+                    <input type="tel" id="sim-phone" name="phone" placeholder="ဥပမာ: 09xxxxxxxx" class="form-input" required pattern="^09\d{7,9}$">
+                    <p class="mt-1 text-xs text-gray-500">MPT, Telenor/Ooredoo နံပါတ်များကိုသာ ဖြည့်သွင်းနိုင်ပါသည် (09 ဖြင့် စတင်ရမည်)</p>
+                </div>
+
+                <div>
+                    <label for="service" class="block text-sm font-medium text-gray-700 mb-2">ဝန်ဆောင်မှု ရွေးချယ်ပါ <span class="text-red-500">*</span></label>
+                    <select id="sim-service" name="service" class="form-input" required>
+                        <option value="" disabled selected>ဝန်ဆောင်မှုကို ရွေးချယ်ပါ</option>
+                        <optgroup label="MPT">
+                            <option value="mpt-3gb">MPT - 3GB Data (1,500 MMK)</option>
+                            <option value="mpt-5gb">MPT - 5GB Data (2,500 MMK)</option>
+                        </optgroup>
+                        <optgroup label="Telenor/Ooredoo (ဘေလ်ဖြည့်)">
+                            <option value="telenor-regular">Telenor - ပုံမှန် 1,000 MMK</option>
+                            <option value="ooredoo-data">Ooredoo - 2,000 MMK Data</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="bg-blue-50 p-4 rounded-lg flex justify-between items-center border border-blue-200">
+                    <span class="text-lg font-semibold text-gray-800">ပေးချေရမည့် စုစုပေါင်း:</span>
+                    <span id="sim-total-price" class="text-2xl font-bold text-primary">0 MMK</span>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">ငွေပေးချေမှု နည်းလမ်း <span class="text-red-500">*</span></label>
+                    <div class="grid grid-cols-2 gap-4">
+                        <label class="p-3 border rounded-lg cursor-pointer hover:shadow-md transition duration-150">
+                            <input type="radio" name="payment-method" value="kbzpay" required class="mr-2 accent-primary"> KBZPay
+                        </label>
+                        <label class="p-3 border rounded-lg cursor-pointer hover:shadow-md transition duration-150">
+                            <input type="radio" name="payment-method" value="wavepay" class="mr-2 accent-primary"> WavePay
+                        </label>
+                        <label class="p-3 border rounded-lg cursor-pointer hover:shadow-md transition duration-150">
+                            <input type="radio" name="payment-method" value="ayapay" class="mr-2 accent-primary"> AYA Pay
+                        </label>
+                        <label class="p-3 border rounded-lg cursor-pointer hover:shadow-md transition duration-150">
+                            <input type="radio" name="payment-method" value="uabpay" class="mr-2 accent-primary"> UAB Pay
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="txn-id" class="block text-sm font-medium text-gray-700 mb-2">ငွေလွှဲပြောင်းမှု ID (Transaction ID) <span class="text-red-500">*</span></label>
+                    <input type="text" id="sim-txn-id" name="txn-id" placeholder="ငွေလွှဲပြီးသောအခါ ရရှိသည့် ID ကိုထည့်ပါ" class="form-input" required>
+                    <p class="mt-1 text-xs text-warning font-medium">ငွေမလွှဲမီ အော်ဒါမတင်ပါနှင့်။ ငွေလွှဲပြီးမှသာ ID ကို ဖြည့်ပါ။</p>
+                </div>
+
+                <button type="submit" id="sim-submit-btn" class="btn-primary" disabled>
+                    <i class="fas fa-spinner fa-spin mr-2 hidden" id="sim-loading-icon"></i>
+                    အော်ဒါ တင်သွင်းမည်
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 mt-10">...</footer>
+
+    <script src="script.js"></script>
+    <script>
+        // (Note: Dynamic Price Calculation and Form Submission Logic will be in script.js - Chunk 5)
+    </script>
+</body>
+  </html>
+  
