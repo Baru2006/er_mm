@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services - EasyRecharge MM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-blue-600 rounded-full"></div>
+                    <a href="index.html" class="text-xl font-bold text-gray-800">EasyRecharge MM</a>
+                </div>
+                <nav class="hidden md:flex space-x-6">
+                    <a href="index.html" class="text-gray-600 hover:text-blue-600">Dashboard</a>
+                    <a href="services.html" class="text-blue-600 font-medium">Services</a>
+                    <a href="status.html" class="text-gray-600 hover:text-blue-600">Orders</a>
+                    <a href="faq.html" class="text-gray-600 hover:text-blue-600">Help</a>
+                </nav>
+                <button class="md:hidden text-gray-600">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <div class="text-center mb-12">
+            <h1 class="text-3xl font-bold text-gray-800 mb-4">Our Services</h1>
+            <p class="text-gray-600 max-w-2xl mx-auto">Choose from our wide range of digital services designed for Myanmar users</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- SIM Recharge -->
+            <a href="order_sim.html" class="service-card bg-white rounded-xl shadow-sm p-8 hover:shadow-lg transition-all duration-300 border border-gray-100">
+                <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-sim-card text-blue-600 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 text-center mb-3">SIM Recharge</h3>
+                <p class="text-gray-600 text-center mb-4">Mobile data packages and top-ups for all major Myanmar carriers</p>
+                <div class="text-center">
+                    <span class="inline-flex items-center text-blue-600 font-medium">
+                        Order Now <i class="fas fa-arrow-right ml-2"></i>
+                    </span>
+                </div>
+            </a>
+
+            <!-- Game Top-up -->
+            <a href="order_game.html" class="service-card bg-white rounded-xl shadow-sm p-8 hover:shadow-lg transition-all duration-300 border border-gray-100">
+                <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-gamepad text-purple-600 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 text-center mb-3">Game Top-up</h3>
+                <p class="text-gray-600 text-center mb-4">Instant diamond and credit top-ups for popular mobile games</p>
+                <div class="text-center">
+                    <span class="inline-flex items-center text-purple-600 font-medium">
+                        Order Now <i class="fas fa-arrow-right ml-2"></i>
+                    </span>
+                </div>
+            </a>
+
+            <!-- SMM Services -->
+            <a href="order_smm.html" class="service-card bg-white rounded-xl shadow-sm p-8 hover:shadow-lg transition-all duration-300 border border-gray-100">
+                <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-bolt text-yellow-600 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 text-center mb-3">SMM Services</h3>
+                <p class="text-gray-600 text-center mb-4">Boost your social media presence with likes, followers, and views</p>
+                <div class="text-center">
+                    <span class="inline-flex items-center text-yellow-600 font-medium">
+                        Order Now <i class="fas fa-arrow-right ml-2"></i>
+                    </span>
+                </div>
+            </a>
+
+            <!-- P2P Exchange -->
+            <a href="pay.html" class="service-card bg-white rounded-xl shadow-sm p-8 hover:shadow-lg transition-all duration-300 border border-gray-100">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-exchange-alt text-green-600 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 text-center mb-3">P2P Exchange</h3>
+                <p class="text-gray-600 text-center mb-4">Secure peer-to-peer digital currency exchange with low fees</p>
+                <div class="text-center">
+                    <span class="inline-flex items-center text-green-600 font-medium">
+                        Exchange Now <i class="fas fa-arrow-right ml-2"></i>
+                    </span>
+                </div>
+            </a>
+
+            <!-- Order Status -->
+            <a href="status.html" class="service-card bg-white rounded-xl shadow-sm p-8 hover:shadow-lg transition-all duration-300 border border-gray-100">
+                <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-clipboard-list text-orange-600 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 text-center mb-3">Order Status</h3>
+                <p class="text-gray-600 text-center mb-4">Track your orders in real-time with automatic status updates</p>
+                <div class="text-center">
+                    <span class="inline-flex items-center text-orange-600 font-medium">
+                        Check Status <i class="fas fa-arrow-right ml-2"></i>
+                    </span>
+                </div>
+            </a>
+
+            <!-- FAQ & Support -->
+            <a href="faq.html" class="service-card bg-white rounded-xl shadow-sm p-8 hover:shadow-lg transition-all duration-300 border border-gray-100">
+                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-question-circle text-red-600 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 text-center mb-3">FAQ & Support</h3>
+                <p class="text-gray-600 text-center mb-4">Get answers to common questions and contact support</p>
+                <div class="text-center">
+                    <span class="inline-flex items-center text-red-600 font-medium">
+                        Get Help <i class="fas fa-arrow-right ml-2"></i>
+                    </span>
+                </div>
+            </a>
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-gray-600">&copy; 2024 EasyRecharge MM. All rights reserved.</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="privacy_policy.html" class="text-gray-600 hover:text-blue-600">Privacy Policy</a>
+                    <a href="faq.html" class="text-gray-600 hover:text-blue-600">FAQ</a>
+                    <a href="#" class="text-gray-600 hover:text-blue-600">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div id="toastContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
+    <script src="script.js"></script>
+</body>
+                      </html>
