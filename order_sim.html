@@ -1,67 +1,73 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIM Order - Easy Recharge MM</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <title>Order SIM - Easy Recharge MM</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="style.css">
+  <script src="price.js"></script>
+  <script src="script.js" defer></script>
 </head>
 <body>
+  <header><h1>SIM Order</h1><a href="index.html">Back</a></header>
 
-    <a href="index.html">Back to Home</a>
-    <h1>SIM Recharge Order</h1>
-    <form id="sim-form">
-        <input type="hidden" name="formType" value="sim">
-        
-        <div>
-            <label for="admin-phone">Admin Phone:</label>
-            <input type="text" id="admin-phone" value="09-123456789" readonly>
-            <button type="button" onclick="copyAdminPhone()">Copy</button>
-        </div>
+  <main>
+    <form id="simOrderForm" onsubmit="submitOrder(event, 'sim')">
+      <div>
+        <label>Admin Phone: <span id="adminPhoneSim">09-123456789</span></label>
+        <button type="button" onclick="copyAdminPhone()">Copy</button>
+      </div>
 
-        <div>
-            <label for="sim-provider">Provider:</label>
-            <select id="sim-provider" name="provider" required>
-                <option value="">-- Select Provider --</option>
-                <option value="mpt">MPT</option>
-                <option value="telenor">Telenor</option>
-                <option value="ooredoo">Ooredoo</option>
-            </select>
-        </div>
+      <div>
+        <label for="provider">Provider</label>
+        <select id="provider" name="provider" onchange="populateSimPackages()">
+          <option value="mpt">MPT</option>
+          <option value="telenor">Telenor</option>
+          <option value="ooredoo">Ooredoo</option>
+        </select>
+      </div>
 
-        <div>
-            <label for="sim-package">Package:</label>
-            <select id="sim-package" name="package" required>
-                <option value="">-- Select Package --</option>
-            </select>
-        </div>
+      <div>
+        <label for="simPackage">Package</label>
+        <select id="simPackage" name="package" onchange="updateSimDescriptionAndTotal()">
+          <!-- populated dynamically -->
+        </select>
+      </div>
 
-        <div>
-            <p>Description: <span id="sim-desc">[Package details show here]</span></p>
-        </div>
+      <div>
+        <label>Description</label>
+        <div id="simDescription">Select a package</div>
+      </div>
 
-        <div>
-            <label for="sim-phone">Phone:</label>
-            <input type="tel" id="sim-phone" name="phone" placeholder="09xxxxxxxxx" required>
-        </div>
+      <div>
+        <label for="simPhone">Phone</label>
+        <input id="simPhone" name="phone" type="text" required />
+      </div>
 
-        <div>
-            <p>Total: <span id="sim-total">0</span> Ks</p>
-            <input type="hidden" id="sim-total-input" name="total">
-        </div>
+      <div>
+        <label>Total</label>
+        <div id="simTotal">0</div>
+      </div>
 
-        <div>
-            <label for="sim-txid">Transaction ID:</label>
-            <input type="text" id="sim-txid" name="txid" placeholder="Wave/KBZ TxID" required>
-        </div>
+      <div>
+        <label>Payment Method</label>
+        <select id="simPayment" name="paymentMethod">
+          <option value="wave">Wave</option>
+          <option value="kbz">KBZ</option>
+        </select>
+      </div>
 
+      <div>
+        <label for="simTxn">Transaction ID</label>
+        <input id="simTxn" name="transactionId" type="text" required />
+      </div>
+
+      <div>
         <button type="submit">Submit Order</button>
+      </div>
     </form>
-    
-    <p id="form-message"></p>
 
-    <script src="price.js"></script>
-    <script src="script.js" defer></script>
+    <div id="simMessage" role="status"></div>
+  </main>
 </body>
-</html>
-
+                                              </html>
