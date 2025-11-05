@@ -1,29 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Order Status</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Status - Easy Recharge MM</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header>
-<h1>Track Orders</h1>
-<button id="theme-toggle">🌙</button>
-</header>
-<main>
-<section id="orders-list"></section>
-</main>
-<nav class="bottom-nav">
-<a href="index.html">Home</a>
-<a href="order.html">Order</a>
-<a href="status.html">Status</a>
-<a href="services.html">Services</a>
-</nav>
-<script src="script.js"></script>
-<script>
-fetchOrders();
-</script>
+
+    <a href="index.html">Back to Home</a>
+    <h1>Order Status</h1>
+    <p>Check your order status here. (Functionality not implemented in skeleton).</p>
+    
+    <div>
+        <label for="order-id-search">Search by Phone or Order ID:</label>
+        <input type="text" id="order-id-search">
+        <button type="button">Search</button>
+    </div>
+    
+    <div id="order-data-display">
+        <!-- Order data will be displayed here -->
+        <table border="1" style="width:100%; margin-top: 20px;">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Service</th>
+                    <th>Details</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>(Example) 12345</td>
+                    <td>SIM Recharge</td>
+                    <td>MPT 3GB</td>
+                    <td>Pending</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="price.js"></script>
+    <script src="script.js" defer></script>
 </body>
 </html>
+
