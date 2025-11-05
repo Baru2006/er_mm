@@ -1,43 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Easy Recharge MM - Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Easy Recharge MM - Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
-<header>
-  <h1>Easy Recharge MM</h1>
-  <button id="theme-toggle">🌙</button>
-</header>
-<main>
-  <section class="stats">
+  <header>
+    Easy Recharge MM
+  </header>
+
+  <div class="container">
+    <!-- Admin Trust Section -->
     <div class="card">
-      <h2>Total Orders</h2>
-      <p id="total-orders">0</p>
+      <h2>📞 Admin Contact</h2>
+      <p>Call or WhatsApp: <span id="adminPhone">09-123456789</span> 
+        <button onclick="copyAdminPhone()">Copy</button>
+      </p>
+      <p>✅ Trusted & Fast Service</p>
     </div>
+
+    <!-- Service Cards -->
+    <div class="service-cards">
+      <div class="service-card" onclick="location.href='order_sim.html'">
+        <img src="icons/sim.png" alt="SIM/Data">
+        <h3>SIM / Data</h3>
+      </div>
+      <div class="service-card" onclick="location.href='order_game.html'">
+        <img src="icons/game.png" alt="Game TopUp">
+        <h3>Game TopUp</h3>
+      </div>
+      <div class="service-card" onclick="location.href='order_smm.html'">
+        <img src="icons/smm.png" alt="SMM Services">
+        <h3>SMM Services</h3>
+      </div>
+      <div class="service-card" onclick="location.href='pay.html'">
+        <img src="icons/p2p.png" alt="P2P Exchange">
+        <h3>P2P Exchange</h3>
+      </div>
+    </div>
+
+    <!-- Live Stats -->
     <div class="card">
-      <h2>Total Revenue</h2>
-      <p id="total-revenue">0 MMK</p>
+      <h2>📊 Live Statistics</h2>
+      <div id="stats">
+        <p>Total Orders: <span id="totalOrders">0</span></p>
+        <p>Pending Orders: <span id="pendingOrders">0</span></p>
+        <p>Completed Orders: <span id="completedOrders">0</span></p>
+      </div>
     </div>
-  </section>
-  <section class="quick-links">
-    <a href="order.html" class="btn">Place Order</a>
-    <a href="status.html" class="btn">Track Orders</a>
-    <a href="services.html" class="btn">View Services</a>
-  </section>
-</main>
-<nav class="bottom-nav">
-  <a href="index.html">Home</a>
-  <a href="order.html">Order</a>
-  <a href="status.html">Status</a>
-  <a href="services.html">Services</a>
-</nav>
-<script src="script.js"></script>
-<script>
-fetchStats();
-</script>
+
+    <!-- Recent Orders Preview -->
+    <div class="card">
+      <h2>🕒 Recent Orders</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Type</th>
+            <th>Details</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="recentOrders">
+          <tr>
+            <td colspan="4">Loading...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    // Copy Admin Phone
+    function copyAdminPhone() {
+      const phone = document.getElementById('adminPhone').textContent;
+      navigator.clipboard.writeText(phone);
+      showToast('Admin phone copied!', 'success');
+    }
+
+    // Fetch Live Stats & Recent Orders
+    async function loadDashboard() {
+      try {
+        const statsRes = await fetch(`${GAS_URL}?action=get_stats`);
+        const statsData = await statsRes.json();
+        if(statsData.success) {
+          document.getElementById('totalOrders').textContent = statsData.stats.totalOrders;
+          document.getElementById('pendingOrders').textContent = statsData.stats.pendingOrders;
+          document.getElementById('completedOrders').textContent = statsData.stats.completedOrders;
+        }
+
+        const ordersRes = await fetch(`${GAS_URL}?action=get_orders&userId=Guest`);
+        const ordersData = await ordersRes.json();
+        const tbody = document.getElementById('recentOrders');
+        tbody.innerHTML = '';
+        if(ordersData.success && ordersData.orders.length > 0) {
+          ordersData.orders.slice(-5).reverse().forEach(order => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${order.orderId}</td>
+              <td>${order.type.replace('_Orders','')}</td>
+              <td>${order.details.join(' | ')}</td>
+              <td>${order.details[9]}</td>
+            `;
+            tbody.appendChild(row);
+          });
+        } else {
+          tbody.innerHTML = '<tr><td colspan="4">No recent orders.</td></tr>';
+        }
+
+      } catch (err) {
+        showToast('Failed to load dashboard data', 'error');
+      }
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchPrices(); // Load prices dynamically
+      loadDashboard(); // Load stats & recent orders
+    });
+  </script>
 </body>
 </html>
