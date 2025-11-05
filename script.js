@@ -1,323 +1,267 @@
-const GAS_URL = "https://script.google.com/macros/s/AKfycbyFPGK9YkQbuQuvNgKixNmoIlpHfrg7eUcU6QNVVcpo5KPyT9piurmAIy2k7kHtR54WJQ/exec"; // <<< IMPORTANT: REPLACE THIS
-const ADMIN_PHONE = "09-123456789";
+// Core client-side functionality for Easy Recharge MM
+// Replace YOUR_SCRIPT_URL with deployed Google Apps Script web app URL
+const GAS_URL = "https://script.google.com/macros/s/AKfycbx8pdT4fIvxJbAEF2L6bQUu5UYIMHlt2ycpyEufu0XikeJI-3htT7HLmTR7mHlTobk_Sg/exec"; // e.g. "https://script.google.com/macros/s/XXX/exec"
+const ADMIN_PHONE = "09-791134604";
 
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Shared ---
-    // Populate admin phone on all pages
-    const adminPhoneDisplay = document.getElementById('admin-phone-display');
-    const adminPhoneInput = document.getElementById('admin-phone');
-    if (adminPhoneDisplay) adminPhoneDisplay.textContent = ADMIN_PHONE;
-    if (adminPhoneInput) adminPhoneInput.value = ADMIN_PHONE;
-    
-    // --- SIM Form ---
-    const simForm = document.getElementById('sim-form');
-    if (simForm) {
-        document.getElementById('sim-provider').addEventListener('change', populateSimPackages);
-        document.getElementById('sim-package').addEventListener('change', () => calculateTotal('sim'));
-        simForm.addEventListener('submit', (e) => submitOrder(e, simForm));
-    }
+  // show admin phone where present
+  const adminElements = document.querySelectorAll('[id^="adminPhone"]');
+  adminElements.forEach(el => el.textContent = ADMIN_PHONE);
 
-    // --- Game Form ---
-    const gameForm = document.getElementById('game-form');
-    if (gameForm) {
-        document.getElementById('game-name').addEventListener('change', populateGamePackages);
-        document.getElementById('game-package').addEventListener('change', () => calculateTotal('game'));
-        gameForm.addEventListener('submit', (e) => submitOrder(e, gameForm));
-    }
-
-    // --- SMM Form ---
-    const smmForm = document.getElementById('smm-form');
-    if (smmForm) {
-        document.getElementById('smm-platform').addEventListener('change', populateSmmServices);
-        document.getElementById('smm-service').addEventListener('change', () => calculateTotal('smm'));
-        document.getElementById('smm-quantity').addEventListener('input', () => calculateTotal('smm'));
-        smmForm.addEventListener('submit', (e) => submitOrder(e, smmForm));
-    }
-
-    // --- P2P Form ---
-    const p2pForm = document.getElementById('p2p-form');
-    if (p2pForm) {
-        document.getElementById('p2p-amount').addEventListener('input', () => calculateTotal('p2p'));
-        document.getElementById('p2p-from').addEventListener('change', validateP2PMethods);
-        document.getElementById('p2p-to').addEventListener('change', validateP2PMethods);
-        p2pForm.addEventListener('submit', (e) => submitOrder(e, p2pForm));
-    }
-
-    // --- Services Page ---
-    if (document.getElementById('sim-price-table')) {
-        loadPriceData('sim', 'sim-price-table');
-        loadPriceData('game', 'game-price-table');
-        loadPriceData('smm', 'smm-price-table');
-    }
+  // initialize package selects on pages
+  if(document.getElementById('provider')) populateSimPackages();
+  if(document.getElementById('gameSelect')) populateGamePackages();
+  if(document.getElementById('platform')) populateSmmServices();
+  // Preload initial totals
+  updateP2PCalculations();
 });
 
-// --- Form Population ---
-
-function populateSimPackages() {
-    const provider = document.getElementById('sim-provider').value;
-    const packageSelect = document.getElementById('sim-package');
-    packageSelect.innerHTML = '<option value="">-- Select Package --</option>'; // Reset
-    
-    for (const key in SERVICE_PRICES.sim) {
-        if (key.startsWith(provider)) {
-            const packageData = SERVICE_PRICES.sim[key];
-            const option = document.createElement('option');
-            option.value = key;
-            option.textContent = packageData.name;
-            packageSelect.appendChild(option);
-        }
-    }
-    calculateTotal('sim'); // Recalculate
+// copy admin phone
+function copyAdminPhone(){
+  if(!navigator.clipboard) {
+    const tmp = document.createElement('input');
+    tmp.value = ADMIN_PHONE;
+    document.body.appendChild(tmp);
+    tmp.select();
+    document.execCommand('copy');
+    tmp.remove();
+    alert('Copied admin phone');
+    return;
+  }
+  navigator.clipboard.writeText(ADMIN_PHONE).then(()=> {
+    alert('Copied admin phone');
+  }).catch(()=> alert('Unable to copy'));
 }
 
-function populateGamePackages() {
-    const game = document.getElementById('game-name').value;
-    const packageSelect = document.getElementById('game-package');
-    packageSelect.innerHTML = '<option value="">-- Select Package --</option>'; // Reset
-
-    for (const key in SERVICE_PRICES.game) {
-        if (key.startsWith(game)) {
-            const packageData = SERVICE_PRICES.game[key];
-            const option = document.createElement('option');
-            option.value = key;
-            option.textContent = packageData.name;
-            packageSelect.appendChild(option);
-        }
-    }
-    calculateTotal('game'); // Recalculate
+// ----- SIM handling -----
+function populateSimPackages(){
+  const provider = document.getElementById('provider').value;
+  const select = document.getElementById('simPackage');
+  select.innerHTML = '';
+  // map provider to keys in SERVICE_PRICES.sim
+  const mapping = {
+    mpt: ['mpt-3gb','mpt-5gb'],
+    telenor: ['telenor-regular'],
+    ooredoo: ['ooredoo-basic']
+  };
+  (mapping[provider] || []).forEach(k => {
+    const opt = document.createElement('option');
+    opt.value = k;
+    opt.textContent = `${k} — ${SERVICE_PRICES.sim[k] || 'N/A'}`;
+    select.appendChild(opt);
+  });
+  updateSimDescriptionAndTotal();
 }
 
-function populateSmmServices() {
-    const platform = document.getElementById('smm-platform').value;
-    const serviceSelect = document.getElementById('smm-service');
-    serviceSelect.innerHTML = '<option value="">-- Select Service --</option>'; // Reset
-
-    // This logic assumes keys like 'fb-likes', 'ig-followers'
-    // 'fb' matches 'fb-likes', 'ig' matches 'ig-followers'
-    let platformPrefix = '';
-    if (platform === 'fb') platformPrefix = 'fb-';
-    if (platform === 'ig') platformPrefix = 'ig-';
-    if (platform === 'yt') platformPrefix = 'yt-';
-    
-    for (const key in SERVICE_PRICES.smm) {
-        if (key.startsWith(platformPrefix)) {
-            const serviceData = SERVICE_PRICES.smm[key];
-            const option = document.createElement('option');
-            option.value = key;
-            option.textContent = serviceData.name;
-            serviceSelect.appendChild(option);
-        }
-    }
-    calculateTotal('smm'); // Recalculate
+function updateSimDescriptionAndTotal(){
+  const sel = document.getElementById('simPackage');
+  const desc = document.getElementById('simDescription');
+  const totalEl = document.getElementById('simTotal');
+  if(!sel) return;
+  const key = sel.value;
+  desc.textContent = key ? (`Package: ${key}`) : 'Select a package';
+  const price = SERVICE_PRICES.sim[key] || 0;
+  totalEl.textContent = price;
 }
 
-// --- Calculation ---
-
-function calculateTotal(formType) {
-    let total = 0;
-    let description = "[Package details show here]";
-
-    try {
-        if (formType === 'sim') {
-            const packageKey = document.getElementById('sim-package').value;
-            if (packageKey && SERVICE_PRICES.sim[packageKey]) {
-                const packageData = SERVICE_PRICES.sim[packageKey];
-                total = packageData.price;
-                description = packageData.desc;
-            }
-            document.getElementById('sim-total').textContent = total;
-            document.getElementById('sim-total-input').value = total;
-            document.getElementById('sim-desc').textContent = description;
-        } 
-        else if (formType === 'game') {
-            const packageKey = document.getElementById('game-package').value;
-            if (packageKey && SERVICE_PRICES.game[packageKey]) {
-                const packageData = SERVICE_PRICES.game[packageKey];
-                total = packageData.price;
-                description = packageData.desc;
-            }
-            document.getElementById('game-total').textContent = total;
-            document.getElementById('game-total-input').value = total;
-            document.getElementById('game-desc').textContent = description;
-        } 
-        else if (formType === 'smm') {
-            const serviceKey = document.getElementById('smm-service').value;
-            const quantity = parseInt(document.getElementById('smm-quantity').value) || 0;
-            let pricePer1000 = 0;
-            if (serviceKey && SERVICE_PRICES.smm[serviceKey]) {
-                const serviceData = SERVICE_PRICES.smm[serviceKey];
-                pricePer1000 = serviceData.price;
-                description = serviceData.desc;
-                total = (pricePer1000 / 1000) * quantity;
-            }
-            document.getElementById('smm-price').textContent = pricePer1000;
-            document.getElementById('smm-total').textContent = total.toFixed(2);
-            document.getElementById('smm-total-input').value = total.toFixed(2);
-            document.getElementById('smm-desc').textContent = description;
-        }
-        else if (formType === 'p2p') {
-            const amount = parseFloat(document.getElementById('p2p-amount').value) || 0;
-            const fee = amount * P2P_FEE_RATE;
-            const receive = amount - fee;
-            
-            document.getElementById('p2p-fee').textContent = fee.toFixed(2);
-            document.getElementById('p2p-receive').textContent = receive.toFixed(2);
-            document.getElementById('p2p-fee-input').value = fee.toFixed(2);
-            document.getElementById('p2p-receive-input').value = receive.toFixed(2);
-        }
-    } catch (error) {
-        console.error("Error in calculateTotal:", error);
-    }
+// ----- Game handling -----
+function populateGamePackages(){
+  const game = document.getElementById('gameSelect').value;
+  const select = document.getElementById('gamePackage');
+  select.innerHTML = '';
+  const map = {
+    freefire: ['freefire-100'],
+    pubg: ['pubg-60'],
+    mlbb: ['mlbb-86']
+  };
+  (map[game] || []).forEach(k => {
+    const opt = document.createElement('option');
+    opt.value = k;
+    opt.textContent = `${k} — ${SERVICE_PRICES.game[k] || 'N/A'}`;
+    select.appendChild(opt);
+  });
+  updateGameDescriptionAndTotal();
 }
 
-// --- Validation ---
+function updateGameDescriptionAndTotal(){
+  const sel = document.getElementById('gamePackage');
+  const desc = document.getElementById('gameDescription');
+  const totalEl = document.getElementById('gameTotal');
+  if(!sel) return;
+  const key = sel.value;
+  desc.textContent = key ? (`Package: ${key}`) : 'Select package';
+  const price = SERVICE_PRICES.game[key] || 0;
+  totalEl.textContent = price;
+}
 
-function validateP2PMethods() {
-    const from = document.getElementById('p2p-from').value;
-    const to = document.getElementById('p2p-to').value;
-    const msgSpan = document.getElementById('p2p-validation-msg');
-    const submitBtn = document.getElementById('p2p-submit');
-    
-    if (from && to && from === to) {
-        msgSpan.textContent = "From and To methods cannot be the same.";
-        submitBtn.disabled = true;
+// ----- SMM handling -----
+function populateSmmServices(){
+  const platform = document.getElementById('platform').value;
+  const select = document.getElementById('smmService');
+  select.innerHTML = '';
+  const map = {
+    facebook: ['fb-likes'],
+    instagram: ['ig-followers'],
+    youtube: ['yt-subscribers']
+  };
+  (map[platform] || []).forEach(k => {
+    const opt = document.createElement('option');
+    opt.value = k;
+    opt.textContent = `${k} — ${SERVICE_PRICES.smm[k] || 'N/A'}`;
+    select.appendChild(opt);
+  });
+  updateSmmDescriptionAndTotal();
+}
+
+function updateSmmDescriptionAndTotal(){
+  const sel = document.getElementById('smmService');
+  const qtyEl = document.getElementById('smmQty');
+  const desc = document.getElementById('smmDescription');
+  const totalEl = document.getElementById('smmTotal');
+  if(!sel) return;
+  const key = sel.value;
+  const qty = parseInt(qtyEl.value || '0', 10);
+  desc.textContent = key ? (`Service: ${key}`) : 'Select service';
+  const base = SERVICE_PRICES.smm[key] || 0;
+  // Calculate total. For this skeleton we treat price value as unit price/standard; adjust as needed.
+  // We'll compute proportional price: base * (qty / 100) to avoid huge totals; this is arbitrary but functional.
+  const total = Math.max(0, Math.round((base * qty) / 100));
+  totalEl.textContent = total;
+}
+
+// ----- P2P handling -----
+function validateP2PMethods(){
+  const from = document.getElementById('p2pFrom').value;
+  const to = document.getElementById('p2pTo').value;
+  if(from === to){
+    document.getElementById('p2pMessage').textContent = 'From and To cannot be the same';
+    return false;
+  } else {
+    document.getElementById('p2pMessage').textContent = '';
+    return true;
+  }
+}
+
+function updateP2PCalculations(){
+  const amount = parseFloat(document.getElementById('p2pAmount')?.value || '0');
+  const fee = Math.round((amount * 0.02) * 100) / 100;
+  const receive = Math.round((amount - fee) * 100) / 100;
+  const feeEl = document.getElementById('p2pFee');
+  const receiveEl = document.getElementById('p2pReceive');
+  if(feeEl) feeEl.textContent = fee;
+  if(receiveEl) receiveEl.textContent = receive;
+}
+
+// ----- Submit handling for all orders -----
+async function submitOrder(event, type){
+  event.preventDefault();
+  const url = GAS_URL;
+  // Build payload depending on type
+  const payload = {type, timestamp: new Date().toISOString()};
+
+  try {
+    if(type === 'sim'){
+      const form = document.getElementById('simOrderForm');
+      payload.provider = form.provider.value;
+      payload.package = form.package.value;
+      payload.description = document.getElementById('simDescription').textContent;
+      payload.phone = form.phone.value.trim();
+      payload.total = document.getElementById('simTotal').textContent;
+      payload.paymentMethod = form.paymentMethod.value;
+      payload.transactionId = form.transactionId.value.trim();
+      // basic validation
+      if(!payload.phone || !payload.transactionId) throw new Error('Phone and Transaction ID are required');
+    } else if(type === 'game'){
+      const form = document.getElementById('gameOrderForm');
+      payload.game = form.game.value;
+      payload.package = form.package.value;
+      payload.description = document.getElementById('gameDescription').textContent;
+      payload.gameId = form.gameId.value.trim();
+      payload.server = form.server.value.trim();
+      payload.total = document.getElementById('gameTotal').textContent;
+      payload.paymentMethod = form.paymentMethod.value;
+      payload.transactionId = form.transactionId.value.trim();
+      if(!payload.gameId || !payload.transactionId) throw new Error('Game ID and Transaction ID are required');
+    } else if(type === 'smm'){
+      const form = document.getElementById('smmOrderForm');
+      payload.platform = form.platform.value;
+      payload.service = form.service.value;
+      payload.description = document.getElementById('smmDescription').textContent;
+      payload.targetUrl = form.targetUrl.value.trim();
+      payload.quantity = Number(form.quantity.value);
+      if(isNaN(payload.quantity) || payload.quantity < 25) throw new Error('Quantity must be at least 25');
+      payload.total = document.getElementById('smmTotal').textContent;
+      payload.paymentMethod = form.paymentMethod.value;
+      payload.transactionId = form.transactionId.value.trim();
+      if(!payload.targetUrl || !payload.transactionId) throw new Error('Target URL and Transaction ID are required');
+    } else if(type === 'p2p'){
+      const form = document.getElementById('p2pForm');
+      payload.amount = Number(form.amount.value);
+      payload.from = form.from.value;
+      payload.to = form.to.value;
+      if(!validateP2PMethods()) throw new Error('From and To cannot be the same');
+      const fee = Math.round((payload.amount * 0.02) * 100) / 100;
+      payload.fee = fee;
+      payload.receive = Math.round((payload.amount - fee) * 100) / 100;
+      payload.transactionId = form.transactionId.value.trim();
+      if(!payload.transactionId) throw new Error('Transaction ID is required');
     } else {
-        msgSpan.textContent = "";
-        submitBtn.disabled = false;
+      throw new Error('Unknown order type');
     }
+
+    // Add admin phone
+    payload.adminPhone = ADMIN_PHONE;
+
+    // POST to GAS
+    const resp = await fetch(url, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+
+    if(!resp.ok) {
+      const txt = await resp.text();
+      throw new Error('Server error: ' + txt);
+    }
+    const json = await resp.json();
+    const messageEl = document.getElementById(`${type}Message`) || document.getElementById('p2pMessage') || document.getElementById('statusMessage');
+    if(json.success){
+      if(messageEl) messageEl.textContent = 'Order submitted successfully. OrderID: ' + (json.orderId || 'N/A');
+      // reset forms minimally
+      const frm = document.querySelector(`form#${type}OrderForm`) || document.getElementById('p2pForm');
+      if(frm) frm.reset();
+      updateP2PCalculations();
+      updateSimDescriptionAndTotal();
+      updateGameDescriptionAndTotal();
+      updateSmmDescriptionAndTotal();
+    } else {
+      throw new Error(json.error || 'Unknown server error');
+    }
+  } catch(err){
+    const messageEl = document.getElementById(`${type}Message`) || document.getElementById('p2pMessage') || document.getElementById('statusMessage');
+    if(messageEl) messageEl.textContent = 'Error: ' + err.message;
+    else alert('Error: ' + err.message);
+  }
 }
 
-// --- Core ---
-
-function copyAdminPhone() {
-    const phoneInput = document.getElementById('admin-phone');
-    if (!phoneInput) return; // Guard clause for pages without the input
-
-    const phone = phoneInput.value;
-    const tempTextarea = document.createElement('textarea');
-    tempTextarea.value = phone;
-    document.body.appendChild(tempTextarea);
-    tempTextarea.select();
-    try {
-        document.execCommand('copy');
-        alert("Admin phone number copied: " + phone); // Using alert as requested (functional, no styling)
-    } catch (err) {
-        console.error('Failed to copy text: ', err);
-    }
-    document.body.removeChild(tempTextarea);
-}
-
-async function submitOrder(event, formElement) {
-    event.preventDefault();
-    const messageEl = document.getElementById('form-message');
-    const submitBtn = formElement.querySelector('button[type="submit"]');
-
-    if (GAS_URL === "YOUR_SCRIPT_URL_GOES_HERE") {
-        messageEl.textContent = "Error: GAS_URL is not set in script.js. Please contact the administrator.";
-        messageEl.style.color = 'red';
-        return;
-    }
-    
-    messageEl.textContent = 'Submitting...';
-    messageEl.style.color = 'black';
-    submitBtn.disabled = true;
-
-    const formData = new FormData(formElement);
-    const data = Object.fromEntries(formData.entries());
-
-    try {
-        const response = await fetch(GAS_URL, {
-            method: 'POST',
-            mode: 'no-cors', // Use no-cors for 'opaque' response from GAS
-            cache: 'no-cache',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            // Note: When using mode: 'no-cors', the body must be plain text.
-            // We must adjust the GAS script to handle this.
-            // Let's change this to send as text and parse in GAS.
-            // A common workaround is to use a redirect.
-            // For a simple skeleton, we'll stringify and assume GAS can handle it.
-            // A better way is to not use no-cors and handle CORS in GAS if possible.
-            // Let's assume standard (non-opaque) request and expect CORS to be handled.
-            mode: 'cors', // Will require a proper JSON response from GAS
-            body: JSON.stringify(data)
-        });
-
-        // Since we are using 'cors' mode, we expect a valid JSON response
-        const result = await response.json();
-
-        if (result.status === 'success') {
-            messageEl.textContent = 'Order submitted successfully! We will process it shortly.';
-            messageEl.style.color = 'green';
-            formElement.reset();
-        } else {
-            throw new Error(result.message || 'Unknown error');
-        }
-
-    } catch (error) {
-        console.error('Fetch Error:', error);
-        // This catch block will also catch opaque response errors (if mode: 'no-cors' was used)
-        // For this skeleton, we will *assume* the request was sent even on error,
-        // as `fetch` with `no-cors` gives no success/failure info.
-        // BUT, since we are using 'cors', this is a real error.
-        
-        // Let's adjust for the most common GAS Web App pattern.
-        // The `fetch` might fail to *parse* the JSON response if GAS returns HTML (e.g., on redirect)
-        // Let's provide a robust 'fire-and-forget' with 'no-cors' as it's the simplest.
-        
-        // --- Re-implementing with 'no-cors' for simplicity ---
-        messageEl.textContent = 'Submitting...';
-        messageEl.style.color = 'black';
-        
-        try {
-             await fetch(GAS_URL, {
-                method: 'POST',
-                mode: 'no-cors', // Fire and forget
-                cache: 'no-cache',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-
-            // With no-cors, we can't know if it was successful.
-            // We just assume it was.
-            messageEl.textContent = 'Order submitted successfully! We will process it shortly.';
-            messageEl.style.color = 'green';
-            formElement.reset();
-
-        } catch (err) {
-            // This inner catch is for network errors (e.g., DNS, no connection)
-            messageEl.textContent = `Submission failed: ${err.message}`;
-            messageEl.style.color = 'red';
-        }
-        
-    } finally {
-        submitBtn.disabled = false;
-        // Reset totals
-        if (formType) calculateTotal(formType);
-    }
-}
-
-// --- Services Page Loader ---
-function loadPriceData(type, tableId) {
-    const tableBody = document.getElementById(tableId)?.querySelector('tbody');
-    if (!tableBody) return;
-
-    const priceData = SERVICE_PRICES[type];
-    if (!priceData) return;
-
-    for (const key in priceData) {
-        const item = priceData[key];
-        const row = document.createElement('tr');
-        
-        const cellName = document.createElement('td');
-        cellName.textContent = item.name;
-        row.appendChild(cellName);
-        
-        const cellPrice = document.createElement('td');
-        cellPrice.textContent = item.price;
-        row.appendChild(cellPrice);
-        
-        tableBody.appendChild(row);
-    }
-}
+// ----- Status page load -----
+async function loadOrders(){
+  const tableBody = document.getElementById('ordersBody');
+  const msg = document.getElementById('statusMessage');
+  tableBody.innerHTML = '';
+  msg.textContent = 'Loading...';
+  try {
+    const resp = await fetch(GAS_URL + '?action=getOrders');
+    if(!resp.ok) throw new Error('Failed to load orders');
+    const data = await resp.json();
+    if(!Array.isArray(data.orders)) throw new Error('Invalid response');
+    data.orders.forEach(row => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${row.orderId}</td><td>${row.type}</td><td>${row.contact || row.gameId || ''}</td><td>${row.service || ''}</td><td>${row.total || ''}</td><td>${row.paymentMethod || ''}</td><td>${row.transactionId || ''}</td><td>${row.status || ''}</td><td>${row.timestamp || ''}</td>`;
+      tableBody.appendChild(tr);
+    });
+    msg.textContent = '';
+  } catch(err){
+    msg.textContent = 'Error loading orders: ' + err.message;
+  }
+                            }
