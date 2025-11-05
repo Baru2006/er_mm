@@ -1,147 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Order SIM/Data - Easy Recharge MM</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIM Order - Easy Recharge MM</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>Order SIM / Data</header>
 
-  <div class="container">
-    <!-- Admin Phone -->
-    <div class="card">
-      <h2>📞 Admin Contact</h2>
-      <p>Call/WhatsApp: <span id="adminPhone">09-123456789</span>
-        <button onclick="copyAdminPhone()">Copy</button>
-      </p>
-    </div>
+    <a href="index.html">Back to Home</a>
+    <h1>SIM Recharge Order</h1>
+    <form id="sim-form">
+        <input type="hidden" name="formType" value="sim">
+        
+        <div>
+            <label for="admin-phone">Admin Phone:</label>
+            <input type="text" id="admin-phone" value="09-123456789" readonly>
+            <button type="button" onclick="copyAdminPhone()">Copy</button>
+        </div>
 
-    <!-- Order Form -->
-    <form id="simOrderForm">
-      <!-- SIM Provider -->
-      <label for="provider">SIM Provider</label>
-      <select id="provider" required>
-        <option value="">Select Provider</option>
-        <option value="mpt">MPT</option>
-        <option value="telenor">Telenor</option>
-        <option value="ooredoo">Ooredoo</option>
-      </select>
+        <div>
+            <label for="sim-provider">Provider:</label>
+            <select id="sim-provider" name="provider" required>
+                <option value="">-- Select Provider --</option>
+                <option value="mpt">MPT</option>
+                <option value="telenor">Telenor</option>
+                <option value="ooredoo">Ooredoo</option>
+            </select>
+        </div>
 
-      <!-- Data Package -->
-      <label for="package">Data Package</label>
-      <select id="package" required>
-        <option value="">Select Package</option>
-      </select>
-      <p id="packageDesc"></p>
+        <div>
+            <label for="sim-package">Package:</label>
+            <select id="sim-package" name="package" required>
+                <option value="">-- Select Package --</option>
+            </select>
+        </div>
 
-      <!-- Phone Number -->
-      <label for="phone">Phone Number</label>
-      <input type="tel" id="phone" placeholder="09xxxxxxxx" required>
+        <div>
+            <p>Description: <span id="sim-desc">[Package details show here]</span></p>
+        </div>
 
-      <!-- Quantity -->
-      <label for="quantity">Quantity</label>
-      <input type="number" id="quantity" value="1" readonly>
+        <div>
+            <label for="sim-phone">Phone:</label>
+            <input type="tel" id="sim-phone" name="phone" placeholder="09xxxxxxxxx" required>
+        </div>
 
-      <!-- Total Price -->
-      <label for="total">Total Price (MMK)</label>
-      <input type="text" id="total" readonly>
+        <div>
+            <p>Total: <span id="sim-total">0</span> Ks</p>
+            <input type="hidden" id="sim-total-input" name="total">
+        </div>
 
-      <!-- Transaction ID -->
-      <label for="transactionId">Transaction ID</label>
-      <input type="text" id="transactionId" placeholder="Enter after payment" required>
+        <div>
+            <label for="sim-txid">Transaction ID:</label>
+            <input type="text" id="sim-txid" name="txid" placeholder="Wave/KBZ TxID" required>
+        </div>
 
-      <button type="submit">Submit Order</button>
+        <button type="submit">Submit Order</button>
     </form>
-  </div>
+    
+    <p id="form-message"></p>
 
-  <script>
-    const providerSelect = document.getElementById('provider');
-    const packageSelect = document.getElementById('package');
-    const packageDesc = document.getElementById('packageDesc');
-    const quantityInput = document.getElementById('quantity');
-    const totalInput = document.getElementById('total');
-    const form = document.getElementById('simOrderForm');
-
-    // Populate packages dynamically
-    providerSelect.addEventListener('change', () => {
-      const provider = providerSelect.value;
-      packageSelect.innerHTML = '<option value="">Select Package</option>';
-      if(SERVICE_PRICES.sim) {
-        Object.keys(SERVICE_PRICES.sim).forEach(key => {
-          if(key.startsWith(provider)) {
-            const option = document.createElement('option');
-            option.value = key;
-            option.textContent = SERVICE_PRICES.sim[key].name;
-            packageSelect.appendChild(option);
-          }
-        });
-      }
-      packageDesc.textContent = '';
-      totalInput.value = '';
-    });
-
-    packageSelect.addEventListener('change', () => {
-      const key = packageSelect.value;
-      if(SERVICE_PRICES.sim[key]){
-        packageDesc.textContent = SERVICE_PRICES.sim[key].description;
-        const qty = parseInt(quantityInput.value) || 1;
-        totalInput.value = SERVICE_PRICES.sim[key].price * qty;
-      } else {
-        packageDesc.textContent = '';
-        totalInput.value = '';
-      }
-    });
-
-    // Submit Form
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const provider = providerSelect.value;
-      const serviceKey = packageSelect.value;
-      const serviceName = SERVICE_PRICES.sim[serviceKey]?.name || '';
-      const phone = document.getElementById('phone').value;
-      const quantity = parseInt(quantityInput.value);
-      const total = parseInt(totalInput.value);
-      const transactionId = document.getElementById('transactionId').value;
-      const payment = "Bank/Wallet"; // Optional, can add select later
-
-      if(!provider || !serviceKey || !phone || !transactionId){
-        showToast('Please fill all required fields', 'error');
-        return;
-      }
-
-      const data = {
-        action: 'submit_sim_order',
-        userId: 'Guest',
-        service: serviceKey,
-        serviceName: serviceName,
-        phone: phone,
-        quantity: quantity,
-        total: total,
-        payment: payment,
-        transactionId: transactionId
-      };
-
-      try {
-        const res = await fetch(GAS_URL, {
-          method: 'POST',
-          body: JSON.stringify(data)
-        });
-        const result = await res.json();
-        if(result.success){
-          showToast('Order submitted successfully!', 'success');
-          form.reset();
-          totalInput.value = '';
-          packageDesc.textContent = '';
-        } else {
-          showToast('Submission failed: '+result.error, 'error');
-        }
-      } catch(err) {
-        showToast('Error submitting order', 'error');
-      }
-    });
-  </script>
+    <script src="price.js"></script>
+    <script src="script.js" defer></script>
 </body>
 </html>
+
