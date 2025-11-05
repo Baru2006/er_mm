@@ -1,375 +1,51 @@
 <!DOCTYPE html>
-<html lang="my">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIM Recharge - EasyRecharge MM</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIM/Data Order</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gray-50">
-    <!-- Header -->
-    <header class="bg-white shadow-sm">
-        <div class="container mx-auto px-4 py-3">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-2">
-                    <a href="index.html" class="flex items-center space-x-2">
-                        <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-bolt text-white text-lg"></i>
-                        </div>
-                        <div>
-                            <h1 class="text-xl font-bold text-gray-800">EasyRecharge MM</h1>
-                            <p class="text-xs text-gray-500">Mobile Recharge & Top-up</p>
-                        </div>
-                    </a>
-                </div>
-                <nav class="hidden md:flex space-x-6">
-                    <a href="index.html" class="text-gray-600 hover:text-blue-600">ပင်မစာမျက်နှာ</a>
-                    <a href="services.html" class="text-gray-600 hover:text-blue-600">ဝန်ဆောင်မှုများ</a>
-                    <a href="status.html" class="text-gray-600 hover:text-blue-600">အမှာစာများ</a>
-                </nav>
-                <button class="md:hidden text-gray-600">
-                    <i class="fas fa-bars text-xl"></i>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="container mx-auto px-4 py-8 max-w-4xl">
-        <!-- Page Header -->
-        <div class="text-center mb-8">
-            <div class="w-20 h-20 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <i class="fas fa-sim-card text-blue-600 text-3xl"></i>
-            </div>
-            <h1 class="text-3xl font-bold text-gray-800 mb-2">SIM Recharge</h1>
-            <p class="text-gray-600">ဒေတာ / ဖုန်းဘေလ် / အင်တာနက်ပက်ကေ့ချ်များ ဝယ်ယူရန်</p>
-        </div>
-
-        <!-- Order Form -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-            <!-- Form Header -->
-            <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4">
-                <h2 class="text-xl font-bold text-white">အမှာစာပေးရန်</h2>
-            </div>
-
-            <!-- Form Content -->
-            <div class="p-6">
-                <form id="simOrderForm">
-                    <!-- Phone Number -->
-                    <div class="mb-6">
-                        <label class="block text-gray-700 font-medium mb-2" for="phone">
-                            ဖုန်းနံပါတ် <span class="text-red-500">*</span>
-                        </label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <span class="text-gray-500">+95</span>
-                            </div>
-                            <input 
-                                type="tel" 
-                                id="phone" 
-                                name="phone"
-                                class="form-input pl-12"
-                                placeholder="9xxxxxxxxx"
-                                maxlength="10"
-                                required
-                            >
-                        </div>
-                        <p class="text-sm text-gray-500 mt-1">ဥပမာ - 09123456789</p>
-                    </div>
-
-                    <!-- Service Selection -->
-                    <div class="mb-6">
-                        <label class="block text-gray-700 font-medium mb-2">
-                            ဝန်ဆောင်မှုရွေးချယ်ရန် <span class="text-red-500">*</span>
-                        </label>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="serviceOptions">
-                            <!-- Services will be populated by JavaScript -->
-                        </div>
-                    </div>
-
-                    <!-- Total Amount -->
-                    <div class="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-700 font-medium">စုစုပေါင်းကျသင့်ငွေ:</span>
-                            <span class="text-2xl font-bold text-blue-600" id="totalAmount">0 MMK</span>
-                        </div>
-                    </div>
-
-                    <!-- Payment Method -->
-                    <div class="mb-6">
-                        <label class="block text-gray-700 font-medium mb-2">
-                            ငွေချေနည်း <span class="text-red-500">*</span>
-                        </label>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3" id="paymentOptions">
-                            <!-- Payment options will be populated by JavaScript -->
-                        </div>
-                    </div>
-
-                    <!-- Transaction ID -->
-                    <div class="mb-6">
-                        <label class="block text-gray-700 font-medium mb-2" for="transactionId">
-                            Transaction ID <span class="text-red-500">*</span>
-                        </label>
-                        <input 
-                            type="text" 
-                            id="transactionId" 
-                            name="transactionId"
-                            class="form-input"
-                            placeholder="KBZPay / WavePay Transaction ID"
-                            required
-                        >
-                        <p class="text-sm text-gray-500 mt-1">ငွေလွှဲပြီး ရရှိသော Transaction ID ထည့်ပါ</p>
-                    </div>
-
-                    <!-- Notes -->
-                    <div class="mb-6 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
-                        <div class="flex items-start space-x-2">
-                            <i class="fas fa-exclamation-circle text-yellow-600 mt-0.5"></i>
-                            <div>
-                                <p class="text-sm text-yellow-800 font-medium">မှတ်ချက်:</p>
-                                <p class="text-sm text-yellow-700">ငွေစက္ကူဖြင့် ငွေချေလိုပါက Facebook Page မှ ဆက်သွယ်ပါ</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Submit Button -->
-                    <div class="flex space-x-3">
-                        <button type="button" onclick="window.history.back()" class="btn-secondary flex-1">
-                            <i class="fas fa-arrow-left mr-2"></i> နောက်သို့
-                        </button>
-                        <button type="submit" class="btn-primary flex-1" id="submitBtn">
-                            <i class="fas fa-paper-plane mr-2"></i> အမှာစာပေးမည်
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- Processing Info -->
-        <div class="mt-6 bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-            <h3 class="text-lg font-semibold text-gray-800 mb-3">ဝန်ဆောင်မှုလုပ်ငန်းစဉ်</h3>
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
-                <div class="flex flex-col items-center">
-                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-2">
-                        <i class="fas fa-edit text-blue-600"></i>
-                    </div>
-                    <p class="text-sm font-medium text-gray-800">အမှာစာပေးခြင်း</p>
-                </div>
-                <div class="flex flex-col items-center">
-                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-2">
-                        <i class="fas fa-check text-green-600"></i>
-                    </div>
-                    <p class="text-sm font-medium text-gray-800">အတည်ပြုခြင်း</p>
-                </div>
-                <div class="flex flex-col items-center">
-                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-2">
-                        <i class="fas fa-cog text-purple-600"></i>
-                    </div>
-                    <p class="text-sm font-medium text-gray-800">လုပ်ဆောင်ခြင်း</p>
-                </div>
-                <div class="flex flex-col items-center">
-                    <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mb-2">
-                        <i class="fas fa-check-double text-orange-600"></i>
-                    </div>
-                    <p class="text-sm font-medium text-gray-800">ပြီးစီးခြင်း</p>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed top-4 right-4 transform translate-x-full transition-transform duration-300 z-50">
-        <div class="bg-gray-800 text-white px-6 py-3 rounded-lg shadow-lg max-w-sm">
-            <div class="flex items-center space-x-2">
-                <i id="toastIcon" class="fas fa-info-circle"></i>
-                <span id="toastMessage">This is a toast message</span>
-            </div>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
-    <script>
-        // SIM Service Configuration
-        const SIM_SERVICES = [
-            {
-                id: 'mpt-3gb',
-                name: 'MPT 3GB',
-                price: 1500,
-                validity: '7 Days',
-                description: 'MPT 3GB Data Package'
-            },
-            {
-                id: 'mpt-5gb',
-                name: 'MPT 5GB',
-                price: 2500,
-                validity: '30 Days',
-                description: 'MPT 5GB Data Package'
-            },
-            {
-                id: 'telenor-regular',
-                name: 'Telenor Regular',
-                price: 1000,
-                validity: '7 Days',
-                description: 'Telenor Regular Package'
-            },
-            {
-                id: 'ooredoo-data',
-                name: 'Ooredoo Data',
-                price: 2000,
-                validity: '30 Days',
-                description: 'Ooredoo Data Package'
-            }
-        ];
-
-        const PAYMENT_METHODS = [
-            { id: 'kbzpay', name: 'KBZPay', icon: 'fas fa-mobile-alt' },
-            { id: 'wavepay', name: 'WavePay', icon: 'fas fa-wave-square' },
-            { id: 'ayapay', name: 'AYA Pay', icon: 'fas fa-university' },
-            { id: 'uabpay', name: 'UAB Pay', icon: 'fas fa-building' }
-        ];
-
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeSIMForm();
-        });
-
-        function initializeSIMForm() {
-            // Populate service options
-            const serviceContainer = document.getElementById('serviceOptions');
-            SIM_SERVICES.forEach(service => {
-                const serviceElement = `
-                    <label class="service-option cursor-pointer">
-                        <input type="radio" name="service" value="${service.id}" class="hidden" data-price="${service.price}">
-                        <div class="border-2 border-gray-200 rounded-lg p-4 hover:border-blue-500 transition-colors duration-200 service-option-content">
-                            <div class="flex justify-between items-start mb-2">
-                                <span class="font-medium text-gray-800">${service.name}</span>
-                                <span class="text-blue-600 font-bold">${service.price} MMK</span>
-                            </div>
-                            <p class="text-sm text-gray-600">${service.description}</p>
-                            <p class="text-xs text-gray-500 mt-1">Validity: ${service.validity}</p>
-                        </div>
-                    </label>
-                `;
-                serviceContainer.innerHTML += serviceElement;
-            });
-
-            // Populate payment options
-            const paymentContainer = document.getElementById('paymentOptions');
-            PAYMENT_METHODS.forEach(payment => {
-                const paymentElement = `
-                    <label class="payment-option cursor-pointer">
-                        <input type="radio" name="payment" value="${payment.id}" class="hidden">
-                        <div class="border-2 border-gray-200 rounded-lg p-3 text-center hover:border-blue-500 transition-colors duration-200 payment-option-content">
-                            <i class="${payment.icon} text-gray-600 text-lg mb-1"></i>
-                            <p class="text-sm font-medium text-gray-800">${payment.name}</p>
-                        </div>
-                    </label>
-                `;
-                paymentContainer.innerHTML += paymentElement;
-            });
-
-            // Add event listeners
-            document.querySelectorAll('input[name="service"]').forEach(radio => {
-                radio.addEventListener('change', updateTotalAmount);
-            });
-
-            // Form submission
-            document.getElementById('simOrderForm').addEventListener('submit', handleSIMOrderSubmit);
-        }
-
-        function updateTotalAmount() {
-            const selectedService = document.querySelector('input[name="service"]:checked');
-            const totalAmount = document.getElementById('totalAmount');
-            
-            if (selectedService) {
-                const price = selectedService.getAttribute('data-price');
-                totalAmount.textContent = price + ' MMK';
-            } else {
-                totalAmount.textContent = '0 MMK';
-            }
-        }
-
-        async function handleSIMOrderSubmit(event) {
-            event.preventDefault();
-            
-            const formData = {
-                phone: document.getElementById('phone').value,
-                service: document.querySelector('input[name="service"]:checked')?.value,
-                payment: document.querySelector('input[name="payment"]:checked')?.value,
-                transactionId: document.getElementById('transactionId').value
-            };
-
-            // Validate form
-            const validation = window.formValidator.validateSIMForm(formData);
-            if (!validation.isValid) {
-                Object.keys(validation.errors).forEach(field => {
-                    window.uiUtils.showToast(validation.errors[field], 'error');
-                });
-                return;
-            }
-
-            // Get selected service details
-            const selectedService = SIM_SERVICES.find(s => s.id === formData.service);
-            
-            const orderData = {
-                type: 'sim',
-                userId: window.userSession.userId,
-                service: selectedService.name,
-                target: formData.phone,
-                quantity: 1,
-                total: selectedService.price,
-                payment: formData.payment,
-                transactionId: formData.transactionId
-            };
-
-            // Show loading state
-            const submitBtn = document.getElementById('submitBtn');
-            const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> တင်နေသည်...';
-            submitBtn.disabled = true;
-
-            try {
-                const result = await window.apiService.submitOrder(orderData);
-                window.uiUtils.showToast('အမှာစာအောင်မြင်စွာတင်ပြီးပါပြီ! Order ID: ' + result.orderId, 'success');
-                
-                // Reset form
-                document.getElementById('simOrderForm').reset();
-                document.getElementById('totalAmount').textContent = '0 MMK';
-                
-                // Redirect to status page after 2 seconds
-                setTimeout(() => {
-                    window.location.href = 'status.html';
-                }, 2000);
-
-            } catch (error) {
-                window.uiUtils.showToast('အမှာစာတင်ရာတွင်အမှားတစ်ခုရှိသည်: ' + error.message, 'error');
-            } finally {
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-            }
-        }
-
-        // Add visual feedback for service and payment options
-        document.addEventListener('click', function(event) {
-            // Service option selection
-            if (event.target.closest('.service-option')) {
-                document.querySelectorAll('.service-option-content').forEach(el => {
-                    el.classList.remove('border-blue-500', 'bg-blue-50');
-                });
-                const selectedContent = event.target.closest('.service-option').querySelector('.service-option-content');
-                selectedContent.classList.add('border-blue-500', 'bg-blue-50');
-            }
-
-            // Payment option selection
-            if (event.target.closest('.payment-option')) {
-                document.querySelectorAll('.payment-option-content').forEach(el => {
-                    el.classList.remove('border-blue-500', 'bg-blue-50');
-                });
-                const selectedContent = event.target.closest('.payment-option').querySelector('.payment-option-content');
-                selectedContent.classList.add('border-blue-500', 'bg-blue-50');
-            }
-        });
-    </script>
+<body>
+<header>
+<h1>SIM/Data Packages</h1>
+<button id="theme-toggle">🌙</button>
+</header>
+<main>
+<form id="sim-order-form">
+<label>Phone Number
+<input type="tel" id="phone" required>
+</label>
+<label>Network
+<select id="network" required>
+<option value="MPT">MPT</option>
+<option value="Telenor">Telenor</option>
+<option value="Ooredoo">Ooredoo</option>
+</select>
+</label>
+<label>Package
+<select id="package" required></select>
+</label>
+<label>Quantity
+<input type="number" id="qty" value="1" min="1" required>
+</label>
+<label>Total
+<input type="text" id="total" readonly>
+</label>
+<button type="submit">Place Order</button>
+</form>
+</main>
+<nav class="bottom-nav">
+<a href="index.html">Home</a>
+<a href="order.html">Order</a>
+<a href="status.html">Status</a>
+<a href="services.html">Services</a>
+</nav>
+<script src="script.js"></script>
+<script>
+populateSimPackages();
+document.getElementById('sim-order-form').addEventListener('submit', submitOrderForm);
+</script>
 </body>
-                            </html>
+</html>
