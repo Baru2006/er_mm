@@ -1,51 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SIM/Data Order</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMM Services - Easy Recharge MM</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-<header>
-<h1>SIM/Data Packages</h1>
-<button id="theme-toggle">🌙</button>
-</header>
-<main>
-<form id="sim-order-form">
-<label>Phone Number
-<input type="tel" id="phone" required>
-</label>
-<label>Network
-<select id="network" required>
-<option value="MPT">MPT</option>
-<option value="Telenor">Telenor</option>
-<option value="Ooredoo">Ooredoo</option>
-</select>
-</label>
-<label>Package
-<select id="package" required></select>
-</label>
-<label>Quantity
-<input type="number" id="qty" value="1" min="1" required>
-</label>
-<label>Total
-<input type="text" id="total" readonly>
-</label>
-<button type="submit">Place Order</button>
-</form>
-</main>
-<nav class="bottom-nav">
-<a href="index.html">Home</a>
-<a href="order.html">Order</a>
-<a href="status.html">Status</a>
-<a href="services.html">Services</a>
-</nav>
-<script src="script.js"></script>
-<script>
-populateSimPackages();
-document.getElementById('sim-order-form').addEventListener('submit', submitOrderForm);
-</script>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <a href="order.html" class="back-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path fill-rule="evenodd" d="M11.03 3.97a.75.75 0 010 1.06l-6.22 6.22H21a.75.75 0 010 1.5H4.81l6.22 6.22a.75.75 0 11-1.06 1.06l-7.5-7.5a.75.75 0 010-1.06l7.5-7.5a.75.75 0 011.06 0z" clip-rule="evenodd"/>
+                    </svg>
+                </a>
+                <h1>SMM Services</h1>
+            </div>
+        </header>
+
+        <main class="main">
+            <form class="order-form" id="smmForm">
+                <div class="form-group">
+                    <label for="target">Target URL/Username</label>
+                    <input type="text" id="target" placeholder="Enter profile URL or username" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="platform">Platform</label>
+                    <select id="platform" required>
+                        <option value="">Select Platform</option>
+                        <option value="Facebook">Facebook</option>
+                        <option value="Instagram">Instagram</option>
+                        <option value="YouTube">YouTube</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="service">Service Type</label>
+                    <select id="service" required>
+                        <option value="">Select Service</option>
+                        <option value="Likes">Likes</option>
+                        <option value="Followers">Followers</option>
+                        <option value="Views">Views</option>
+                        <option value="Comments">Comments</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="qty">Quantity</label>
+                    <input type="number" id="qty" value="100" min="100" max="10000" step="100" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="payment">Payment Method</label>
+                    <select id="payment" required>
+                        <option value="">Select Payment</option>
+                        <option value="KBZ Pay">KBZ Pay</option>
+                        <option value="Wave Pay">Wave Pay</option>
+                        <option value="CB Pay">CB Pay</option>
+                        <option value="AYA Pay">AYA Pay</option>
+                    </select>
+                </div>
+
+                <div class="total-section">
+                    <label>Total Amount</label>
+                    <div class="total-amount" id="total">0 MMK</div>
+                </div>
+
+                <button type="submit" class="btn-primary">Place Order</button>
+            </form>
+        </main>
+
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z"/>
+                    <path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z"/>
+                </svg>
+                <span>Home</span>
+            </a>
+            <a href="order.html" class="nav-item active">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M2.25 2.25a.75.75 0 000 1.5h1.386c.17 0 .318.114.362.278l2.558 9.592a3.752 3.752 0 00-2.806 3.63c0 .414.336.75.75.75h15.75a.75.75 0 000-1.5H5.378A2.25 2.25 0 017.5 15h11.218a.75.75 0 00.674-.421 60.358 60.358 0 002.96-7.228.75.75 0 00-.525-.965A60.864 60.864 0 005.68 4.509l-.232-.867A1.875 1.875 0 003.636 2.25H2.25zM3.75 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM16.5 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z"/>
+                </svg>
+                <span>Order</span>
+            </a>
+            <a href="status.html" class="nav-item">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path fill-rule="evenodd" d="M4.5 12a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm6 0a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm6 0a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" clip-rule="evenodd"/>
+                </svg>
+                <span>Status</span>
+            </a>
+        </nav>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            populateSMMPrices();
+            
+            document.getElementById('smmForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitOrderForm(e);
+            });
+        });
+    </script>
 </body>
 </html>
