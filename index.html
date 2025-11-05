@@ -1,60 +1,66 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Easy Recharge MM - Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <title>Easy Recharge MM - Dashboard</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="style.css">
+  <script src="price.js"></script>
+  <script src="script.js" defer></script>
 </head>
 <body>
+  <header>
+    <h1>Easy Recharge MM — Dashboard</h1>
+    <nav>
+      <a href="index.html">Home</a> |
+      <a href="order_sim.html">Order SIM</a> |
+      <a href="order_game.html">Order Game</a> |
+      <a href="order_smm.html">Order SMM</a> |
+      <a href="pay.html">P2P Exchange</a> |
+      <a href="status.html">Order Status</a> |
+      <a href="services.html">Services</a> |
+      <a href="faq.html">FAQ</a> |
+      <a href="maintenance.html">Maintenance</a>
+    </nav>
+  </header>
 
-    <header>
-        <h1>Easy Recharge MM</h1>
-        <nav>
-            <a href="index.html">Home</a> |
-            <a href="order_sim.html">SIM Recharge</a> |
-            <a href="order_game.html">Game Topup</a> |
-            <a href="order_smm.html">SMM Services</a> |
-            <a href="pay.html">P2P Exchange</a> |
-            <a href="status.html">Order Status</a> |
-            <a href="services.html">Services</a> |
-            <a href="faq.html">FAQ</a>
-        </nav>
-        <p>Admin Phone: <span id="admin-phone-display">09-123456789</span></p>
-    </header>
+  <main>
+    <section>
+      <h2>Admin</h2>
+      <div>
+        Admin Phone: <span id="adminPhone">09-123456789</span>
+        <button type="button" onclick="copyAdminPhone()">Copy</button>
+      </div>
+    </section>
 
-    <main>
-        <h2>Our Services</h2>
-        
-        <div>
-            <h3><a href="order_sim.html">SIM Recharge</a></h3>
-            <p>Recharge your MPT, Telenor, Ooredoo, and more.</p>
-        </div>
+    <section>
+      <h2>Services</h2>
+      <!-- Horizontal service cards (functional links only) -->
+      <div>
+        <a href="order_sim.html">SIM Services</a>
+      </div>
+      <div>
+        <a href="order_game.html">Game TopUp</a>
+      </div>
+      <div>
+        <a href="order_smm.html">SMM</a>
+      </div>
+      <div>
+        <a href="pay.html">P2P Exchange</a>
+      </div>
+    </section>
 
-        <hr>
-        
-        <div>
-            <h3><a href="order_game.html">Game Topup</a></h3>
-            <p>Topup for Free Fire, PUBG, MLBB, and more.</p>
-        </div>
+    <section>
+      <h2>Quick Links</h2>
+      <ul>
+        <li><a href="status.html">Track Orders</a></li>
+        <li><a href="services.html">View Prices</a></li>
+      </ul>
+    </section>
+  </main>
 
-        <hr>
-
-        <div>
-            <h3><a href="order_smm.html">SMM Services</a></h3>
-            <p>Get Facebook Likes, IG Followers, and more.</p>
-        </div>
-
-        <hr>
-
-        <div>
-            <h3><a href="pay.html">P2P Exchange</a></h3>
-            <p>Exchange KBZ Pay, Wave Pay, and more.</p>
-        </div>
-    </main>
-
-    <script src="price.js"></script>
-    <script src="script.js" defer></script>
+  <footer>
+    <small>Easy Recharge MM — functional skeleton</small>
+  </footer>
 </body>
 </html>
-
