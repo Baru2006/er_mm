@@ -1,126 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Easy Recharge MM - Dashboard</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy Recharge MM - Dashboard</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    Easy Recharge MM
-  </header>
 
-  <div class="container">
-    <!-- Admin Trust Section -->
-    <div class="card">
-      <h2>📞 Admin Contact</h2>
-      <p>Call or WhatsApp: <span id="adminPhone">09-123456789</span> 
-        <button onclick="copyAdminPhone()">Copy</button>
-      </p>
-      <p>✅ Trusted & Fast Service</p>
-    </div>
+    <header>
+        <h1>Easy Recharge MM</h1>
+        <nav>
+            <a href="index.html">Home</a> |
+            <a href="order_sim.html">SIM Recharge</a> |
+            <a href="order_game.html">Game Topup</a> |
+            <a href="order_smm.html">SMM Services</a> |
+            <a href="pay.html">P2P Exchange</a> |
+            <a href="status.html">Order Status</a> |
+            <a href="services.html">Services</a> |
+            <a href="faq.html">FAQ</a>
+        </nav>
+        <p>Admin Phone: <span id="admin-phone-display">09-123456789</span></p>
+    </header>
 
-    <!-- Service Cards -->
-    <div class="service-cards">
-      <div class="service-card" onclick="location.href='order_sim.html'">
-        <img src="icons/sim.png" alt="SIM/Data">
-        <h3>SIM / Data</h3>
-      </div>
-      <div class="service-card" onclick="location.href='order_game.html'">
-        <img src="icons/game.png" alt="Game TopUp">
-        <h3>Game TopUp</h3>
-      </div>
-      <div class="service-card" onclick="location.href='order_smm.html'">
-        <img src="icons/smm.png" alt="SMM Services">
-        <h3>SMM Services</h3>
-      </div>
-      <div class="service-card" onclick="location.href='pay.html'">
-        <img src="icons/p2p.png" alt="P2P Exchange">
-        <h3>P2P Exchange</h3>
-      </div>
-    </div>
+    <main>
+        <h2>Our Services</h2>
+        
+        <div>
+            <h3><a href="order_sim.html">SIM Recharge</a></h3>
+            <p>Recharge your MPT, Telenor, Ooredoo, and more.</p>
+        </div>
 
-    <!-- Live Stats -->
-    <div class="card">
-      <h2>📊 Live Statistics</h2>
-      <div id="stats">
-        <p>Total Orders: <span id="totalOrders">0</span></p>
-        <p>Pending Orders: <span id="pendingOrders">0</span></p>
-        <p>Completed Orders: <span id="completedOrders">0</span></p>
-      </div>
-    </div>
+        <hr>
+        
+        <div>
+            <h3><a href="order_game.html">Game Topup</a></h3>
+            <p>Topup for Free Fire, PUBG, MLBB, and more.</p>
+        </div>
 
-    <!-- Recent Orders Preview -->
-    <div class="card">
-      <h2>🕒 Recent Orders</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Order ID</th>
-            <th>Type</th>
-            <th>Details</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody id="recentOrders">
-          <tr>
-            <td colspan="4">Loading...</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+        <hr>
 
-  <script>
-    // Copy Admin Phone
-    function copyAdminPhone() {
-      const phone = document.getElementById('adminPhone').textContent;
-      navigator.clipboard.writeText(phone);
-      showToast('Admin phone copied!', 'success');
-    }
+        <div>
+            <h3><a href="order_smm.html">SMM Services</a></h3>
+            <p>Get Facebook Likes, IG Followers, and more.</p>
+        </div>
 
-    // Fetch Live Stats & Recent Orders
-    async function loadDashboard() {
-      try {
-        const statsRes = await fetch(`${GAS_URL}?action=get_stats`);
-        const statsData = await statsRes.json();
-        if(statsData.success) {
-          document.getElementById('totalOrders').textContent = statsData.stats.totalOrders;
-          document.getElementById('pendingOrders').textContent = statsData.stats.pendingOrders;
-          document.getElementById('completedOrders').textContent = statsData.stats.completedOrders;
-        }
+        <hr>
 
-        const ordersRes = await fetch(`${GAS_URL}?action=get_orders&userId=Guest`);
-        const ordersData = await ordersRes.json();
-        const tbody = document.getElementById('recentOrders');
-        tbody.innerHTML = '';
-        if(ordersData.success && ordersData.orders.length > 0) {
-          ordersData.orders.slice(-5).reverse().forEach(order => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-              <td>${order.orderId}</td>
-              <td>${order.type.replace('_Orders','')}</td>
-              <td>${order.details.join(' | ')}</td>
-              <td>${order.details[9]}</td>
-            `;
-            tbody.appendChild(row);
-          });
-        } else {
-          tbody.innerHTML = '<tr><td colspan="4">No recent orders.</td></tr>';
-        }
+        <div>
+            <h3><a href="pay.html">P2P Exchange</a></h3>
+            <p>Exchange KBZ Pay, Wave Pay, and more.</p>
+        </div>
+    </main>
 
-      } catch (err) {
-        showToast('Failed to load dashboard data', 'error');
-      }
-    }
-
-    // Initialize
-    document.addEventListener('DOMContentLoaded', () => {
-      fetchPrices(); // Load prices dynamically
-      loadDashboard(); // Load stats & recent orders
-    });
-  </script>
+    <script src="price.js"></script>
+    <script src="script.js" defer></script>
 </body>
 </html>
+
