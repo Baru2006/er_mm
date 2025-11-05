@@ -1,183 +1,43 @@
 <!DOCTYPE html>
-<html lang="my">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EasyRecharge MM - Mobile Recharge Service</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Easy Recharge MM - Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gray-50">
-    <!-- Header -->
-    <header class="bg-white shadow-sm">
-        <div class="container mx-auto px-4 py-3">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-2">
-                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-bolt text-white text-lg"></i>
-                    </div>
-                    <div>
-                        <h1 class="text-xl font-bold text-gray-800">EasyRecharge MM</h1>
-                        <p class="text-xs text-gray-500">Mobile Recharge & Top-up</p>
-                    </div>
-                </div>
-                <nav class="hidden md:flex space-x-6">
-                    <a href="index.html" class="text-blue-600 font-medium">ပင်မစာမျက်နှာ</a>
-                    <a href="services.html" class="text-gray-600 hover:text-blue-600">ဝန်ဆောင်မှုများ</a>
-                    <a href="status.html" class="text-gray-600 hover:text-blue-600">အမှာစာများ</a>
-                    <a href="faq.html" class="text-gray-600 hover:text-blue-600">အကူအညီ</a>
-                </nav>
-                <button class="md:hidden text-gray-600">
-                    <i class="fas fa-bars text-xl"></i>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="container mx-auto px-4 py-6">
-        <!-- User Profile Card -->
-        <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-6 text-white mb-6 shadow-lg">
-            <div class="flex items-center space-x-4">
-                <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
-                    <i class="fas fa-user text-2xl"></i>
-                </div>
-                <div>
-                    <h2 class="text-2xl font-bold">မင်္ဂလာပါ!</h2>
-                    <p class="text-blue-100" id="welcomeMessage">EasyRecharge MM မှ ကြိုဆိုပါတယ်</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Statistics Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div class="stat-card bg-white rounded-xl p-4 shadow-sm border-l-4 border-blue-500">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <p class="text-gray-500 text-sm">စုစုပေါင်းအမှာစာ</p>
-                        <h3 class="text-2xl font-bold text-gray-800" id="totalOrders">0</h3>
-                    </div>
-                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-shopping-cart text-blue-600"></i>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="stat-card bg-white rounded-xl p-4 shadow-sm border-l-4 border-green-500">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <p class="text-gray-500 text-sm">စုစုပေါင်းသုံးစွဲမှု</p>
-                        <h3 class="text-2xl font-bold text-gray-800" id="totalSpent">0 MMK</h3>
-                    </div>
-                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-wallet text-green-600"></i>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="stat-card bg-white rounded-xl p-4 shadow-sm border-l-4 border-orange-500">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <p class="text-gray-500 text-sm">ဆောင်ရွက်ဆဲအမှာစာ</p>
-                        <h3 class="text-2xl font-bold text-gray-800" id="pendingOrders">0</h3>
-                    </div>
-                    <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-clock text-orange-600"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Quick Services -->
-        <div class="mb-6">
-            <h3 class="text-lg font-semibold text-gray-800 mb-4">အမြန်ဝန်ဆောင်မှုများ</h3>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <a href="order_sim.html" class="service-card">
-                    <div class="bg-white rounded-xl p-4 text-center shadow-sm hover:shadow-md transition-shadow border border-gray-100">
-                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                            <i class="fas fa-sim-card text-blue-600 text-xl"></i>
-                        </div>
-                        <p class="font-medium text-gray-800">SIM Recharge</p>
-                        <p class="text-sm text-gray-500">ဒေတာ / ဖုန်းဘေလ်</p>
-                    </div>
-                </a>
-                
-                <a href="order_game.html" class="service-card">
-                    <div class="bg-white rounded-xl p-4 text-center shadow-sm hover:shadow-md transition-shadow border border-gray-100">
-                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                            <i class="fas fa-gamepad text-green-600 text-xl"></i>
-                        </div>
-                        <p class="font-medium text-gray-800">Game Top-up</p>
-                        <p class="text-sm text-gray-500">ဂိမ်းကဒ်များ</p>
-                    </div>
-                </a>
-                
-                <a href="pay.html" class="service-card">
-                    <div class="bg-white rounded-xl p-4 text-center shadow-sm hover:shadow-md transition-shadow border border-gray-100">
-                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                            <i class="fas fa-exchange-alt text-purple-600 text-xl"></i>
-                        </div>
-                        <p class="font-medium text-gray-800">P2P Exchange</p>
-                        <p class="text-sm text-gray-500">ငွေလွှဲပြောင်းခြင်း</p>
-                    </div>
-                </a>
-                
-                <a href="status.html" class="service-card">
-                    <div class="bg-white rounded-xl p-4 text-center shadow-sm hover:shadow-md transition-shadow border border-gray-100">
-                        <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                            <i class="fas fa-clipboard-list text-orange-600 text-xl"></i>
-                        </div>
-                        <p class="font-medium text-gray-800">Order Status</p>
-                        <p class="text-sm text-gray-500">အမှာစာများကြည့်ရန်</p>
-                    </div>
-                </a>
-            </div>
-        </div>
-
-        <!-- Recent Orders -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100">
-            <div class="p-4 border-b border-gray-100">
-                <h3 class="text-lg font-semibold text-gray-800">နောက်ဆုံးအမှာစာများ</h3>
-            </div>
-            <div class="p-4">
-                <div id="recentOrders" class="text-center py-8">
-                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
-                    <p class="text-gray-500">အချက်အလက်များ ရယူနေသည်...</p>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed top-4 right-4 transform translate-x-full transition-transform duration-300 z-50">
-        <div class="bg-gray-800 text-white px-6 py-3 rounded-lg shadow-lg max-w-sm">
-            <div class="flex items-center space-x-2">
-                <i id="toastIcon" class="fas fa-info-circle"></i>
-                <span id="toastMessage">This is a toast message</span>
-            </div>
-        </div>
+<body>
+<header>
+  <h1>Easy Recharge MM</h1>
+  <button id="theme-toggle">🌙</button>
+</header>
+<main>
+  <section class="stats">
+    <div class="card">
+      <h2>Total Orders</h2>
+      <p id="total-orders">0</p>
     </div>
-
-    <!-- Footer -->
-    <footer class="bg-white border-t border-gray-200 mt-12">
-        <div class="container mx-auto px-4 py-6">
-            <div class="text-center">
-                <p class="text-gray-600">&copy; 2024 EasyRecharge MM. All rights reserved.</p>
-                <div class="flex justify-center space-x-4 mt-2">
-                    <a href="privacy_policy.html" class="text-gray-500 hover:text-blue-600 text-sm">Privacy Policy</a>
-                    <a href="faq.html" class="text-gray-500 hover:text-blue-600 text-sm">FAQ & Support</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <script src="script.js"></script>
-    <script>
-        // Initialize dashboard
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeDashboard();
-        });
-    </script>
+    <div class="card">
+      <h2>Total Revenue</h2>
+      <p id="total-revenue">0 MMK</p>
+    </div>
+  </section>
+  <section class="quick-links">
+    <a href="order.html" class="btn">Place Order</a>
+    <a href="status.html" class="btn">Track Orders</a>
+    <a href="services.html" class="btn">View Services</a>
+  </section>
+</main>
+<nav class="bottom-nav">
+  <a href="index.html">Home</a>
+  <a href="order.html">Order</a>
+  <a href="status.html">Status</a>
+  <a href="services.html">Services</a>
+</nav>
+<script src="script.js"></script>
+<script>
+fetchStats();
+</script>
 </body>
-    </html>
+</html>
