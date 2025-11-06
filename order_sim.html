@@ -1,72 +1,55 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Order SIM / Data - Easy Recharge MM</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIM/Data Order</title>
 <link rel="stylesheet" href="style.css">
-<script src="price.js"></script>
+<script src="price.js" defer></script>
 <script src="script.js" defer></script>
 </head>
 <body>
-<header class="topbar">
-<div class="brand">Order SIM / Data</div>
-<div class="admin-phone">
-<span id="adminPhoneDisplayOrderSim">09-123456789</span>
-<button class="copy-btn" data-phone="09-123456789" onclick="copyAdminPhone(event)">Copy</button>
-</div>
+<header>
+  <h1>SIM/Data Order</h1>
+  <div id="user-info">
+    <span id="user-role" class="badge"></span>
+    <span id="user-id"></span>
+  </div>
 </header>
-<main class="container form-container">
-<form id="simForm" onsubmit="submitSimForm(event)">
-<div class="form-row">
-<label>Admin Phone</label>
-<div class="admin-box">
-<span id="adminPhoneSim">09-123456789</span>
-<button type="button" class="copy-btn" data-phone="09-123456789" onclick="copyAdminPhone(event)">Copy</button>
-</div>
-</div>
-<div class="form-row">
-<label>SIM Provider</label>
-<select id="simProvider" required onchange="populateSimPackages()">
-<option value="">Select Provider</option>
-<option value="mpt">MPT</option>
-<option value="telenor">Telenor</option>
-<option value="ooredoo">Ooredoo</option>
-</select>
-</div>
-<div class="form-row">
-<label>Data Package</label>
-<select id="simPackage" required onchange="updateSimDescriptionAndPrice()">
-<option value="">Select Package</option>
-</select>
-</div>
-<div class="form-row">
-<label>Service Description</label>
-<div id="simServiceDesc" class="service-desc">Choose a package to see details</div>
-</div>
-<div class="form-row">
-<label>Phone Number</label>
-<input id="simPhone" type="tel" placeholder="09xxxxxxxxx" pattern="[0-9]{8,12}" required>
-</div>
-<div class="form-row">
-<label>Quantity</label>
-<input id="simQty" type="number" value="1" min="1" readonly>
-</div>
-<div class="form-row">
-<label>Total Price</label>
-<div id="simTotal">0</div>
-</div>
-<div class="form-row">
-<label>Transaction ID</label>
-<input id="simTx" type="text" required>
-</div>
-<div class="form-row">
-<button class="btn" type="submit">Submit Order</button>
-</div>
-<div class="form-row">
-<div id="simFormMessage" class="message-box">Messages will appear here</div>
-</div>
-</form>
+
+<main>
+  <form id="simOrderForm">
+    <label>Admin Phone <button type="button" onclick="copyAdminPhone()">Copy</button></label>
+    <input type="text" id="adminPhone" value="09XXXXXXXX" readonly>
+
+    <label>Provider</label>
+    <select id="provider">
+      <option value="MPT">MPT</option>
+      <option value="Telenor">Telenor</option>
+      <option value="Ooredoo">Ooredoo</option>
+    </select>
+
+    <label>Package</label>
+    <select id="package">
+      <option value="Data 1GB">Data 1GB</option>
+      <option value="Data 3GB">Data 3GB</option>
+      <option value="Data 5GB">Data 5GB</option>
+    </select>
+
+    <label>Phone Number</label>
+    <input type="text" id="phone" required>
+
+    <label>Quantity</label>
+    <input type="number" id="qty" value="1" readonly>
+
+    <label>Total Price</label>
+    <input type="text" id="totalPrice" readonly>
+
+    <label>Transaction ID</label>
+    <input type="text" id="transactionId" required>
+
+    <button type="submit">Submit Order</button>
+  </form>
 </main>
 </body>
 </html>
