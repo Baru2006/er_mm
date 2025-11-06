@@ -1,66 +1,69 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>Easy Recharge MM - Dashboard</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" href="style.css">
-  <script src="price.js"></script>
-  <script src="script.js" defer></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Easy Recharge MM - Dashboard</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>Easy Recharge MM — Dashboard</h1>
-    <nav>
-      <a href="index.html">Home</a> |
-      <a href="order_sim.html">Order SIM</a> |
-      <a href="order_game.html">Order Game</a> |
-      <a href="order_smm.html">Order SMM</a> |
-      <a href="pay.html">P2P Exchange</a> |
-      <a href="status.html">Order Status</a> |
-      <a href="services.html">Services</a> |
-      <a href="faq.html">FAQ</a> |
-      <a href="maintenance.html">Maintenance</a>
-    </nav>
-  </header>
-
-  <main>
-    <section>
-      <h2>Admin</h2>
-      <div>
-        Admin Phone: <span id="adminPhone">09-123456789</span>
-        <button type="button" onclick="copyAdminPhone()">Copy</button>
-      </div>
-    </section>
-
-    <section>
-      <h2>Services</h2>
-      <!-- Horizontal service cards (functional links only) -->
-      <div>
-        <a href="order_sim.html">SIM Services</a>
-      </div>
-      <div>
-        <a href="order_game.html">Game TopUp</a>
-      </div>
-      <div>
-        <a href="order_smm.html">SMM</a>
-      </div>
-      <div>
-        <a href="pay.html">P2P Exchange</a>
-      </div>
-    </section>
-
-    <section>
-      <h2>Quick Links</h2>
-      <ul>
-        <li><a href="status.html">Track Orders</a></li>
-        <li><a href="services.html">View Prices</a></li>
-      </ul>
-    </section>
-  </main>
-
-  <footer>
-    <small>Easy Recharge MM — functional skeleton</small>
-  </footer>
+<header class="topbar">
+<div class="container">
+<div class="brand">Easy Recharge MM</div>
+<div class="admin-box">
+<div class="admin-label">Admin Phone</div>
+<div class="admin-phone" id="adminPhone">09-123456789</div>
+<button class="btn small" id="copyAdminBtn">Copy</button>
+</div>
+</div>
+</header>
+<main class="container">
+<section class="cards">
+<a class="card" href="order_sim.html">
+<div class="card-title">SIM / Data</div>
+<div class="card-sub">Buy mobile data</div>
+<div class="card-cta">Order</div>
+</a>
+<a class="card" href="order_game.html">
+<div class="card-title">Game TopUp</div>
+<div class="card-sub">Top up game credits</div>
+<div class="card-cta">Order</div>
+</a>
+<a class="card" href="order_smm.html">
+<div class="card-title">SMM Services</div>
+<div class="card-sub">Social media growth</div>
+<div class="card-cta">Order</div>
+</a>
+<a class="card" href="pay.html">
+<div class="card-title">P2P Exchange</div>
+<div class="card-sub">Send & receive payments</div>
+<div class="card-cta">Exchange</div>
+</a>
+</section>
+<section class="stats">
+<div class="stat">
+<div class="stat-value" id="totalOrders">--</div>
+<div class="stat-label">Total Orders</div>
+</div>
+<div class="stat">
+<div class="stat-value" id="revenue">--</div>
+<div class="stat-label">Revenue</div>
+</div>
+<div class="stat">
+<div class="stat-value" id="pending">--</div>
+<div class="stat-label">Pending</div>
+</div>
+</section>
+<section class="links">
+<a class="link" href="services.html">Services</a>
+<a class="link" href="status.html">Order Status</a>
+<a class="link" href="faq.html">FAQ</a>
+</section>
+</main>
+<script src="price.js"></script>
+<script src="script.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded',function(){initAdminCopy();loadStats();});
+</script>
 </body>
-</html>
+  </html>
