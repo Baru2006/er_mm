@@ -15,15 +15,14 @@ function renderServicesCatalog(){const container=document.getElementById('servic
 function loadStats(){fetch(GAS_URL+'?action=getStats').then(r=>r.json()).then(res=>{if(res.status==='success'){document.getElementById('totalOrders').textContent=res.data.totalOrders||0;document.getElementById('revenue').textContent=(res.data.revenue||0)+' Ks';document.getElementById('pending').textContent=res.data.pending||0}}).catch(()=>{})}
 async function submitOrder(payload) {
   try {
-    const res = await fetch(GAS_URL, {
+    await fetch(GAS_URL, {
       method: "POST",
+      mode: "no-cors",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     });
-
-    const text = await res.text();
-    alert("Response: " + text);
+    alert("Order Submitted Successfully!");
   } catch (err) {
-    alert("Fetch Error: " + err.message);
+    alert("Failed to Submit: " + err.message);
   }
 }
