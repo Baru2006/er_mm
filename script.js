@@ -13,3 +13,18 @@ function initP2PForm(){const amount=document.getElementById('p2pAmount');const f
 function initStatusPage(){const searchBtn=document.getElementById('statusSearch');const input=document.getElementById('statusPhone');const results=document.getElementById('statusResults');searchBtn.addEventListener('click',function(){const q=input.value.trim();if(!q){results.innerHTML='<div class=\"status-card\">Please provide phone or transaction id</div>';return}results.innerHTML='<div class=\"status-card\">Searching...</div>';fetch(GAS_URL+'?action=getOrders&query='+encodeURIComponent(q)).then(r=>r.json()).then(res=>{if(res.status==='success'&&res.data&&res.data.length){results.innerHTML='';res.data.forEach(o=>{const el=document.createElement('div');el.className='status-card';el.innerHTML=`<div><strong>OrderID:</strong> ${o.OrderID||o.orderId||''}</div><div><strong>Category:</strong> ${o.Category||o.category||''}</div><div><strong>Service:</strong> ${o.Service||o.service||''}</div><div><strong>Target:</strong> ${o.Phone||o.Target||o.GameID||o.TargetLink||''}</div><div><strong>Total:</strong> ${o.Total||o.total||''}</div><div><strong>Status:</strong> ${o.Status||o.status||''}</div><div><strong>Timestamp:</strong> ${o.Timestamp||o.timestamp||''}</div>`;results.appendChild(el)})}else results.innerHTML='<div class=\"status-card\">No orders found</div>'}).catch(()=>results.innerHTML='<div class=\"status-card\">Error fetching orders</div>')})}
 function renderServicesCatalog(){const container=document.getElementById('servicesCatalog');if(!container)return;container.innerHTML='';Object.keys(SERVICE_PRICES).forEach(cat=>{Object.keys(SERVICE_PRICES[cat]).forEach(key=>{const item=SERVICE_PRICES[cat][key];const card=document.createElement('div');card.className='catalog-item';card.innerHTML=`<div class=\"title\">${item.name}</div><div class=\"desc\">${item.description}</div><div class=\"price\">${item.price} Ks</div><div style=\"margin-top:10px\"><a class=\"btn\" href=\"${cat==='sim'?'order_sim.html':cat==='game'?'order_game.html':'order_smm.html'}\">Order</a></div>`;container.appendChild(card)})})}
 function loadStats(){fetch(GAS_URL+'?action=getStats').then(r=>r.json()).then(res=>{if(res.status==='success'){document.getElementById('totalOrders').textContent=res.data.totalOrders||0;document.getElementById('revenue').textContent=(res.data.revenue||0)+' Ks';document.getElementById('pending').textContent=res.data.pending||0}}).catch(()=>{})}
+async function submitOrder(payload) {
+  try {
+    const res = await fetch(GAS_URL, {
+      method: "POST",
+      mode: "no-cors", // ❌ remove this if you want to see JSON response
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    console.log(await res.text());
+    alert("Order Submitted Successfully!");
+  } catch (err) {
+    console.error(err);
+    alert("Order Failed!");
+  }
+}
