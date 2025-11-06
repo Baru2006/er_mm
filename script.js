@@ -159,3 +159,24 @@ fetch(GAS_URL+'?action=getStats').then(function(r){return r.json()}).then(functi
 if(s && s.stats){document.getElementById('totalOrders').textContent=s.stats.totalOrders||'0';document.getElementById('todayRevenue').textContent=(s.stats.todayRevenue||0).toString();document.getElementById('pendingOrders').textContent=(s.stats.pending||0).toString()}}
 ).catch(function(){})
   }
+
+async function submitOrder(formId, type) {
+  const form = document.getElementById(formId);
+  const formData = Object.fromEntries(new FormData(form).entries());
+  formData.type = type;
+
+  try {
+    const res = await fetch(GAS_URL, {
+      method: "POST",
+      mode: "no-cors", // ❌ remove this line
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData)
+    });
+
+    const data = await res.json();
+    if (data.success) showMessage("Order submitted successfully!");
+    else showMessage("Submission failed: " + data.message);
+  } catch (err) {
+    showMessage("Error: " + err.message);
+  }
+}
