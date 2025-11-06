@@ -1,7 +1,7 @@
 /* script.js - Frontend logic: UserID/Role localStorage, fetch() integration, price calculation, copy button, validation */
 
 /* CONFIG - Replace with your Google Apps Script Web App URL */
-const GAS_URL = 'REPLACE_WITH_GAS_DEPLOY_URL'; // e.g. https://script.google.com/macros/s/AAA.../exec
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbxEgEr3G_C_yqIWNAmNjmAARAseY_yLZAxSc0snePJnL_XKvmAiw7nhRRZtQsTmqQtRiw/exec'; // e.g. https://script.google.com/macros/s/AAA.../exec
 
 /* Utility functions */
 function uuidv4() {
