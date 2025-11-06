@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>P2P Exchange — Easy Recharge MM</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Easy Recharge MM</div>
+    <div class="user-info" id="userInfoPay">
+      <div id="userIdPay">User: —</div>
+      <div id="userRolePay">Role: —</div>
+    </div>
+  </header>
+
+  <main class="container narrow">
+    <h1>P2P Exchange</h1>
+
+    <form id="p2pForm" class="form-card">
+      <label for="fromMethod">From Method</label>
+      <select id="fromMethod" required>
+        <option value="">Select From</option>
+        <option value="KBZPay">KBZPay</option>
+        <option value="WavePay">WavePay</option>
+        <option value="Bank">Bank Transfer</option>
+      </select>
+
+      <label for="toMethod">To Method</label>
+      <select id="toMethod" required>
+        <option value="">Select To</option>
+        <option value="KBZPay">KBZPay</option>
+        <option value="WavePay">WavePay</option>
+        <option value="Bank">Bank Transfer</option>
+      </select>
+
+      <label for="amount">Amount</label>
+      <input id="amount" type="number" min="100" value="1000" required />
+
+      <div class="admin-row">
+        <label for="adminPhoneP2P">Admin Phone</label>
+        <div class="copy-box">
+          <input id="adminPhoneP2P" type="text" value="09-ADMIN-PHONE" />
+          <button type="button" class="copy-btn" data-copy-target="adminPhoneP2P">Copy</button>
+        </div>
+      </div>
+
+      <label for="transactionIdP2P">Transaction ID</label>
+      <input id="transactionIdP2P" type="text" placeholder="Txn reference" required />
+
+      <div class="price-row">
+        <div>Fee (2%):</div>
+        <div id="feeP2P">—</div>
+      </div>
+      <div class="price-row">
+        <div>Receive:</div>
+        <div id="receiveP2P">—</div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn primary">Submit Exchange</button>
+        <button type="reset" class="btn">Reset</button>
+      </div>
+
+      <div id="p2pFormMsg" class="form-msg"></div>
+    </form>
+  </main>
+
+  <script src="price.js"></script>
+  <script src="script.js"></script>
+  <script>
+    initUser();
+    showUserInfo('#userIdPay', '#userRolePay');
+
+    function updateP2Pcalc() {
+      const amount = Number(document.getElementById('amount').value) || 0;
+      const fee = Math.round(amount * 0.02);
+      const receive = amount - fee;
+      document.getElementById('feeP2P').textContent = formatMoney(fee);
+      document.getElementById('receiveP2P').textContent = formatMoney(receive);
+      return {fee, receive};
+    }
+
+    document.getElementById('amount').addEventListener('input', updateP2Pcalc);
+    addGlobalCopyButtons();
+
+    document.getElementById('p2pForm').addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      const fromMethod = document.getElementById('fromMethod').value;
+      const toMethod = document.getElementById('toMethod').value;
+      const amount = Number(document.getElementById('amount').value);
+      const transactionId = document.getElementById('transactionIdP2P').value.trim();
+
+      if (!fromMethod || !toMethod || !transactionId || amount < 100) {
+        showFormMessage('p2pFormMsg', 'Please fill all fields correctly. Amount must be >= 100.');
+        return;
+      }
+      if (fromMethod === toMethod) {
+        showFormMessage('p2pFormMsg', 'FromMethod and ToMethod must be different.');
+        return;
+      }
+
+      const calc = updateP2Pcalc();
+      const payload = {
+        type: 'p2p',
+        fromMethod,
+        toMethod,
+        amount,
+        fee: calc.fee,
+        receive: calc.receive,
+        transactionId,
+        userId: getUserId(),
+        role: getUserRole()
+      };
+
+      await sendOrder(payload, 'p2pFormMsg');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Price Catalog — Easy Recharge MM</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Easy Recharge MM</div>
+    <div class="user-info" id="userInfoCatalog">
+      <div id="userIdCatalog">User: —</div>
+      <div id="userRoleCatalog">Role: —</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1>Price Catalog</h1>
+    <div class="role-toggle">
+      <label>Role: </label>
+      <select id="roleSelect">
+        <option value="Customer">Customer</option>
+        <option value="Reseller">Reseller</option>
+      </select>
+    </div>
+
+    <div id="catalogGrid" class="catalog-grid"></div>
+  </main>
+
+  <script src="price.js"></script>
+  <script src="script.js"></script>
+  <script>
+    initUser();
+    showUserInfo('#userIdCatalog', '#userRoleCatalog');
+
+    // sync role select with user's role
+    const roleSelect = document.getElementById('roleSelect');
+    roleSelect.value = getUserRole();
+
+    roleSelect.addEventListener('change', (e) => {
+      setUserRole(e.target.value);
+      showUserInfo('#userIdCatalog', '#userRoleCatalog');
+      renderCatalog();
+    });
+
+    function renderCatalog() {
+      const role = getUserRole();
+      const catalog = [
+        {key:'sim-1gb', label:'SIM 1GB', base: 1000},
+        {key:'sim-3gb', label:'SIM 3GB', base: 2500},
+        {key:'game-100', label:'Game 100', base: 350},
+        {key:'smm-1', label:'SMM per unit', base: 0.02},
+        {key:'p2p-fee', label:'P2P Fee (2%)', base: '2%'}
+      ];
+      const html = catalog.map(item => {
+        let displayPrice = (item.base === '2%') ? '2%' : formatMoney(calculateRolePriceForDisplay(item.base, role));
+        return `<div class="catalog-card"><div class="catalog-title">${item.label}</div><div class="catalog-price">${displayPrice}</div></div>`;
+      }).join('');
+      document.getElementById('catalogGrid').innerHTML = html;
+    }
+
+    function calculateRolePriceForDisplay(base, role) {
+      // reuse calculateRolePrice in script.js via global
+      return calculateRolePrice('generic', base, role);
+    }
+
+    renderCatalog();
+  </script>
+</body>
+</html>

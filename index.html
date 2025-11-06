@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Easy Recharge MM — Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Easy Recharge MM</div>
+    <div class="user-info" id="userInfo">
+      <div id="userId">User: —</div>
+      <div id="userRole">Role: —</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="stats-card">
+      <h2>Live Stats</h2>
+      <div class="stats-grid">
+        <div class="stat">
+          <div class="stat-value" id="totalOrders">—</div>
+          <div class="stat-label">Total Orders</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="pendingOrders">—</div>
+          <div class="stat-label">Pending</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="completedOrders">—</div>
+          <div class="stat-label">Completed</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="grossRevenue">—</div>
+          <div class="stat-label">Gross</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="services">
+      <h2>Services</h2>
+      <div class="cards-row">
+        <a class="service-card" href="order_sim.html">
+          <h3>SIM / Data</h3>
+          <p>Mobile top-ups and data packages</p>
+        </a>
+        <a class="service-card" href="order_game.html">
+          <h3>Game TopUp</h3>
+          <p>In-game currency & items</p>
+        </a>
+        <a class="service-card" href="order_smm.html">
+          <h3>SMM</h3>
+          <p>Social growth & services</p>
+        </a>
+        <a class="service-card" href="pay.html">
+          <h3>P2P Exchange</h3>
+          <p>Peer-to-peer currency swaps</p>
+        </a>
+        <a class="service-card" href="status.html">
+          <h3>Order Status</h3>
+          <p>Track your orders</p>
+        </a>
+        <a class="service-card" href="services.html">
+          <h3>Price Catalog</h3>
+          <p>See price list</p>
+        </a>
+      </div>
+    </section>
+
+    <section class="quick-actions">
+      <h2>Quick Actions</h2>
+      <div class="actions">
+        <a class="btn" href="order_sim.html">New SIM Order</a>
+        <a class="btn" href="order_game.html">New Game Order</a>
+        <a class="btn" href="order_smm.html">New SMM Order</a>
+        <a class="btn" href="pay.html">P2P Exchange</a>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <small>© Easy Recharge MM • Built with Google Apps Script backend</small>
+    </footer>
+  </main>
+
+  <script src="price.js"></script>
+  <script src="script.js"></script>
+  <script>
+    // Initialize user and load dashboard stats
+    initUser();
+    showUserInfo();
+    fetchStatsAndRender();
+  </script>
+</body>
+</html>

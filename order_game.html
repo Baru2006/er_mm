@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Game TopUp — Easy Recharge MM</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Easy Recharge MM</div>
+    <div class="user-info" id="userInfoSmall2">
+      <div id="userIdSmall2">User: —</div>
+      <div id="userRoleSmall2">Role: —</div>
+    </div>
+  </header>
+
+  <main class="container narrow">
+    <h1>Game TopUp</h1>
+
+    <form id="gameForm" class="form-card">
+      <label for="game">Game</label>
+      <select id="game" required>
+        <option value="">Select Game</option>
+        <option value="PUBG">PUBG</option>
+        <option value="Mobile Legends">Mobile Legends</option>
+        <option value="Free Fire">Free Fire</option>
+        <option value="RoV">RoV</option>
+      </select>
+
+      <label for="gameId">Game ID</label>
+      <input id="gameId" type="text" placeholder="Player ID" required />
+
+      <label for="server">Server</label>
+      <input id="server" type="text" placeholder="Server name/ID" required />
+
+      <label for="qtyGame">Quantity (Diamonds / Currency)</label>
+      <input id="qtyGame" type="number" value="1" min="1" max="10000" required />
+
+      <label for="gamePackage">Package</label>
+      <select id="gamePackage" required>
+        <option value="">Select Package</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+        <option value="500">500</option>
+        <option value="1000">1000</option>
+      </select>
+
+      <div class="admin-row">
+        <label for="adminPhoneGame">Admin Phone</label>
+        <div class="copy-box">
+          <input id="adminPhoneGame" type="text" value="09-ADMIN-PHONE" />
+          <button type="button" class="copy-btn" data-copy-target="adminPhoneGame">Copy</button>
+        </div>
+      </div>
+
+      <label for="paymentGame">Payment Method</label>
+      <select id="paymentGame" required>
+        <option value="">Select Payment</option>
+        <option value="KBZPay">KBZPay</option>
+        <option value="WavePay">WavePay</option>
+        <option value="Bank">Bank Transfer</option>
+      </select>
+
+      <div class="price-row">
+        <div>Unit Price:</div>
+        <div id="unitPriceGame">—</div>
+      </div>
+      <div class="price-row">
+        <div>Total:</div>
+        <div id="totalPriceGame">—</div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn primary">Submit Order</button>
+        <button type="reset" class="btn">Reset</button>
+      </div>
+
+      <div id="gameFormMsg" class="form-msg"></div>
+    </form>
+  </main>
+
+  <script src="price.js"></script>
+  <script src="script.js"></script>
+  <script>
+    initUser();
+    showUserInfo('#userIdSmall2', '#userRoleSmall2');
+
+    const gameBasePrices = {
+      "50": 200,
+      "100": 350,
+      "500": 1400,
+      "1000": 2500
+    };
+
+    function updateGamePrices() {
+      const role = getUserRole();
+      const pkg = document.getElementById('gamePackage').value;
+      const qty = Number(document.getElementById('qtyGame').value) || 1;
+      const base = Number(gameBasePrices[pkg] || 0);
+      const unit = calculateRolePrice('game', base, role);
+      const total = unit * qty;
+      document.getElementById('unitPriceGame').textContent = formatMoney(unit);
+      document.getElementById('totalPriceGame').textContent = formatMoney(total);
+      return {unit, total};
+    }
+
+    document.getElementById('gamePackage').addEventListener('change', updateGamePrices);
+    document.getElementById('qtyGame').addEventListener('input', updateGamePrices);
+
+    addGlobalCopyButtons();
+
+    document.getElementById('gameForm').addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      const game = document.getElementById('game').value;
+      const gameId = document.getElementById('gameId').value.trim();
+      const server = document.getElementById('server').value.trim();
+      const qty = Number(document.getElementById('qtyGame').value);
+      const payment = document.getElementById('paymentGame').value;
+      const pkg = document.getElementById('gamePackage').value;
+
+      if(!game || !gameId || !server || !pkg || !payment || qty < 1){
+        showFormMessage('gameFormMsg', 'Please fill all fields correctly.');
+        return;
+      }
+
+      const prices = updateGamePrices();
+      const payload = {
+        type: 'game',
+        game,
+        gameId,
+        server,
+        pkg,
+        qty,
+        unitPrice: prices.unit,
+        total: prices.total,
+        payment,
+        userId: getUserId(),
+        role: getUserRole()
+      };
+
+      await sendOrder(payload, 'gameFormMsg');
+    });
+  </script>
+</body>
+</html>
