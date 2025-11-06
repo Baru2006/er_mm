@@ -1,73 +1,70 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>Order SIM - Easy Recharge MM</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" href="style.css">
-  <script src="price.js"></script>
-  <script src="script.js" defer></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Order SIM / Data - Easy Recharge MM</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header><h1>SIM Order</h1><a href="index.html">Back</a></header>
-
-  <main>
-    <form id="simOrderForm" onsubmit="submitOrder(event, 'sim')">
-      <div>
-        <label>Admin Phone: <span id="adminPhoneSim">09-123456789</span></label>
-        <button type="button" onclick="copyAdminPhone()">Copy</button>
-      </div>
-
-      <div>
-        <label for="provider">Provider</label>
-        <select id="provider" name="provider" onchange="populateSimPackages()">
-          <option value="mpt">MPT</option>
-          <option value="telenor">Telenor</option>
-          <option value="ooredoo">Ooredoo</option>
-        </select>
-      </div>
-
-      <div>
-        <label for="simPackage">Package</label>
-        <select id="simPackage" name="package" onchange="updateSimDescriptionAndTotal()">
-          <!-- populated dynamically -->
-        </select>
-      </div>
-
-      <div>
-        <label>Description</label>
-        <div id="simDescription">Select a package</div>
-      </div>
-
-      <div>
-        <label for="simPhone">Phone</label>
-        <input id="simPhone" name="phone" type="text" required />
-      </div>
-
-      <div>
-        <label>Total</label>
-        <div id="simTotal">0</div>
-      </div>
-
-      <div>
-        <label>Payment Method</label>
-        <select id="simPayment" name="paymentMethod">
-          <option value="wave">Wave</option>
-          <option value="kbz">KBZ</option>
-        </select>
-      </div>
-
-      <div>
-        <label for="simTxn">Transaction ID</label>
-        <input id="simTxn" name="transactionId" type="text" required />
-      </div>
-
-      <div>
-        <button type="submit">Submit Order</button>
-      </div>
-    </form>
-
-    <div id="simMessage" role="status"></div>
-  </main>
+<header class="topbar">
+<div class="container">
+<div class="brand">Easy Recharge MM</div>
+</div>
+</header>
+<main class="container form-container">
+<div class="admin-row">
+<div class="admin-box-inline">
+<div class="admin-label">Admin Phone</div>
+<div class="admin-phone" id="adminPhoneSim">09-123456789</div>
+</div>
+<button class="btn" id="copyAdminBtnSim">Copy</button>
+</div>
+<form id="simForm" class="form">
+<div class="form-row">
+<label for="simProvider">SIM Provider</label>
+<select id="simProvider" required>
+<option value="">Select Provider</option>
+<option value="mpt">MPT</option>
+<option value="telenor">Telenor</option>
+<option value="ooredoo">Ooredoo</option>
+</select>
+</div>
+<div class="form-row">
+<label for="simService">Data Package</label>
+<select id="simService" required>
+<option value="">Select Package</option>
+</select>
+</div>
+<div class="form-row">
+<div id="simDescription" class="service-desc">Package details will appear here</div>
+</div>
+<div class="form-row">
+<label for="simPhone">Phone Number</label>
+<input id="simPhone" type="tel" pattern="[0-9+-]{6,20}" required>
+</div>
+<div class="form-row">
+<label>Quantity</label>
+<input id="simQty" type="number" value="1" readonly>
+</div>
+<div class="form-row">
+<label>Total Price</label>
+<div id="simTotal">0</div>
+</div>
+<div class="form-row">
+<label for="simTxn">Transaction ID</label>
+<input id="simTxn" type="text" required>
+</div>
+<div class="form-row">
+<button class="btn primary" id="simSubmit">Submit Order</button>
+</div>
+<div id="simMessage" class="form-message"></div>
+</form>
+</main>
+<script src="price.js"></script>
+<script src="script.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded',function(){initSimForm();initAdminCopy('#adminPhoneSim','#copyAdminBtnSim');});
+</script>
 </body>
-                                              </html>
+</html>
