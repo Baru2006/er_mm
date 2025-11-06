@@ -17,14 +17,13 @@ async function submitOrder(payload) {
   try {
     const res = await fetch(GAS_URL, {
       method: "POST",
-      mode: "no-cors", // ❌ remove this if you want to see JSON response
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     });
-    console.log(await res.text());
-    alert("Order Submitted Successfully!");
+
+    const text = await res.text();
+    alert("Response: " + text);
   } catch (err) {
-    console.error(err);
-    alert("Order Failed!");
+    alert("Fetch Error: " + err.message);
   }
 }
