@@ -1,38 +1,37 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>Order Status - Easy Recharge MM</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Status</title>
+<link rel="stylesheet" href="style.css">
+<script src="script.js" defer></script>
 </head>
 <body>
-  <header><h1>Order Tracking</h1><a href="index.html">Back</a></header>
+<header>
+  <h1>Order Status</h1>
+  <div id="user-info">
+    <span id="user-role" class="badge"></span>
+    <span id="user-id"></span>
+  </div>
+</header>
 
-  <main>
-    <section>
-      <h2>Search</h2>
-      <label for="searchQuery">Order ID / Phone / Txn</label>
-      <input id="searchQuery" type="search" />
-      <button type="button" onclick="loadOrders()">Load Orders</button>
-    </section>
-
-    <section>
-      <h2>Orders</h2>
-      <table id="ordersTable" border="1" cellpadding="4">
-        <thead>
-          <tr>
-            <th>OrderID</th><th>Type</th><th>Contact/ID</th><th>Service</th><th>Total</th><th>Payment</th><th>Txn</th><th>Status</th><th>Timestamp</th>
-          </tr>
-        </thead>
-        <tbody id="ordersBody">
-          <!-- rows populated dynamically -->
-        </tbody>
-      </table>
-    </section>
-
-    <div id="statusMessage" role="status"></div>
-  </main>
+<main>
+  <table id="ordersTable">
+    <thead>
+      <tr>
+        <th>OrderID</th>
+        <th>Category</th>
+        <th>Service</th>
+        <th>Qty</th>
+        <th>Total</th>
+        <th>Status</th>
+        <th>UserID</th>
+        <th>Role</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</main>
 </body>
 </html>
