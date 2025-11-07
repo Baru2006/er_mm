@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIM Order - Easy Recharge MM</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body onload="initUser()">
+  <header class="header">
+    <h1>SIM Order</h1>
+    <div class="user-info">
+      <span id="user-id"></span> |
+      <span id="user-role"></span>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="admin-contact card">
+      <h2>Admin Phone</h2>
+      <div class="admin-phone">
+        <input type="text" id="adminPhone" readonly value="09-123456789" />
+        <button onclick="copyAdminPhone()">Copy</button>
+      </div>
+    </section>
+
+    <form id="simOrderForm" class="order-form card" onsubmit="return submitSimOrder(event)">
+      <label>Provider:</label>
+      <select id="provider" required>
+        <option value="">Select Provider</option>
+        <option value="MPT">MPT</option>
+        <option value="Ooredoo">Ooredoo</option>
+        <option value="Telenor">Telenor</option>
+        <option value="Atom">Atom</option>
+      </select>
+
+      <label>Package:</label>
+      <select id="package" required onchange="updateSimDescription()">
+        <option value="">Select Package</option>
+        <option value="Data1000">Data 1000Ks</option>
+        <option value="Data3000">Data 3000Ks</option>
+        <option value="Voice2000">Voice 2000Ks</option>
+      </select>
+
+      <label>Description:</label>
+      <div id="description" class="desc-box">Package details will appear here.</div>
+
+      <label>Phone Number:</label>
+      <input type="tel" id="phone" placeholder="09xxxxxxxxx" required />
+
+      <label>Total:</label>
+      <input type="text" id="total" readonly value="0 Ks" />
+
+      <label>Transaction ID:</label>
+      <input type="text" id="txnId" placeholder="Enter Transaction ID" required />
+
+      <button type="submit" class="btn-primary">Submit Order</button>
+    </form>
+
+    <nav class="nav-links">
+      <a href="index.html">🏠 Home</a>
+      <a href="status.html">📋 Status</a>
+    </nav>
+  </main>
+
+  <footer class="footer">
+    <p>© 2025 Easy Recharge MM</p>
+  </footer>
+
+  <script src="price.js"></script>
+  <script src="script.js"></script>
+
+  <script>
+    // Example: update package description + total dynamically
+    function updateSimDescription() {
+      const pkg = document.getElementById('package').value;
+      const desc = document.getElementById('description');
+      let detail = '';
+      let price = 0;
+
+      switch (pkg) {
+        case 'Data1000': detail = '1GB Data Pack - valid 7 days'; price = 1000; break;
+        case 'Data3000': detail = '3GB Data Pack - valid 15 days'; price = 3000; break;
+        case 'Voice2000': detail = '2000Ks voice balance'; price = 2000; break;
+        default: detail = 'Package details will appear here.';
+      }
+
+      desc.textContent = detail;
+      const role = localStorage.getItem('ERMM_Role') || 'Customer';
+      const finalPrice = calcRolePrice('sim', price, role);
+      document.getElementById('total').value = finalPrice + ' Ks';
+    }
+
+    // Submit SIM Order
+    async function submitSimOrder(e) {
+      e.preventDefault();
+      const userId = localStorage.getItem('ERMM_UserID');
+      const role = localStorage.getItem('ERMM_Role');
+      const payload = {
+        type: 'sim',
+        userId,
+        role,
+        provider: document.getElementById('provider').value,
+        package: document.getElementById('package').value,
+        phone: document.getElementById('phone').value,
+        total: document.getElementById('total').value,
+        transactionId: document.getElementById('txnId').value,
+        timestamp: new Date().toISOString()
+      };
+
+      const res = await sendOrder(payload);
+      if (res.success) {
+        alert('✅ Order submitted successfully!\nOrder ID: ' + res.orderId);
+        document.getElementById('simOrderForm').reset();
+      } else {
+        alert('❌ Failed: ' + (res.error || 'Unknown error'));
+      }
+    }
+  </script>
+</body>
+  </html>
