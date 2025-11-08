@@ -15,7 +15,7 @@
     "cors": "^2.8.5"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   },
   "keywords": [
     "easy-recharge",
