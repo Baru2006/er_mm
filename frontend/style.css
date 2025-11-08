@@ -1,0 +1,209 @@
+/* ======================
+   Easy Recharge MM - Global Styles
+   ====================== */
+
+/* Reset some defaults */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f9f9f9;
+  color: #333;
+  line-height: 1.6;
+}
+
+header.header {
+  background: #3498db;
+  color: #fff;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+header h1 {
+  font-size: 1.5rem;
+}
+
+.user-info {
+  font-size: 0.9rem;
+}
+
+main.main {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+h2 {
+  margin-bottom: 15px;
+  color: #2c3e50;
+}
+
+/* Forms */
+form.order-form label {
+  display: block;
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+form input[type="text"],
+form input[type="number"],
+form input[type="url"],
+form input[type="file"],
+form select,
+form .desc-box {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.95rem;
+}
+
+.desc-box {
+  min-height: 50px;
+  background: #f0f4f8;
+  padding: 10px;
+}
+
+.btn-primary {
+  background: #3498db;
+  color: #fff;
+  border: none;
+  padding: 12px 18px;
+  margin-top: 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: #2980b9;
+}
+
+/* Admin phone section */
+.admin-contact .admin-phone {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-contact input[readonly] {
+  flex: 1;
+  background: #f0f4f8;
+  border: 1px solid #ccc;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+table th, table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+table th {
+  background: #3498db;
+  color: #fff;
+}
+
+.status.pending { color: #f39c12; font-weight: bold; }
+.status.completed { color: #27ae60; font-weight: bold; }
+.status.rejected { color: #e74c3c; font-weight: bold; }
+
+/* Navigation Links */
+.nav-links {
+  margin-top: 20px;
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.nav-links a {
+  color: #3498db;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.nav-links a:hover {
+  text-decoration: underline;
+}
+
+/* Services grid */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.service-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+.service-card h2 {
+  margin-bottom: 10px;
+}
+
+.service-card p {
+  margin-bottom: 10px;
+}
+
+.service-card ul {
+  list-style: disc;
+  margin-left: 20px;
+  margin-bottom: 10px;
+}
+
+/* Footer */
+footer.footer {
+  text-align: center;
+  padding: 15px 0;
+  background: #f1f1f1;
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 30px;
+}
+
+/* Responsive adjustments */
+@media(max-width: 600px) {
+  header.header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .admin-contact .admin-phone {
+    flex-direction: column;
+    gap: 5px;
+  }
+  }
