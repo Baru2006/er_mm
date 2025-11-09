@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>SMM Order — Easy Recharge MM</title><link rel="stylesheet" href="style.css"></head>
+<body>
+  <div class="container">
+    <header class="header"><div class="brand"><div class="logo">ER</div><div><div style="font-weight:700">SMM Order</div><div class="small">Social Media Services</div></div></div><div class="nav"><a class="btn" href="index.html">Back</a></div></header>
+
+    <main>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><strong>Admin Phone</strong><div class="small">Tap to copy</div></div>
+          <div class="copy" onclick="copyToClipboard('09-XXXX-XXXX')">09-XXXX-XXXX</div>
+        </div>
+      </div>
+
+      <form id="form-smm" class="card">
+        <div class="form-row"><label>Platform</label><select name="platform" class="input"><option value="facebook">Facebook</option><option value="instagram">Instagram</option><option value="youtube">YouTube</option></select></div>
+        <div class="form-row"><label>Service</label><select name="service" class="input"><option value="fb-likes">FB Likes</option><option value="ig-followers">IG Followers</option><option value="yt-subscribers">YT Subscribers</option></select></div>
+        <div class="form-row"><label>Target URL</label><input name="target_url" class="input" placeholder="https://..." /></div>
+        <div class="form-row"><label>Quantity (min 25)</label><input name="quantity" type="number" min="25" max="100000" value="25" class="input" /></div>
+        <div class="form-row">Total: <span class="total">0</span></div>
+        <div class="form-row"><label>Payment Method</label><input name="payment_method" class="input" /></div>
+        <div class="form-row"><label>Transaction ID</label><input name="transaction_id" class="input" /></div>
+
+        <div style="display:flex;gap:8px"><button class="btn" type="submit">Submit</button><div class="small">Role: <span class="user-role"></span></div></div>
+      </form>
+    </main>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="price.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
