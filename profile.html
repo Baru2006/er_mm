@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Profile — Easy Recharge MM</title><link rel="stylesheet" href="style.css"></head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="brand"><div class="logo">ER</div><div><div style="font-weight:700">Profile</div><div class="small">Overview</div></div></div>
+      <div class="nav"><a class="btn" href="index.html">Dashboard</a></div>
+    </header>
+
+    <main id="profile_page">
+      <div class="card" style="display:flex;gap:16px;align-items:center">
+        <div style="width:86px;height:86px;border-radius:16px;background:linear-gradient(135deg,#0b76ef,#5ad1ff);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700">U</div>
+        <div>
+          <div>User ID: <span class="user-id"></span></div>
+          <div>Role: <span class="user-role"></span></div>
+          <div style="margin-top:8px">Total Orders: <span id="profile_total_orders">0</span> • Total Spent: <span id="profile_total_spent">0</span> • Total Exchange: <span id="profile_total_exchange">0</span></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <h3>Last 10 Orders</h3>
+        <table class="table" id="last_orders_table">
+          <tr><th>Timestamp</th><th>Type</th><th>Service</th><th>Total</th><th>Status</th></tr>
+        </table>
+      </div>
+    </main>
+
+    <footer class="footer"><a href="index.html">Back</a></footer>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="price.js"></script>
+  <script src="script.js"></script>
+</body>
+  </html>
