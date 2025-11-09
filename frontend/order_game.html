@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Game TopUp — Easy Recharge MM</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1>Game TopUp</h1>
+      <div id="user-info" class="user-info"></div>
+    </div>
+  </header>
+
+  <main class="container form-page">
+    <section class="admin-box">
+      <p>Admin Phone: <strong id="admin-phone" onclick="copyAdminPhone()">09xxxxxxxx</strong></p>
+    </section>
+
+    <form id="game-order-form" class="order-form">
+      <label for="game">Game</label>
+      <select id="game" name="game" required>
+        <option value="">— Select Game —</option>
+        <option value="FreeFire">Free Fire</option>
+        <option value="PUBG">PUBG</option>
+        <option value="MobileLegends">Mobile Legends</option>
+      </select>
+
+      <label for="game-package">Package</label>
+      <select id="game-package" name="gamePackage" required>
+        <option value="">— Select Package —</option>
+        <option value="50">50 Diamonds</option>
+        <option value="200">200 Diamonds</option>
+        <option value="500">500 Diamonds</option>
+      </select>
+
+      <p id="game-desc" class="muted">Description updates here.</p>
+
+      <label for="gameId">Game ID</label>
+      <input id="gameId" name="gameId" type="text" placeholder="PlayerID" required />
+
+      <label for="server">Server</label>
+      <input id="server" name="server" type="text" placeholder="e.g. 1" required />
+
+      <div class="summary-line">
+        <span>Total</span>
+        <strong id="game-total">0</strong> <span>Ks</span>
+      </div>
+
+      <label for="txIdGame">Transaction ID</label>
+      <input id="txIdGame" name="txIdGame" type="text" required />
+
+      <button class="btn" type="submit">Submit Order</button>
+    </form>
+  </main>
+
+  <script type="module" src="price.js"></script>
+  <script type="module" src="script.js"></script>
+  <script>
+    import { PRICES } from './price.js';
+    const pkg = document.getElementById('game-package');
+    const desc = document.getElementById('game-desc');
+    const totalEl = document.getElementById('game-total');
+    const form = document.getElementById('game-order-form');
+
+    function recalc() {
+      const value = Number(pkg.value) || 0;
+      const role = localStorage.getItem('role') || 'Customer';
+      // Here: assume package price equals package * 100 (example) — replace with real price table if needed
+      const raw = value * 100;
+      totalEl.textContent = Math.round(raw * (PRICES.game[role] ?? 1));
+      desc.textContent = value ? `Top-up ${value} units for selected game.` : 'Description updates here.';
+    }
+
+    pkg.addEventListener('change', recalc);
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        type: 'game',
+        game: form.game.value,
+        package: form['gamePackage'].value,
+        gameId: form.gameId.value,
+        server: form.server.value,
+        txId: form.txIdGame.value,
+        total: Number(totalEl.textContent),
+        userId: localStorage.getItem('userId') || null
+      };
+      await sendOrder(payload);
+    });
+
+    recalc();
+  </script>
+</body>
+</html>
