@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>P2P Exchange — Easy Recharge MM</title><link rel="stylesheet" href="style.css"></head>
+<body>
+  <div class="container">
+    <header class="header"><div class="brand"><div class="logo">ER</div><div><div style="font-weight:700">P2P Exchange</div><div class="small">Wallet / Bank swap</div></div></div><div class="nav"><a class="btn" href="index.html">Back</a></div></header>
+
+    <main>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><strong>Admin Phone</strong><div class="small">Tap to copy</div></div>
+          <div class="copy" onclick="copyToClipboard('09-XXXX-XXXX')">09-XXXX-XXXX</div>
+        </div>
+      </div>
+
+      <form id="form-p2p" class="card">
+        <div class="form-row"><label>Amount</label><input name="amount" type="number" min="100" value="1000" class="input" /></div>
+        <div class="form-row"><label>From</label><select name="from" class="input"><option value="wavepay">WavePay</option><option value="kbzpay">KBZPay</option><option value="bank">Bank</option></select></div>
+        <div class="form-row"><label>To</label><select name="to" class="input"><option value="bank">Bank</option><option value="wavepay">WavePay</option><option value="kbzpay">KBZPay</option></select></div>
+        <div class="form-row">Fee: <span class="fee">0</span> • Receive: <span class="receive">0</span></div>
+        <div class="form-row"><label>Account Details (to receive)</label><input name="account_details" class="input" /></div>
+        <div class="form-row"><label>Transaction ID</label><input name="transaction_id" class="input" /></div>
+        <div style="display:flex;gap:8px"><button class="btn" type="submit">Submit Exchange</button><div class="small">Role: <span class="user-role"></span></div></div>
+      </form>
+    </main>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="price.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
