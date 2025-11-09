@@ -1,37 +1,23 @@
+// api/status.js — Vercel serverless function
+// GET /api/status?userId=...
+import initCors from 'micro-cors';
 import { getOrdersByUser } from './utils/sheets.js';
 
-/**
- * Vercel serverless handler for GET /api/status?userId=...
- */
-export default async function handler(req, res) {
-  // CORS headers
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+const cors = initCors({ allowMethods: ['GET', 'OPTIONS'] });
 
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
+export default cors(async (req, res) => {
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
 
-  if (req.method !== 'GET') {
-    return res.status(405).json({ success: false, error: 'Method not allowed' });
-  }
-
-  const userId = req.query.userId;
-  if (!userId) {
-    return res.status(400).json({ success: false, error: 'Missing userId query parameter' });
-  }
+  const userId = req.query?.userId || (req.url && new URL(req.url, 'http://localhost').searchParams.get('userId'));
+  if (!userId) return res.status(400).json({ error: 'userId query param required' });
 
   try {
-    // Fetch orders from all sheets
-    const orders = await getOrdersByUser(userId);
-
-    // Sort by timestamp descending (most recent first)
-    orders.sort((a, b) => new Date(b.Timestamp) - new Date(a.Timestamp));
-
-    return res.status(200).json({ success: true, orders });
+    const rows = await getOrdersByUser(userId);
+    // rows should be array of objects: {orderId,type,total,status,txId,timestamp,...}
+    return res.status(200).json(rows);
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ success: false, error: 'Failed to fetch orders' });
+    return res.status(500).json({ error: err.message || 'Server error' });
   }
-                 }
+});
