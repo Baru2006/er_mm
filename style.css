@@ -1,0 +1,49 @@
+/* style.css - simple light, mobile-first styling */
+:root {
+  --bg: #fafafa;
+  --card: #ffffff;
+  --muted: #666;
+  --accent: #0b76ef;
+  --radius: 12px;
+  --shadow: 0 6px 18px rgba(9, 30, 66, 0.06);
+  --gap: 12px;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background:var(--bg);
+  color:#111;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  padding:16px;
+  line-height:1.4;
+}
+.header {display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.brand {display:flex;align-items:center;gap:10px}
+.logo {width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#0b76ef,#5ad1ff);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+.nav {display:flex;gap:10px;flex-wrap:wrap}
+.btn {background:var(--accent);color:#fff;padding:8px 12px;border-radius:10px;text-decoration:none;display:inline-block}
+.container {max-width:980px;margin:0 auto}
+.grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.card {background:var(--card);padding:14px;border-radius:var(--radius);box-shadow:var(--shadow)}
+.small {font-size:13px;color:var(--muted)}
+.kpi {display:flex;flex-direction:column;gap:6px}
+.kpi .value {font-size:20px;font-weight:700}
+.form-row {display:flex;flex-direction:column;margin-bottom:10px}
+.form-row label {font-weight:600;margin-bottom:6px}
+.input, select, textarea {
+  padding:8px 10px;border-radius:8px;border:1px solid #e6e6e6;background:#fff
+}
+.table {width:100%;border-collapse:collapse}
+.table th, .table td {padding:8px;border-bottom:1px solid #f0f0f0;text-align:left}
+.footer {margin-top:20px;font-size:13px;color:var(--muted);text-align:center}
+
+/* mobile tweaks */
+@media(min-width:720px){
+  .header{padding:0 8px}
+  body{padding:24px}
+}
+.copy {cursor:pointer;color:var(--accent);font-weight:600}
+.badge {background:#eef8ff;color:#0b76ef;padding:6px 8px;border-radius:999px;font-weight:600}
