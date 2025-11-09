@@ -1,67 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Easy Recharge MM - Dashboard</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Easy Recharge MM — Dashboard</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body onload="initUser()">
-  <header class="header">
-    <h1>Easy Recharge MM</h1>
-    <div class="user-info">
-      <span id="user-id"></span> |
-      <span id="user-role"></span>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container">
+      <h1 class="brand">Easy Recharge MM</h1>
+      <div id="user-info" class="user-info">
+        <span id="user-id">User: —</span>
+        <span id="user-role">Role: —</span>
+      </div>
     </div>
   </header>
 
-  <main class="main">
-    <section class="admin-contact card">
-      <h2>Admin Phone</h2>
-      <div class="admin-phone">
-        <input type="text" id="adminPhone" readonly value="09-123456789" />
-        <button onclick="copyAdminPhone()">Copy</button>
-      </div>
-    </section>
-
-    <section class="services-grid">
-      <a href="order_sim.html" class="service-card">
-        <img src="https://img.icons8.com/ios/100/000000/sim-card-chip.png" alt="SIM" />
-        <h3>SIM Top-Up</h3>
-        <p>Buy Data, Voice & Packages</p>
+  <!-- Main -->
+  <main class="container">
+    <section class="cards-row">
+      <a class="card" href="order_sim.html">
+        <h2>SIM Recharge</h2>
+        <p>Top up local SIM — fast & safe</p>
       </a>
 
-      <a href="order_game.html" class="service-card">
-        <img src="https://img.icons8.com/ios/100/000000/controller.png" alt="Game" />
-        <h3>Game Top-Up</h3>
-        <p>Free Fire, MLBB, PUBG etc.</p>
+      <a class="card" href="order_game.html">
+        <h2>Game TopUp</h2>
+        <p>In-game currency & items</p>
       </a>
 
-      <a href="order_smm.html" class="service-card">
-        <img src="https://img.icons8.com/ios/100/000000/facebook-like.png" alt="SMM" />
-        <h3>SMM Panel</h3>
-        <p>Facebook, TikTok, YouTube Services</p>
+      <a class="card" href="order_smm.html">
+        <h2>SMM Services</h2>
+        <p>Followers, Likes, Views</p>
       </a>
 
-      <a href="pay.html" class="service-card">
-        <img src="https://img.icons8.com/ios/100/000000/exchange.png" alt="P2P" />
-        <h3>P2P Exchange</h3>
-        <p>Transfer between e-wallets</p>
+      <a class="card" href="pay.html">
+        <h2>P2P Exchange</h2>
+        <p>Peer-to-peer currency exchange</p>
       </a>
     </section>
 
-    <nav class="nav-links">
-      <a href="status.html">📋 Order Status</a>
-      <a href="services.html">💡 Services</a>
-      <a href="faq.html">❓ FAQ</a>
-      <a href="maintenance.html">⚙️ Maintenance</a>
+    <section class="admin-box">
+      <h3>Admin Contact</h3>
+      <p>Phone: <strong id="admin-phone" onclick="copyAdminPhone()">09xxxxxxxx</strong> <small>(click to copy)</small></p>
+    </section>
+
+    <nav class="main-nav">
+      <a href="services.html">Services</a>
+      <a href="faq.html">FAQ</a>
+      <a href="status.html">Order Status</a>
     </nav>
   </main>
 
-  <footer class="footer">
-    <p>© 2025 Easy Recharge MM. All rights reserved.</p>
+  <footer class="site-footer">
+    <div class="container">
+      <small>© <span id="year"></span> Easy Recharge MM</small>
+    </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script type="module" src="script.js"></script>
 </body>
 </html>
