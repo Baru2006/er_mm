@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Easy Recharge MM — Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="brand">
+        <div class="logo">ER</div>
+        <div>
+          <div style="font-weight:700">Easy Recharge MM</div>
+          <div class="small">Fast mobile top-ups • Game • SMM • P2P</div>
+        </div>
+      </div>
+      <div class="nav">
+        <div class="small">User: <span class="user-id"></span></div>
+        <select id="roleToggle" onchange="setRole(this.value); initUser();">
+          <option>Customer</option>
+          <option>Reseller</option>
+        </select>
+        <a class="btn" href="order_sim.html">Order SIM</a>
+      </div>
+    </header>
+
+    <main>
+      <div class="grid">
+        <div class="card">
+          <div class="kpi"><div class="small">SIM Top-up</div><div class="value">Quick SIM recharge</div></div>
+          <div style="margin-top:8px"><a class="btn" href="order_sim.html">Create SIM Order</a></div>
+        </div>
+
+        <div class="card">
+          <div class="kpi"><div class="small">Game Top-up</div><div class="value">In-game currency & items</div></div>
+          <div style="margin-top:8px"><a class="btn" href="order_game.html">Create Game Order</a></div>
+        </div>
+
+        <div class="card">
+          <div class="kpi"><div class="small">SMM</div><div class="value">Social growth services</div></div>
+          <div style="margin-top:8px"><a class="btn" href="order_smm.html">Create SMM Order</a></div>
+        </div>
+
+        <div class="card">
+          <div class="kpi"><div class="small">P2P Exchange</div><div class="value">Fast wallet exchanges</div></div>
+          <div style="margin-top:8px"><a class="btn" href="pay.html">Start Exchange</a></div>
+        </div>
+      </div>
+
+      <section style="margin-top:16px">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div><strong>Admin Phone</strong><div class="small">Tap to copy</div></div>
+            <div class="copy" onclick="copyToClipboard('09-XXXX-XXXX')">09-XXXX-XXXX</div>
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:16px" class="card">
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a class="btn" href="profile.html">Profile</a>
+          <a class="btn" href="status.html">Order Status</a>
+          <a class="btn" href="services.html">Services</a>
+          <a class="btn" href="faq.html">FAQ</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">© Easy Recharge MM</footer>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="price.js"></script>
+  <script src="script.js"></script>
+</body>
+            </html>
