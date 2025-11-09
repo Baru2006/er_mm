@@ -1,29 +1,19 @@
 {
   "name": "easy-recharge-mm",
   "version": "1.0.0",
-  "description": "Easy Recharge MM - Full-stack Vercel + Google Sheets + Gmail Notifications",
-  "main": "api/order.js",
+  "description": "Easy Recharge MM — frontend + serverless APIs (Google Sheets + Gmail integration)",
   "type": "module",
+  "engines": { "node": ">=18" },
   "scripts": {
-    "start": "node api/order.js",
-    "dev": "vercel dev"
+    "start": "vercel dev",
+    "dev": "vercel dev",
+    "lint": "echo \"No linter configured\""
   },
   "dependencies": {
-    "googleapis": "^122.0.0",
-    "nodemailer": "^6.9.4",
-    "express": "^4.18.2",
-    "cors": "^2.8.5"
-  },
-  "engines": {
-    "node": ">=18"
-  },
-  "keywords": [
-    "easy-recharge",
-    "vercel",
-    "google-sheets",
-    "nodemailer",
-    "serverless"
-  ],
-  "author": "Chit Ko & ChatGPT",
-  "license": "MIT"
+    "cors": "^2.8.5",
+    "googleapis": "^121.0.0",
+    "micro": "^9.3.4",
+    "micro-cors": "^0.1.1",
+    "nodemailer": "^6.9.3"
+  }
 }
