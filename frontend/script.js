@@ -1,108 +1,95 @@
-/* ================================
-   Easy Recharge MM - Frontend Script
-   ================================ */
+// script.js - shared frontend functions
+// - initUser(): persistent userId + role stored in localStorage
+// - sendOrder(payload): POST to API_ROOT/api/order
+// - getOrders(userId): GET API_ROOT/api/status?userId=...
+// - copyAdminPhone(): copies displayed admin phone
+// Replace API_ROOT placeholder to point to deployed API root (e.g. https://your-app.vercel.app)
+const API_ROOT = window.https://easyrechargemm.vercel.app || (location.origin); // if using Vercel, same origin; for GitHub Pages set API_ROOT manually
 
-// Replace with your deployed backend URL
-export const API_ROOT = 'https://easyrechargemm.vercel.app/';
+// Initialize user id and role
+function initUser() {
+  let userId = localStorage.getItem('userId');
+  if (!userId) {
+    userId = 'u_' + Math.random().toString(36).slice(2, 10);
+    localStorage.setItem('userId', userId);
+  }
+  let role = localStorage.getItem('role');
+  if (!role) {
+    // default role; change to 'Reseller' manually if needed
+    role = 'Customer';
+    localStorage.setItem('role', role);
+  }
+  // Inject UI
+  const uidEl = document.getElementById('user-id');
+  const roleEl = document.getElementById('user-role');
+  if (uidEl) uidEl.textContent = `User: ${userId}`;
+  if (roleEl) roleEl.textContent = `Role: ${role}`;
 
-/**
- * Initialize UserID and Role in localStorage
- */
-export function initUser() {
-  if (!localStorage.getItem('ERMM_UserID')) {
-    localStorage.setItem('ERMM_UserID', 'USER-' + Date.now());
-  }
-  if (!localStorage.getItem('ERMM_Role')) {
-    localStorage.setItem('ERMM_Role', 'Customer');
-  }
-  document.getElementById('user-id')?.textContent = localStorage.getItem('ERMM_UserID');
-  document.getElementById('user-role')?.textContent = localStorage.getItem('ERMM_Role');
+  // Update admin phone year
+  const y = new Date().getFullYear();
+  const yearEl = document.getElementById('year');
+  if (yearEl) yearEl.textContent = y;
 }
 
-/**
- * Copy admin phone to clipboard
- */
-export function copyAdminPhone() {
-  const phoneInput = document.getElementById('adminPhone');
-  if (!phoneInput) return;
-  navigator.clipboard.writeText(phoneInput.value).then(() => {
-    alert('Admin phone copied: ' + phoneInput.value);
+// copy admin phone from page element with id admin-phone
+function copyAdminPhone() {
+  const el = document.getElementById('admin-phone');
+  if (!el) return;
+  const text = el.textContent.trim();
+  navigator.clipboard?.writeText(text).then(() => {
+    alert('Admin phone copied: ' + text);
+  }).catch(() => {
+    // fallback
+    const tmp = document.createElement('input');
+    document.body.appendChild(tmp);
+    tmp.value = text;
+    tmp.select();
+    document.execCommand('copy');
+    tmp.remove();
+    alert('Admin phone copied: ' + text);
   });
 }
 
-/**
- * Send order payload to backend
- * @param {object} payload
- */
-export async function sendOrder(payload) {
+// sendOrder: posts payload to /api/order
+async function sendOrder(payload) {
+  // Attach userId if missing
+  payload.userId = payload.userId || localStorage.getItem('userId') || null;
+  // Minimal client-side validation (expand as needed)
+  if (!payload.userId) { alert('UserId missing'); return; }
   try {
     const res = await fetch(`${API_ROOT}/api/order`, {
       method: 'POST',
-      mode: 'cors',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {'Content-Type':'application/json'},
       body: JSON.stringify(payload)
     });
-    return await res.json();
-  } catch (err) {
-    console.error(err);
-    return { success: false, error: 'Failed to send order.' };
-  }
-}
-
-/**
- * Send P2P payment payload
- * @param {object} payload
- */
-export async function sendPayment(payload) {
-  // For simplicity, reuse sendOrder endpoint with type='p2p'
-  payload.type = 'p2p';
-  return sendOrder(payload);
-}
-
-/**
- * Fetch orders for current user
- */
-export async function getOrders() {
-  const userId = localStorage.getItem('ERMM_UserID');
-  if (!userId) return;
-
-  try {
-    const res = await fetch(`${API_ROOT}/api/status?userId=${encodeURIComponent(userId)}`, {
-      method: 'GET',
-      mode: 'cors'
-    });
     const data = await res.json();
-    return data;
+    if (!res.ok) {
+      alert('Error: ' + (data?.error || res.statusText));
+      console.error(data);
+      return;
+    }
+    alert('Order submitted. OrderID: ' + (data.orderId || '—'));
+    // Optionally redirect to status page
+    location.href = 'status.html';
   } catch (err) {
     console.error(err);
-    return { success: false, orders: [] };
+    alert('Network error. See console for details.');
   }
 }
 
-/**
- * Price calculation helpers
- * Uses imported calcRolePrice from price.js
- */
-import { calcRolePrice } from './price.js';
-
-/**
- * Example: update total on quantity/input change
- * @param {string} type - 'sim' | 'game' | 'smm' | 'p2p'
- * @param {number} baseTotal
- * @param {string} totalInputId
- */
-export function updateTotal(type, baseTotal, totalInputId) {
-  const role = localStorage.getItem('ERMM_Role') || 'Customer';
-  const final = calcRolePrice(type, baseTotal, role);
-  const totalInput = document.getElementById(totalInputId);
-  if (totalInput) totalInput.value = final.toFixed(0) + ' Ks';
+// getOrders: returns array of orders for user
+async function getOrders(userId) {
+  const res = await fetch(`${API_ROOT}/api/status?userId=${encodeURIComponent(userId)}`);
+  if (!res.ok) throw new Error('Failed to fetch orders');
+  return res.json();
 }
 
-/**
- * Utility: format timestamp to local string
- */
-export function formatDate(timestamp) {
-  if (!timestamp) return '-';
-  const d = new Date(timestamp);
-  return d.toLocaleString('en-GB', { timeZone: 'Asia/Yangon' });
-}
+// expose functions globally for page-level scripts
+window.initUser = initUser;
+window.copyAdminPhone = copyAdminPhone;
+window.sendOrder = sendOrder;
+window.getOrders = getOrders;
+window.API_ROOT = API_ROOT;
+
+// auto-init on page load
+initUser();
