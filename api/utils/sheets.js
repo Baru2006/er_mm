@@ -1,26 +1,30 @@
+// api/utils/sheets.js
+// Google Sheets helper using googleapis JWT service account
 import { google } from 'googleapis';
 
-// Load env variables
+// Environment variables required:
+// - GOOGLE_SHEET_ID
+// - GOOGLE_CLIENT_EMAIL
+// - GOOGLE_PRIVATE_KEY  (note: ensure newlines are properly stored; \"\\n\" converted)
+// The service account must be granted edit access to the spreadsheet.
+
 const SHEET_ID = process.env.GOOGLE_SHEET_ID;
 const CLIENT_EMAIL = process.env.GOOGLE_CLIENT_EMAIL;
-const PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
+let PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY;
+
+// If PRIVATE_KEY was stored with escaped newlines, unescape them
+if (PRIVATE_KEY && PRIVATE_KEY.includes('\\n')) PRIVATE_KEY = PRIVATE_KEY.replace(/\\n/g, '\n');
 
 if (!SHEET_ID || !CLIENT_EMAIL || !PRIVATE_KEY) {
-  throw new Error('Missing Google Sheets environment variables!');
+  console.warn('Sheets helper is missing environment variables. GOOGLE_SHEET_ID, GOOGLE_CLIENT_EMAIL, GOOGLE_PRIVATE_KEY required.');
 }
 
-// JWT auth
-const auth = new google.auth.JWT(
-  CLIENT_EMAIL,
-  null,
-  PRIVATE_KEY,
-  ['https://www.googleapis.com/auth/spreadsheets']
-);
-
+const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
+const auth = new google.auth.JWT(CLIENT_EMAIL, null, PRIVATE_KEY, SCOPES);
 const sheets = google.sheets({ version: 'v4', auth });
 
-// Sheet tabs
-const SHEETS = {
+// Map order types to sheet tabs
+const TAB_MAP = {
   sim: 'Orders',
   game: 'Game_Orders',
   smm: 'SMM_Orders',
@@ -28,162 +32,82 @@ const SHEETS = {
 };
 
 /**
- * Append order to the correct sheet
- * @param {string} type - sim | game | smm | p2p
- * @param {object} payload - order data
+ * appendOrder(type, payload)
+ * - type: 'sim'|'game'|'smm'|'p2p'
+ * - payload: object (order data). Will be flattened to a row.
  */
 export async function appendOrder(type, payload) {
-  const sheetName = SHEETS[type];
-  if (!sheetName) throw new Error('Invalid type: ' + type);
+  const tab = TAB_MAP[type] || 'Orders';
+  // Flatten object to a predictable row order
+  // Recommended sheet columns: orderId,timestamp,status,userId,type,total,txId,details...
+  const details = [];
+  // push type-specific fields to details for visibility
+  if (type === 'sim') details.push(payload.provider || '', payload.package || '', payload.userPhone || '');
+  if (type === 'game') details.push(payload.game || '', payload.package || '', payload.gameId || '', payload.server || '');
+  if (type === 'smm') details.push(payload.platform || '', payload.service || '', payload.targetUrl || '', payload.quantity || '');
+  if (type === 'p2p') details.push(payload.amount || '', payload.from || '', payload.to || '', payload.fee || '', payload.receive || '');
 
-  // Map payload fields to row depending on type
-  let row = [];
-  switch (type) {
-    case 'sim':
-      row = [
-        payload.OrderID,
-        payload.UserID || '',
-        payload.Provider || '',
-        payload.Package || '',
-        payload.Phone || '',
-        payload.Total || '',
-        payload.txnId || '',
-        payload.Timestamp || ''
-      ];
-      break;
-    case 'game':
-      row = [
-        payload.OrderID,
-        payload.UserID || '',
-        payload.Game || '',
-        payload.Package || '',
-        payload.GameID || '',
-        payload.Server || '',
-        payload.Total || '',
-        payload.txnId || '',
-        payload.Timestamp || ''
-      ];
-      break;
-    case 'smm':
-      row = [
-        payload.OrderID,
-        payload.UserID || '',
-        payload.Platform || '',
-        payload.Service || '',
-        payload.Target || '',
-        payload.Quantity || '',
-        payload.Total || '',
-        payload.txnId || '',
-        payload.Timestamp || ''
-      ];
-      break;
-    case 'p2p':
-      row = [
-        payload.OrderID,
-        payload.UserID || '',
-        payload.Amount || '',
-        payload.From || '',
-        payload.To || '',
-        payload.Receive || '',
-        payload.Fee || '',
-        payload.txnId || '',
-        payload.Timestamp || ''
-      ];
-      break;
-  }
+  const row = [
+    payload.orderId || '',
+    payload.timestamp || '',
+    payload.status || '',
+    payload.userId || '',
+    payload.type || type,
+    payload.total || '',
+    payload.txId || '',
+    ...details
+  ];
 
   await sheets.spreadsheets.values.append({
     spreadsheetId: SHEET_ID,
-    range: sheetName,
+    range: `${tab}!A1`,
     valueInputOption: 'USER_ENTERED',
     requestBody: { values: [row] }
   });
+
+  return true;
 }
 
 /**
- * Fetch all orders for a given userId
- * @param {string} userId
- * @returns {Promise<Array>} combined orders array
+ * getOrdersByUser(userId)
+ * reads multiple tabs and returns combined array of orders for userId
  */
 export async function getOrdersByUser(userId) {
-  const allOrders = [];
+  // We'll read each relevant tab's values and filter
+  const tabs = Object.values(TAB_MAP);
+  // batchGet to minimize requests
+  const res = await sheets.spreadsheets.values.batchGet({
+    spreadsheetId: SHEET_ID,
+    ranges: tabs.map(t => `${t}!A1:Z1000`)
+  });
 
-  for (const type in SHEETS) {
-    const sheetName = SHEETS[type];
+  const valueRanges = res.data.valueRanges || [];
+  const rows = [];
 
-    const res = await sheets.spreadsheets.values.get({
-      spreadsheetId: SHEET_ID,
-      range: sheetName
-    });
-
-    const values = res.data.values || [];
-
-    // Skip header row
-    for (let i = 1; i < values.length; i++) {
-      const row = values[i];
-      // Map row depending on type
-      let order = { type };
-      switch (type) {
-        case 'sim':
-          order = {
-            ...order,
-            OrderID: row[0],
-            UserID: row[1],
-            Provider: row[2],
-            Package: row[3],
-            Phone: row[4],
-            Total: row[5],
-            txnId: row[6],
-            Timestamp: row[7]
-          };
-          break;
-        case 'game':
-          order = {
-            ...order,
-            OrderID: row[0],
-            UserID: row[1],
-            Game: row[2],
-            Package: row[3],
-            GameID: row[4],
-            Server: row[5],
-            Total: row[6],
-            txnId: row[7],
-            Timestamp: row[8]
-          };
-          break;
-        case 'smm':
-          order = {
-            ...order,
-            OrderID: row[0],
-            UserID: row[1],
-            Platform: row[2],
-            Service: row[3],
-            Target: row[4],
-            Quantity: row[5],
-            Total: row[6],
-            txnId: row[7],
-            Timestamp: row[8]
-          };
-          break;
-        case 'p2p':
-          order = {
-            ...order,
-            OrderID: row[0],
-            UserID: row[1],
-            Amount: row[2],
-            From: row[3],
-            To: row[4],
-            Receive: row[5],
-            Fee: row[6],
-            txnId: row[7],
-            Timestamp: row[8]
-          };
-          break;
+  valueRanges.forEach((vr, idx) => {
+    const tab = tabs[idx];
+    const values = vr.values || [];
+    // Assume first row is headerless or header; we accept both — we search for userId in 4th column per appendOrder
+    values.forEach((row) => {
+      // protect against header rows or short rows
+      if (row.length >= 4 && row[3] === userId) {
+        // reconstruct object:
+        rows.push({
+          orderId: row[0] || '',
+          timestamp: row[1] || '',
+          status: row[2] || '',
+          userId: row[3] || '',
+          type: row[4] || tab,
+          total: row[5] || '',
+          txId: row[6] || '',
+          extras: row.slice(7)
+        });
       }
+    });
+  });
 
-      if (order.UserID === userId) allOrders.push(order);
-    }
-  }
+  // Sort newest first by timestamp if possible
+  rows.sort((a, b) => (b.timestamp || '').localeCompare(a.timestamp || ''));
 
-  return allOrders;
-  }
+  return rows;
+}
