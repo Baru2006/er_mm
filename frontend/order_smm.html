@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SMM Order — Easy Recharge MM</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1>SMM Services</h1>
+      <div id="user-info" class="user-info"></div>
+    </div>
+  </header>
+
+  <main class="container form-page">
+    <section class="admin-box">
+      <p>Admin Phone: <strong id="admin-phone" onclick="copyAdminPhone()">09xxxxxxxx</strong></p>
+    </section>
+
+    <form id="smm-order-form" class="order-form">
+      <label for="platform">Platform</label>
+      <select id="platform" name="platform" required>
+        <option value="">— Platform —</option>
+        <option value="Facebook">Facebook</option>
+        <option value="Instagram">Instagram</option>
+        <option value="TikTok">TikTok</option>
+      </select>
+
+      <label for="service">Service</label>
+      <select id="service" name="service" required>
+        <option value="">— Service —</option>
+        <option value="Likes">Likes</option>
+        <option value="Followers">Followers</option>
+        <option value="Views">Views</option>
+      </select>
+
+      <p id="smm-desc" class="muted">Service description updates here.</p>
+
+      <label for="targetUrl">Target URL</label>
+      <input id="targetUrl" name="targetUrl" type="url" placeholder="https://..." required />
+
+      <label for="quantity">Quantity (25–100000)</label>
+      <input id="quantity" name="quantity" type="number" min="25" max="100000" value="100" required />
+
+      <div class="summary-line">
+        <span>Total</span>
+        <strong id="smm-total">0</strong> <span>Ks</span>
+      </div>
+
+      <label for="txSmm">Transaction ID</label>
+      <input id="txSmm" name="txSmm" type="text" required />
+
+      <button class="btn" type="submit">Submit Order</button>
+    </form>
+  </main>
+
+  <script type="module" src="price.js"></script>
+  <script type="module" src="script.js"></script>
+  <script>
+    import { PRICES } from './price.js';
+    const qty = document.getElementById('quantity');
+    const totalEl = document.getElementById('smm-total');
+    const form = document.getElementById('smm-order-form');
+
+    function recalc() {
+      const q = Number(qty.value) || 0;
+      const role = localStorage.getItem('role') || 'Customer';
+      // assume base price per unit: 2 Ks — adjust as you need
+      const base = q * 2;
+      totalEl.textContent = Math.round(base * (PRICES.smm[role] ?? 1));
+      document.getElementById('smm-desc').textContent = q ? `Order ${q} for ${form.platform.value || 'selected platform'}.` : 'Service description updates here.';
+    }
+
+    qty.addEventListener('input', recalc);
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        type: 'smm',
+        platform: form.platform.value,
+        service: form.service.value,
+        targetUrl: form.targetUrl.value,
+        quantity: Number(form.quantity.value),
+        txId: form.txSmm.value,
+        total: Number(totalEl.textContent),
+        userId: localStorage.getItem('userId') || null
+      };
+      await sendOrder(payload);
+    });
+
+    recalc();
+  </script>
+</body>
+</html>
