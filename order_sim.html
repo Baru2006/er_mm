@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>SIM Order — Easy Recharge MM</title><link rel="stylesheet" href="style.css"></head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="brand"><div class="logo">ER</div><div><div style="font-weight:700">SIM Order</div><div class="small">Quick recharge</div></div></div>
+      <div class="nav"><a class="btn" href="index.html">Back</a></div>
+    </header>
+
+    <main>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><strong>Admin Phone</strong><div class="small">Tap to copy</div></div>
+          <div class="copy" onclick="copyToClipboard('09-XXXX-XXXX')">09-XXXX-XXXX</div>
+        </div>
+      </div>
+
+      <form class="card" id="form-sim">
+        <div class="form-row">
+          <label>Provider</label>
+          <select name="provider" class="input">
+            <option value="mpt">MPT</option>
+            <option value="telenor">Telenor</option>
+            <option value="ooredoo">Ooredoo</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <label>Package</label>
+          <select name="package" class="input">
+            <option value="mpt-3gb">MPT 3GB</option>
+            <option value="mpt-5gb">MPT 5GB</option>
+            <option value="telenor-regular">Telenor Regular</option>
+            <option value="ooredoo-basic">Ooredoo Basic</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <label>Phone number</label>
+          <input name="phone" class="input" placeholder="09xxxxxxx" required />
+        </div>
+
+        <div class="form-row">
+          <label>Total</label>
+          <div class="total small">0</div>
+        </div>
+
+        <div class="form-row">
+          <label>Payment Method</label>
+          <input name="payment_method" class="input" placeholder="e.g., WavePay" />
+        </div>
+
+        <div class="form-row">
+          <label>Transaction ID</label>
+          <input name="transaction_id" class="input" />
+        </div>
+
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="btn" type="submit">Submit Order</button>
+          <div class="small">Role: <span class="user-role"></span></div>
+        </div>
+      </form>
+
+    </main>
+    <footer class="footer"></footer>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="price.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
