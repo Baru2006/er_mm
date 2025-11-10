@@ -1,36 +1,98 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Profile — Easy Recharge MM</title><link rel="stylesheet" href="style.css"></head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Easy Recharge MM</title>
+    <link rel="stylesheet" href="style.css">
+</head>
 <body>
-  <div class="container">
+
     <header class="header">
-      <div class="brand"><div class="logo">ER</div><div><div style="font-weight:700">Profile</div><div class="small">Overview</div></div></div>
-      <div class="nav"><a class="btn" href="index.html">Dashboard</a></div>
+        <div class="container">
+            <h1 class="logo">Easy Recharge MM</h1>
+            <div id="userInfo" class="user-info">
+                <span>UserID: <code id="navUserId">...</code></span>
+                <span>Role: <b id="navUserRole">...</b></span>
+            </div>
+        </div>
     </header>
 
-    <main id="profile_page">
-      <div class="card" style="display:flex;gap:16px;align-items:center">
-        <div style="width:86px;height:86px;border-radius:16px;background:linear-gradient(135deg,#0b76ef,#5ad1ff);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700">U</div>
-        <div>
-          <div>User ID: <span class="user-id"></span></div>
-          <div>Role: <span class="user-role"></span></div>
-          <div style="margin-top:8px">Total Orders: <span id="profile_total_orders">0</span> • Total Spent: <span id="profile_total_spent">0</span> • Total Exchange: <span id="profile_total_exchange">0</span></div>
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html">Home</a>
+            <a href="profile.html" class="active">Profile</a>
+            <a href="status.html">Order Status</a>
+            <a href="services.html">Services</a>
+            <a href="faq.html">FAQ</a>
         </div>
-      </div>
+    </nav>
 
-      <div class="card" style="margin-top:12px">
-        <h3>Last 10 Orders</h3>
-        <table class="table" id="last_orders_table">
-          <tr><th>Timestamp</th><th>Type</th><th>Service</th><th>Total</th><th>Status</th></tr>
-        </table>
-      </div>
+    <main class="container">
+        
+        <section class="card profile-header">
+            <div class="profile-icon">👤</div>
+            <h2 id="profileUserId">Loading User...</h2>
+            <p>Role: <b id="profileUserRole">...</b></p>
+        </section>
+
+        <!-- Profile Stats -->
+        <section class="profile-stats">
+            <div class="stat-card">
+                <h3>Total Orders</h3>
+                <p id="statTotalOrders">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Total Spent</h3>
+                <p id="statTotalSpent">0 MMK</p>
+            </div>
+            <div class="stat-card">
+                <h3>Total Exchanged</h3>
+                <p id="statTotalExchange">0 MMK</p>
+            </div>
+        </section>
+
+        <!-- Last 10 Orders -->
+        <section class="order-history">
+            <h2 class="section-title">Last 10 Orders</h2>
+            <div class="table-container">
+                <table id="ordersTable">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Type</th>
+                            <th>Service</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                        <!-- Orders will be loaded here by script.js -->
+                        <tr><td colspan="5" id="loadingOrders">Loading order history...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
     </main>
 
-    <footer class="footer"><a href="index.html">Back</a></footer>
-  </div>
+    <footer class="footer">
+        <p>&copy; 2025 Easy Recharge MM. All rights reserved.</p>
+    </footer>
 
-  <script src="config.js"></script>
-  <script src="price.js"></script>
-  <script src="script.js"></script>
+    <!-- JS Files -->
+    <script src="price.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Load profile data on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initUser();
+            displayUserInfo();
+            
+            // Call the function to fetch and display profile data
+            loadProfilePage();
+        });
+    </script>
 </body>
-  </html>
+</html>
+
