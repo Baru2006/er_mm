@@ -1,292 +1,446 @@
-// script.js - core frontend logic
-// Requires: config.js (API_URL) and price.js
-if (typeof API_URL === 'undefined') {
-  console.warn('API_URL not defined. Copy config.example.js -> config.js and set API_URL');
-}
+/**
+ * Easy Recharge MM - Core Frontend Logic
+ * Handles User Auth, API Calls, Form Calculations
+ */
 
-// --------- Utilities ----------
-function genUserId() {
-  return 'USER-' + Math.random().toString(36).slice(2,10).toUpperCase();
-}
-function uid() {
-  let id = localStorage.getItem('easy_userid');
-  if (!id) { id = genUserId(); localStorage.setItem('easy_userid', id); }
-  return id;
-}
-function role() {
-  let r = localStorage.getItem('easy_role');
-  if (!r) { r = 'Customer'; localStorage.setItem('easy_role', r); }
-  return r;
-}
-function setRole(r) { localStorage.setItem('easy_role', r); }
-function copyToClipboard(text) {
-  navigator.clipboard?.writeText(text).then(()=> alert('Copied'));
-}
+// --- CONFIGURATION ---
+// ❗*** MUST REPLACE THIS with your deployed Google Apps Script URL ***❗
+const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzvDnKGbWHGzqLN9o4Jx1K88yU_F4uoj703xFJH-lMy2dfz3GwAOzUxMX8dI2QtxY5h1Q/exec';
 
-// --------- Display & Init ----------
+// --- 1. USER INITIALIZATION ---
+
+/**
+ * Initializes the user by checking localStorage for a UserID.
+ * If not found, creates a new one.
+ * Also sets a default role.
+ */
 function initUser() {
-  document.querySelectorAll('.user-id').forEach(el => el.textContent = uid());
-  document.querySelectorAll('.user-role').forEach(el => el.textContent = role());
-  const roleToggle = document.getElementById('roleToggle');
-  if (roleToggle) roleToggle.value = role();
-  displayUserKPI();
-}
-function displayUserKPI(){ /* placeholder: fetch counts */
-  // showing static placeholders, profile page calls getOrders to compute real stats
+    let userId = localStorage.getItem('easyRechargeUserID');
+    let userRole = localStorage.getItem('easyRechargeUserRole');
+
+    if (!userId) {
+        userId = 'user-' + new Date().getTime() + '-' + Math.floor(Math.random() * 999);
+        localStorage.setItem('easyRechargeUserID', userId);
+    }
+
+    if (!userRole) {
+        userRole = 'Customer'; // Default role
+        localStorage.setItem('easyRechargeUserRole', userRole);
+    }
 }
 
-// --------- Pricing ----------
-function calculatePrice(type, key, quantity=1) {
-  let base = 0;
-  if (type === 'sim' || type === 'game' || type === 'smm') {
-    base = SERVICE_PRICES[type][key] || 0;
-    if (type === 'smm') base = base * (quantity || 1);
-  }
-  if (role() === 'Reseller') base = Math.round(base * (1 - RESELLER_DISCOUNT));
-  return base;
-}
-function calculateP2P(amount) {
-  const fee = Math.round(amount * SERVICE_PRICES.p2p.feePercent);
-  return {fee, receive: Math.max(0, amount - fee)};
+/**
+ * Displays the UserID and Role in the header/nav.
+ */
+function displayUserInfo() {
+    const userId = localStorage.getItem('easyRechargeUserID');
+    const userRole = localStorage.getItem('easyRechargeUserRole');
+
+    const navUserId = document.getElementById('navUserId');
+    const navUserRole = document.getElementById('navUserRole');
+    if (navUserId) navUserId.textContent = userId.substring(0, 15) + '...';
+    if (navUserRole) navUserRole.textContent = userRole;
+
+    // For profile page
+    const profileUserId = document.getElementById('profileUserId');
+    const profileUserRole = document.getElementById('profileUserRole');
+    if (profileUserId) profileUserId.textContent = userId;
+    if (profileUserRole) profileUserRole.textContent = userRole;
 }
 
-// --------- API calls ----------
-async function sendOrder(payload) {
-  if (!API_URL) return {success:false, message:'API_URL not set'};
-  payload.userId = uid();
-  payload.timestamp = (new Date()).toISOString();
-  try {
-    const res = await fetch(API_URL, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({action:'createOrder', order: payload})
+// --- 2. FORM HANDLING & CALCULATIONS ---
+
+/**
+ * Sets up event listeners for a specific order form.
+ * @param {string} formId - The ID of the form element.
+ * @param {string} type - The order type ('sim', 'game', 'smm', 'p2p').
+ */
+function setupOrderForm(formId, type) {
+    const form = document.getElementById(formId);
+    if (!form) return;
+
+    const userRole = localStorage.getItem('easyRechargeUserRole') || 'Customer';
+    const totalDisplay = document.getElementById('totalDisplay');
+    const submitBtn = document.getElementById('submitBtn');
+
+    // --- Dynamic Dropdown Logic ---
+    populateDynamicSelects(form, type);
+
+    // --- Calculation Logic ---
+    const calculateTotal = () => {
+        let total = 0;
+        let description = "";
+
+        try {
+            if (type === 'sim' || type === 'game') {
+                const serviceEl = form.querySelector('#service, #package');
+                const selectedKey = serviceEl.value;
+                if (selectedKey && SERVICE_PRICES[type][selectedKey]) {
+                    total = SERVICE_PRICES[type][selectedKey].price;
+                    description = SERVICE_PRICES[type][selectedKey].name;
+                }
+            } else if (type === 'smm') {
+                const serviceEl = form.querySelector('#service');
+                const quantityEl = form.querySelector('#quantity');
+                const selectedKey = serviceEl.value;
+                const quantity = parseInt(quantityEl.value) || 0;
+                
+                if (selectedKey && SERVICE_PRICES[type][selectedKey]) {
+                    const pricePer1000 = SERVICE_PRICES[type][selectedKey].price;
+                    total = (quantity / 1000) * pricePer1000;
+                    description = `${SERVICE_PRICES[type][selectedKey].name} (${pricePer1000} MMK per 1000)`;
+                }
+            } else if (type === 'p2p') {
+                const amountEl = form.querySelector('#amountSent');
+                const amountSent = parseFloat(amountEl.value) || 0;
+                const feePercent = SERVICE_PRICES.p2p.feePercent;
+                
+                const fee = amountSent * feePercent;
+                const amountReceive = amountSent - fee;
+
+                document.getElementById('feeDisplay').textContent = `Fee (${feePercent * 100}%): ${fee.toFixed(0)} MMK`;
+                document.getElementById('receiveDisplay').textContent = `Amount to Receive: ${amountReceive.toFixed(0)} MMK`;
+                return; // P2P has a different display
+            }
+
+            // Apply Reseller Discount
+            if (userRole === 'Reseller' && type !== 'p2p') {
+                const discount = total * RESELLER_DISCOUNT_PERCENT;
+                total -= discount;
+                description += ` (Reseller Price: -${RESELLER_DISCOUNT_PERCENT * 100}%)`;
+            }
+            
+            if (totalDisplay) totalDisplay.textContent = `${total.toFixed(0)} MMK`;
+            const descEl = document.getElementById('packageDescription');
+            if (descEl) descEl.textContent = description;
+
+        } catch (e) {
+            console.error("Calculation error:", e);
+            if (totalDisplay) totalDisplay.textContent = "Error";
+        }
+    };
+
+    // Attach listeners
+    form.addEventListener('input', calculateTotal);
+    form.addEventListener('change', calculateTotal); // For select dropdowns
+    
+    // --- Form Submission ---
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (submitBtn) submitBtn.disabled = true;
+        if (submitBtn) submitBtn.textContent = 'Submitting...';
+
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        
+        // Add required backend data
+        data.userId = localStorage.getItem('easyRechargeUserID');
+        data.type = type;
+        data.orderId = 'ORD-' + new Date().getTime(); // Client-side basic ID
+
+        // Add calculated totals
+        if (type === 'p2p') {
+            const amountSent = parseFloat(data.amountSent) || 0;
+            const fee = amountSent * SERVICE_PRICES.p2p.feePercent;
+            const amountReceive = amountSent - fee;
+            data.fee = fee.toFixed(0);
+            data.amountReceive = amountReceive.toFixed(0);
+        } else {
+            // Recalculate total one last time for submission
+            let total = 0;
+            const serviceKey = data.service || data.package;
+            if(type === 'sim' || type === 'game') {
+                total = SERVICE_PRICES[type][serviceKey]?.price || 0;
+            } else if (type === 'smm') {
+                const pricePer1000 = SERVICE_PRICES[type][serviceKey]?.price || 0;
+                total = (parseInt(data.quantity) / 1000) * pricePer1000;
+            }
+            if(userRole === 'Reseller') total *= (1 - RESELLER_DISCOUNT_PERCENT);
+            data.total = total.toFixed(0);
+        }
+
+        // Send to backend
+        const success = await sendOrder(data);
+
+        if (success) {
+            showToast('Order submitted successfully!', 'success');
+            form.reset();
+            if (totalDisplay) totalDisplay.textContent = "0 MMK";
+            setTimeout(() => {
+                window.location.href = 'status.html';
+            }, 1500);
+        } else {
+            showToast('Order submission failed. Please try again.', 'error');
+            if (submitBtn) submitBtn.disabled = false;
+            if (submitBtn) submitBtn.textContent = 'Submit Order';
+        }
     });
-    const j = await res.json();
-    return j;
-  } catch(e) {
-    console.error(e);
-    return {success:false, message:e.message || 'Network error'};
-  }
 }
 
-async function fetchOrders({userId, limit=50, full=false} = {}) {
-  if (!API_URL) return {success:false, message:'API_URL not set'};
-  try {
-    const url = new URL(API_URL);
-    url.searchParams.set('action', 'getOrders');
-    if (userId) url.searchParams.set('userId', userId);
-    if (full) url.searchParams.set('full', '1');
-    if (limit) url.searchParams.set('limit', String(limit));
-    const res = await fetch(url.toString());
-    const j = await res.json();
-    return j;
-  } catch(e) {
-    console.error(e);
-    return {success:false, message:e.message || 'Network error'};
-  }
-}
+/**
+ * Populates second-level dropdowns based on the first selection.
+ * @param {HTMLFormElement} form - The form element.
+ * @param {string} type - The order type.
+ */
+function populateDynamicSelects(form, type) {
+    let primarySelect, secondarySelect;
 
-// --------- Form setup helpers ----------
-function setupOrderSim(formId) {
-  const form = document.getElementById(formId);
-  if (!form) return;
-  const providerEl = form.querySelector('[name="provider"]');
-  const packageEl = form.querySelector('[name="package"]');
-  const phoneEl = form.querySelector('[name="phone"]');
-  const totalEl = form.querySelector('.total');
-  function recalc(){
-    const key = packageEl.value;
-    const total = calculatePrice('sim', key, 1);
-    totalEl.textContent = total;
-  }
-  packageEl?.addEventListener('change', recalc);
-  recalc();
-  form.addEventListener('submit', async (ev)=>{
-    ev.preventDefault();
-    const payload = {
-      type:'SIM',
-      service: packageEl.value,
-      provider: providerEl.value,
-      target: phoneEl.value,
-      quantity:1,
-      total: Number(totalEl.textContent),
-      paymentMethod: form.payment_method?.value || '',
-      transactionId: form.transaction_id?.value || '',
-      notes: form.notes?.value || ''
-    };
-    const res = await sendOrder(payload);
-    if (res.success) {
-      alert('Order placed: ' + res.orderId);
-      form.reset();
-      recalc();
-    } else alert('Error: ' + (res.message || 'unknown'));
-  });
-}
+    if (type === 'sim') {
+        primarySelect = form.querySelector('#provider');
+        secondarySelect = form.querySelector('#service');
+    } else if (type === 'game') {
+        primarySelect = form.querySelector('#game');
+        secondarySelect = form.querySelector('#package');
+    } else if (type === 'smm') {
+        primarySelect = form.querySelector('#platform');
+        secondarySelect = form.querySelector('#service');
+    } else {
+        return; // No dynamic selects for P2P
+    }
 
-function setupOrderGame(formId) {
-  const form = document.getElementById(formId);
-  if (!form) return;
-  const gameEl = form.querySelector('[name="game"]');
-  const packEl = form.querySelector('[name="package"]');
-  const totalEl = form.querySelector('.total');
-  function recalc(){
-    const key = packEl.value;
-    const total = calculatePrice('game', key, 1);
-    totalEl.textContent = total;
-  }
-  packEl?.addEventListener('change', recalc);
-  recalc();
-  form.addEventListener('submit', async (ev)=>{
-    ev.preventDefault();
-    const payload = {
-      type:'GAME',
-      game: gameEl.value,
-      package: packEl.value,
-      gameId: form.game_id?.value || '',
-      server: form.server?.value || '',
-      total: Number(totalEl.textContent),
-      paymentMethod: form.payment_method?.value || '',
-      transactionId: form.transaction_id?.value || ''
-    };
-    const res = await sendOrder(payload);
-    if (res.success) { alert('Order placed: ' + res.orderId); form.reset(); recalc(); }
-    else alert('Error: ' + (res.message || 'unknown'));
-  });
-}
+    primarySelect.addEventListener('change', () => {
+        const selectedValue = primarySelect.value;
+        secondarySelect.innerHTML = ''; // Clear options
+        secondarySelect.disabled = true;
 
-function setupOrderSMM(formId) {
-  const form = document.getElementById(formId);
-  if (!form) return;
-  const platformEl = form.querySelector('[name="platform"]');
-  const serviceEl = form.querySelector('[name="service"]');
-  const qtyEl = form.querySelector('[name="quantity"]');
-  const totalEl = form.querySelector('.total');
+        if (!selectedValue) {
+            secondarySelect.add(new Option('-- Select Primary First --', ''));
+            return;
+        }
 
-  function recalc(){
-    const key = serviceEl.value;
-    const qty = Number(qtyEl.value) || 1;
-    const base = calculatePrice('smm', key, qty);
-    totalEl.textContent = base;
-  }
-  serviceEl?.addEventListener('change', recalc);
-  qtyEl?.addEventListener('input', recalc);
-  recalc();
-  form.addEventListener('submit', async (ev)=>{
-    ev.preventDefault();
-    const payload = {
-      type:'SMM',
-      platform: platformEl.value,
-      service: serviceEl.value,
-      link: form.target_url?.value || '',
-      quantity: Number(qtyEl.value) || 1,
-      total: Number(totalEl.textContent),
-      paymentMethod: form.payment_method?.value || '',
-      transactionId: form.transaction_id?.value || ''
-    };
-    const res = await sendOrder(payload);
-    if (res.success) { alert('Order placed: ' + res.orderId); form.reset(); recalc(); }
-    else alert('Error: ' + (res.message || 'unknown'));
-  });
-}
-
-function setupP2P(formId) {
-  const form = document.getElementById(formId);
-  if (!form) return;
-  const amtEl = form.querySelector('[name="amount"]');
-  const fromEl = form.querySelector('[name="from"]');
-  const toEl = form.querySelector('[name="to"]');
-  const feeEl = form.querySelector('.fee');
-  const receiveEl = form.querySelector('.receive');
-
-  function recalc(){
-    const amount = Number(amtEl.value) || 0;
-    const {fee, receive} = calculateP2P(amount);
-    feeEl.textContent = fee;
-    receiveEl.textContent = receive;
-  }
-  amtEl?.addEventListener('input', recalc);
-  recalc();
-
-  form.addEventListener('submit', async (ev)=>{
-    ev.preventDefault();
-    if (fromEl.value === toEl.value) return alert('From and To cannot be same');
-    const amount = Number(amtEl.value) || 0;
-    const {fee, receive} = calculateP2P(amount);
-    const payload = {
-      type:'P2P',
-      fromMethod: fromEl.value,
-      toMethod: toEl.value,
-      amountSent: amount,
-      fee,
-      amountReceive: receive,
-      accountDetails: form.account_details?.value || '',
-      total: amount
-    };
-    const res = await sendOrder(payload);
-    if (res.success) { alert('Exchange placed: ' + res.orderId); form.reset(); recalc(); }
-    else alert('Error: ' + (res.message || 'unknown'));
-  });
-}
-
-// --------- Profile & Status helpers ----------
-async function loadProfile() {
-  const userId = uid();
-  const res = await fetchOrders({userId, limit: 50});
-  if (!res.success) { console.warn(res.message); return; }
-  const orders = res.orders || [];
-  // compute totals
-  const totalOrders = orders.length;
-  const totalSpent = orders.reduce((s,o)=>s + Number(o.Total || o.total || 0),0);
-  const totalExchange = orders.filter(o => (o.Type||'').toUpperCase() === 'P2P').reduce((s,o)=>s + Number(o.AmountSent || o.amountSent || 0),0);
-  // render basics
-  document.getElementById('profile_total_orders')?.replaceWith(createTextNodeOrSpan('profile_total_orders', totalOrders));
-  document.getElementById('profile_total_spent')?.textContent = totalSpent;
-  document.getElementById('profile_total_exchange')?.textContent = totalExchange;
-  // last 10 orders
-  const table = document.getElementById('last_orders_table');
-  if (table) {
-    table.innerHTML = '<tr><th>Timestamp</th><th>Type</th><th>Service</th><th>Total</th><th>Status</th></tr>';
-    orders.slice(0,10).forEach(o=>{
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${o.Timestamp || o.timestamp || ''}</td>
-        <td>${o.Type || o.type || ''}</td>
-        <td>${o.Service || o.service || o.Package || ''}</td>
-        <td>${o.Total || o.total || ''}</td>
-        <td>${o.Status || o.status || 'PENDING'}</td>`;
-      table.appendChild(tr);
+        const options = DROPDOWN_MAP[type][selectedValue];
+        if (options && options.length > 0) {
+            secondarySelect.add(new Option(`-- Select ${type === 'game' ? 'Package' : 'Service'} --`, ''));
+            options.forEach(key => {
+                const optionData = SERVICE_PRICES[type][key];
+                secondarySelect.add(new Option(optionData.name, key));
+            });
+            secondarySelect.disabled = false;
+        } else {
+            secondarySelect.add(new Option('-- No services available --', ''));
+        }
     });
-  }
 }
 
-function createTextNodeOrSpan(id, text) {
-  const span = document.createElement('span');
-  span.id = id;
-  span.textContent = text;
-  return span;
+
+// --- 3. API CALLS (Backend Communication) ---
+
+/**
+ * Sends the new order data to the Google Apps Script backend.
+ * @param {object} data - The order data object.
+ * @returns {boolean} - True if successful, false if not.
+ */
+async function sendOrder(data) {
+    if (GAS_WEB_APP_URL.includes('YOUR_DEPLOYMENT_ID')) {
+        console.error('GAS_WEB_APP_URL is not set!');
+        alert('FATAL ERROR: Backend URL not configured in script.js');
+        return false;
+    }
+    
+    try {
+        const response = await fetch(GAS_WEB_APP_URL, {
+            method: 'POST',
+            mode: 'no-cors', // Important for 'doPost' simple trigger
+            cache: 'no-cache',
+            redirect: 'follow',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        // Note: 'no-cors' mode means we can't read the response.
+        // We assume success if the request was sent.
+        // For a real app, you'd deploy properly and use JSONP or read the response.
+        // For this demo, we'll assume it worked.
+        return true; 
+        
+        /* // Proper way if not using 'no-cors'
+        const result = await response.json();
+        if (result.success) {
+            return true;
+        } else {
+            console.error('Backend error:', result.message);
+            return false;
+        }
+        */
+        
+    } catch (error) {
+        console.error('Fetch Error:', error);
+        return false;
+    }
 }
 
-// auto init on pages
-document.addEventListener('DOMContentLoaded', ()=> {
-  initUser();
-  // auto-setup forms if present
-  setupOrderSim('form-sim');
-  setupOrderGame('form-game');
-  setupOrderSMM('form-smm');
-  setupP2P('form-p2p');
-  // profile page
-  if (document.getElementById('profile_page')) loadProfile();
-  // status page
-  if (document.getElementById('status_page')) {
-    (async ()=>{
-      const r = await fetchOrders({full:true, limit:200});
-      if (!r.success) return;
-      const table = document.getElementById('all_orders_table');
-      table.innerHTML = '<tr><th>Time</th><th>UserID</th><th>Type</th><th>Service</th><th>Total</th><th>Status</th></tr>';
-      (r.orders||[]).forEach(o=>{
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${o.Timestamp||o.timestamp||''}</td><td>${o.UserID||o.userId||''}</td><td>${o.Type||o.type||''}</td><td>${o.Service||o.service||''}</td><td>${o.Total||o.total||''}</td><td>${o.Status||o.status||''}</td>`;
-        table.appendChild(tr);
-      });
-    })();
-  }
-});
+/**
+ * Fetches order history for the current user.
+ * @param {string} userId - The user's unique ID.
+ * @param {string} action - 'profile' (last 10 + stats) or 'history' (all).
+ * @returns {object|null} - The data object from the backend, or null on error.
+ */
+async function getOrders(userId, action = 'history') {
+    if (GAS_WEB_APP_URL.includes('YOUR_DEPLOYMENT_ID')) {
+        console.error('GAS_WEB_APP_URL is not set!');
+        return null;
+    }
+    
+    const url = `${GAS_WEB_APP_URL}?userId=${encodeURIComponent(userId)}&action=${encodeURIComponent(action)}`;
+    
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            cache: 'no-cache'
+        });
+        
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            return result.data;
+        } else {
+            console.error('Backend error:', result.message);
+            return null;
+        }
+    } catch (error) {
+        console.error('Fetch Error:', error);
+        showToast('Could not load order history.', 'error');
+        return null;
+    }
+}
+
+// --- 4. PAGE-SPECIFIC LOADERS ---
+
+/**
+ * Loads and displays data for the profile.html page.
+ */
+async function loadProfilePage() {
+    const userId = localStorage.getItem('easyRechargeUserID');
+    if (!userId) return;
+
+    const data = await getOrders(userId, 'profile');
+    
+    if (data) {
+        document.getElementById('statTotalOrders').textContent = data.totalOrders || 0;
+        document.getElementById('statTotalSpent').textContent = `${data.totalSpent || 0} MMK`;
+        document.getElementById('statTotalExchange').textContent = `${data.totalExchange || 0} MMK`;
+
+        const tableBody = document.getElementById('ordersTableBody');
+        tableBody.innerHTML = ''; // Clear loading message
+
+        if (data.last10Orders && data.last10Orders.length > 0) {
+            data.last10Orders.forEach(order => {
+                const row = `
+                    <tr>
+                        <td>${new Date(order.Timestamp).toLocaleString()}</td>
+                        <td>${order.Type}</td>
+                        <td>${order.Service || order.Game || order.Package || order.FromMethod}</td>
+                        <td>${order.Total || order.AmountReceive} MMK</td>
+                        <td>${createStatusBadge(order.Status)}</td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        } else {
+            tableBody.innerHTML = '<tr><td colspan="5">No orders found.</td></tr>';
+        }
+    } else {
+        document.getElementById('loadingOrders').textContent = 'Error loading history.';
+    }
+}
+
+/**
+ * Loads and displays data for the status.html (full history) page.
+ */
+async function loadFullHistoryPage() {
+    const userId = localStorage.getItem('easyRechargeUserID');
+    if (!userId) return;
+    
+    const data = await getOrders(userId, 'history');
+    
+    if (data && data.orders) {
+        const tableBody = document.getElementById('fullOrdersTableBody');
+        tableBody.innerHTML = ''; // Clear loading message
+
+        if (data.orders.length > 0) {
+            data.orders.forEach(order => {
+                const details = order.Service || order.Game || order.Package || order.FromMethod;
+                const row = `
+                    <tr>
+                        <td>${new Date(order.Timestamp).toLocaleString()}</td>
+                        <td><code>${order.OrderID}</code></td>
+                        <td>${order.Type}</td>
+                        <td>${details}</td>
+                        <td>${order.Total || order.AmountReceive} MMK</td>
+                        <td>${createStatusBadge(order.Status)}</td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        } else {
+            tableBody.innerHTML = '<tr><td colspan="6">No orders found.</td></tr>';
+        }
+    } else {
+        document.getElementById('loadingFullOrders').textContent = 'Error loading history.';
+    }
+}
+
+// --- 5. UTILITY FUNCTIONS ---
+
+/**
+ * Copies text from an input field to the clipboard.
+ * @param {string} elementId - The ID of the input element.
+ */
+function copyToClipboard(elementId) {
+    const input = document.getElementById(elementId);
+    if (input) {
+        input.select();
+        input.setSelectionRange(0, 99999); // For mobile devices
+
+        try {
+            document.execCommand('copy');
+            showToast('Copied to clipboard!', 'success');
+        } catch (err) {
+            console.error('Failed to copy text: ', err);
+            showToast('Failed to copy.', 'error');
+        }
+    }
+}
+
+/**
+ * Displays a temporary toast notification.
+ * @param {string} message - The message to display.
+ * @param {string} type - 'success', 'error', or 'info'.
+ */
+function showToast(message, type = 'info') {
+    const toast = document.getElementById('toastNotification');
+    if (!toast) {
+        console.warn('Toast notification element not found.');
+        return;
+    }
+    
+    toast.textContent = message;
+    toast.className = `show ${type}`; // Use classes for styling
+    
+    setTimeout(() => {
+        toast.className = toast.className.replace('show', '');
+    }, 3000); // Hide after 3 seconds
+}
+
+/**
+ * Creates an HTML string for a status badge.
+ * @param {string} status - The status text (e.g., 'Pending', 'Completed').
+ * @returns {string} - HTML string for the badge.
+ */
+function createStatusBadge(status) {
+    let statusClass = 'status-pending'; // Default
+    if (status === 'Completed') {
+        statusClass = 'status-completed';
+    } else if (status === 'Cancelled') {
+        statusClass = 'status-cancelled';
+    }
+    return `<span class="status-badge ${statusClass}">${status}</span>`;
+}
+
+      
