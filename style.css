@@ -1,49 +1,401 @@
-/* style.css - simple light, mobile-first styling */
-:root {
-  --bg: #fafafa;
-  --card: #ffffff;
-  --muted: #666;
-  --accent: #0b76ef;
-  --radius: 12px;
-  --shadow: 0 6px 18px rgba(9, 30, 66, 0.06);
-  --gap: 12px;
-}
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;
-  font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  background:var(--bg);
-  color:#111;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-  padding:16px;
-  line-height:1.4;
-}
-.header {display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.brand {display:flex;align-items:center;gap:10px}
-.logo {width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#0b76ef,#5ad1ff);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
-.nav {display:flex;gap:10px;flex-wrap:wrap}
-.btn {background:var(--accent);color:#fff;padding:8px 12px;border-radius:10px;text-decoration:none;display:inline-block}
-.container {max-width:980px;margin:0 auto}
-.grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-.card {background:var(--card);padding:14px;border-radius:var(--radius);box-shadow:var(--shadow)}
-.small {font-size:13px;color:var(--muted)}
-.kpi {display:flex;flex-direction:column;gap:6px}
-.kpi .value {font-size:20px;font-weight:700}
-.form-row {display:flex;flex-direction:column;margin-bottom:10px}
-.form-row label {font-weight:600;margin-bottom:6px}
-.input, select, textarea {
-  padding:8px 10px;border-radius:8px;border:1px solid #e6e6e6;background:#fff
-}
-.table {width:100%;border-collapse:collapse}
-.table th, .table td {padding:8px;border-bottom:1px solid #f0f0f0;text-align:left}
-.footer {margin-top:20px;font-size:13px;color:var(--muted);text-align:center}
+/* --- Easy Recharge MM - Base Stylesheet --- */
 
-/* mobile tweaks */
-@media(min-width:720px){
-  .header{padding:0 8px}
-  body{padding:24px}
+/* 1. Variables and Reset */
+:root {
+    --color-primary: #007bff;
+    --color-primary-dark: #0056b3;
+    --color-secondary: #f8f9fa;
+    --color-text: #333;
+    --color-text-light: #777;
+    --color-border: #e0e0e0;
+    --color-bg: #ffffff;
+    --color-success: #28a745;
+    --color-pending: #ffc107;
+    --color-danger: #dc3545;
+    --border-radius: 8px;
+    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
-.copy {cursor:pointer;color:var(--accent);font-weight:600}
-.badge {background:#eef8ff;color:#0b76ef;padding:6px 8px;border-radius:999px;font-weight:600}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--color-secondary);
+    color: var(--color-text);
+    line-height: 1.6;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* 2. Header and Navigation */
+.header {
+    background-color: var(--color-bg);
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+.user-info {
+    font-size: 0.8rem;
+    text-align: right;
+}
+.user-info span {
+    display: block;
+    color: var(--color-text-light);
+}
+.user-info b {
+    color: var(--color-primary);
+}
+.user-info code {
+    background-color: var(--color-secondary);
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+.navbar {
+    background-color: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+    padding: 0.5rem 0;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+.navbar .container {
+    display: flex;
+    gap: 0.5rem;
+}
+.navbar a {
+    color: var(--color-text-light);
+    text-decoration: none;
+    padding: 0.75rem 1rem;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    transition: background-color 0.2s, color 0.2s;
+}
+.navbar a:hover {
+    background-color: var(--color-secondary);
+    color: var(--color-text);
+}
+.navbar a.active {
+    background-color: var(--color-primary);
+    color: #fff;
+}
+
+/* 3. Main Content & Cards */
+main {
+    padding: 1.5rem 0;
+}
+
+.section-title {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+    color: var(--color-text);
+}
+
+.card {
+    background-color: var(--color-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.admin-contact p {
+    margin-bottom: 1rem;
+    color: var(--color-text-light);
+}
+
+/* 4. Service Grid (Dashboard) */
+.service-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.service-card {
+    background-color: var(--color-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 1.5rem;
+    text-decoration: none;
+    color: var(--color-text);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+.service-card .card-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+.service-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-primary);
+}
+.service-card p {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+}
+
+/* 5. Forms */
+.form-group {
+    margin-bottom: 1.25rem;
+}
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    background-color: #fff;
+}
+.form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.form-description {
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+    margin-top: 0.5rem;
+}
+
+.total-display {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+}
+.total-display span {
+    font-size: 1rem;
+    color: var(--color-text-light);
+    font-weight: 400;
+}
+
+.btn {
+    display: inline-block;
+    width: 100%;
+    background-color: var(--color-primary);
+    color: #fff;
+    padding: 0.9rem 1.5rem;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.btn:hover {
+    background-color: var(--color-primary-dark);
+}
+.btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* 6. Copy Field */
+.copy-field {
+    display: flex;
+}
+.copy-field input {
+    flex-grow: 1;
+    padding: 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
+    background-color: var(--color-secondary);
+    font-family: monospace;
+    font-size: 0.9rem;
+}
+.copy-field button {
+    padding: 0.75rem 1rem;
+    background-color: var(--color-primary);
+    color: #fff;
+    border: none;
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.copy-field button:hover {
+    background-color: var(--color-primary-dark);
+}
+
+/* 7. Profile Page */
+.profile-header {
+    text-align: center;
+}
+.profile-icon {
+    font-size: 4rem;
+    background-color: var(--color-secondary);
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    color: var(--color-text-light);
+}
+.profile-header h2 {
+    font-size: 1.2rem;
+    word-break: break-all;
+}
+.profile-header p {
+    font-size: 1rem;
+    color: var(--color-text-light);
+}
+
+.profile-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+.stat-card {
+    background-color: var(--color-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 1rem;
+    text-align: center;
+}
+.stat-card h3 {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    margin-bottom: 0.5rem;
+}
+.stat-card p {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    word-break: break-word;
+}
+
+/* 8. Table (Order History) */
+.table-container {
+    overflow-x: auto;
+    background-color: var(--color-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+table th, table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 0.9rem;
+}
+table th {
+    font-weight: 600;
+    background-color: var(--color-secondary);
+}
+table tbody tr:last-child td {
+    border-bottom: none;
+}
+table td code {
+    background-color: var(--color-secondary);
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+}
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: #fff;
+}
+.status-pending { background-color: var(--color-pending); color: var(--color-text); }
+.status-completed { background-color: var(--color-success); }
+.status-cancelled { background-color: var(--color-danger); }
+
+/* 9. Footer */
+.footer {
+    text-align: center;
+    padding: 2rem 0;
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+}
+
+/* 10. Utility & Responsive */
+.hidden {
+    display: none;
+}
+
+#toastNotification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 1rem 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    visibility: hidden;
+}
+#toastNotification.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    visibility: visible;
+}
+
+
+@media (max-width: 768px) {
+    .service-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-stats {
+        grid-template-columns: 1fr;
+    }
+    .header .container {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .user-info {
+        text-align: center;
+    }
+    .navbar .container {
+        padding: 0 0.5rem;
+    }
+    .navbar a {
+        padding: 0.5rem 0.75rem;
+    }
+      }
