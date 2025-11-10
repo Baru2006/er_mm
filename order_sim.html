@@ -1,73 +1,87 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>SIM Order — Easy Recharge MM</title><link rel="stylesheet" href="style.css"></head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIM Recharge - Easy Recharge MM</title>
+    <link rel="stylesheet" href="style.css">
+</head>
 <body>
-  <div class="container">
     <header class="header">
-      <div class="brand"><div class="logo">ER</div><div><div style="font-weight:700">SIM Order</div><div class="small">Quick recharge</div></div></div>
-      <div class="nav"><a class="btn" href="index.html">Back</a></div>
+        <div class="container">
+            <h1 class="logo"><a href="index.html" style="text-decoration:none; color:inherit;">Easy Recharge MM</a></h1>
+            <div id="userInfo" class="user-info">
+                <span>UserID: <code id="navUserId">...</code></span>
+                <span>Role: <b id="navUserRole">...</b></span>
+            </div>
+        </div>
     </header>
 
-    <main>
-      <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div><strong>Admin Phone</strong><div class="small">Tap to copy</div></div>
-          <div class="copy" onclick="copyToClipboard('09-XXXX-XXXX')">09-XXXX-XXXX</div>
-        </div>
-      </div>
+    <main class="container">
+        <section class="card">
+            <h2 class="section-title">📱 SIM Recharge Order</h2>
+            
+            <div class="form-group admin-contact">
+                <label>Admin Payment Number</label>
+                <div class="copy-field">
+                    <input type="text" id="adminPhone" value="09123456789 (KBZ Pay)" readonly>
+                    <button onclick="copyToClipboard('adminPhone')">Copy</button>
+                </div>
+                <p class="form-description">ငွေလွှဲပြီး Transaction ID ကိုဖြည့်ပါ။</p>
+            </div>
 
-      <form class="card" id="form-sim">
-        <div class="form-row">
-          <label>Provider</label>
-          <select name="provider" class="input">
-            <option value="mpt">MPT</option>
-            <option value="telenor">Telenor</option>
-            <option value="ooredoo">Ooredoo</option>
-          </select>
-        </div>
+            <form id="simOrderForm">
+                <div class="form-group">
+                    <label for="provider">Provider</label>
+                    <select id="provider" name="provider" required>
+                        <option value="">-- Select Provider --</option>
+                        <option value="mpt">MPT</option>
+                        <option value="telenor">Telenor</option>
+                        <option value="ooredoo">Ooredoo</option>
+                        <option value="mytel">MyTel</option>
+                    </select>
+                </div>
 
-        <div class="form-row">
-          <label>Package</label>
-          <select name="package" class="input">
-            <option value="mpt-3gb">MPT 3GB</option>
-            <option value="mpt-5gb">MPT 5GB</option>
-            <option value="telenor-regular">Telenor Regular</option>
-            <option value="ooredoo-basic">Ooredoo Basic</option>
-          </select>
-        </div>
+                <div class="form-group">
+                    <label for="service">Package</label>
+                    <select id="service" name="service" required disabled>
+                        <option value="">-- Select Provider First --</option>
+                    </select>
+                    <p id="packageDescription" class="form-description"></p>
+                </div>
 
-        <div class="form-row">
-          <label>Phone number</label>
-          <input name="phone" class="input" placeholder="09xxxxxxx" required />
-        </div>
+                <div class="form-group">
+                    <label for="target">Phone Number (ဖြည့်ရမည့် ဖုန်းနံပါတ်)</label>
+                    <input type="tel" id="target" name="target" placeholder="e.g., 09xxxxxxxxx" required>
+                </div>
 
-        <div class="form-row">
-          <label>Total</label>
-          <div class="total small">0</div>
-        </div>
+                <div class="form-group">
+                    <label>Total Amount (ကျသင့်ငွေ)</label>
+                    <div id="totalDisplay" class="total-display">0 MMK</div>
+                </div>
 
-        <div class="form-row">
-          <label>Payment Method</label>
-          <input name="payment_method" class="input" placeholder="e.g., WavePay" />
-        </div>
+                <div class="form-group">
+                    <label for="transactionId">Transaction ID (ငွေလွှဲ ID)</label>
+                    <input type="text" id="transactionId" name="transactionId" placeholder="Enter your payment transaction ID" required>
+                </div>
 
-        <div class="form-row">
-          <label>Transaction ID</label>
-          <input name="transaction_id" class="input" />
-        </div>
-
-        <div style="display:flex;gap:8px;align-items:center">
-          <button class="btn" type="submit">Submit Order</button>
-          <div class="small">Role: <span class="user-role"></span></div>
-        </div>
-      </form>
-
+                <button type="submit" id="submitBtn" class="btn">Submit Order</button>
+            </form>
+        </section>
     </main>
-    <footer class="footer"></footer>
-  </div>
 
-  <script src="config.js"></script>
-  <script src="price.js"></script>
-  <script src="script.js"></script>
+    <div id="toastNotification" class=""></div>
+    
+    <script src="price.js"></script>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initUser();
+            displayUserInfo();
+            setupOrderForm('simOrderForm', 'sim');
+        });
+    </script>
 </body>
 </html>
+
+                  
