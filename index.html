@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram URL Shortener Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Adsgram Script (Block ID: 53936) -->
+    <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
+</head>
+<body class="bg-slate-950 text-white min-h-screen flex items-center justify-center p-4 font-sans">
+    <div class="max-w-md w-full bg-white/10 backdrop-blur-xl p-6 rounded-3xl border border-white/20 shadow-2xl text-center space-y-4">
+        <h1 class="text-xl font-black text-indigo-300">🔗 Telegram URL Shortener Hub</h1>
+        <p class="text-xs text-slate-300">လင့်ခ်အတိုများကို လွယ်ကူလျင်မြန်စွာ ဖန်တီးပြီး ကြော်ငြာကြည့်ရှုနိုင်ပါသည်။</p>
+        
+        <input type="text" id="longUrlInput" placeholder="https://example.com" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-indigo-500">
+        <button onclick="generateShortLinkWithAd()" class="w-full bg-indigo-600 hover:bg-indigo-500 font-bold py-3 rounded-xl text-xs shadow transition active:scale-95">Short Link ဖန်တီးမည် (Ads)</button>
+        
+        <div id="resultBox" class="hidden bg-black/40 p-3 rounded-xl border border-white/10 text-xs font-mono text-emerald-400 break-all"></div>
+        <p id="adStatus" class="text-[10px] text-slate-400"></p>
+    </div>
+
+    <script>
+        function generateShortLinkWithAd() {
+            const url = document.getElementById("longUrlInput").value;
+            if(!url) {
+                alert("ကျေးဇူးပြု၍ URL ထည့်ပါ။");
+                return;
+            }
+
+            const status = document.getElementById("adStatus");
+            status.innerText = "📺 ကြော်ငြာပြသနေသည်...";
+
+            if (window.Adsgram) {
+                window.Adsgram.init({ blockId: "53936" }).show()
+                    .then(() => {
+                        status.innerText = "✅ အောင်မြင်ပါပြီ!";
+                        showShortLinkResult(url);
+                    })
+                    .catch(() => {
+                        status.innerText = "⚠️ ကြော်ငြာကျော်သွားပါပြီ။ ဆက်သွားမည်။";
+                        showShortLinkResult(url);
+                    });
+            } else {
+                status.innerText = "✅ အော့ဖ်လိုင်းမုဒ်";
+                showShortLinkResult(url);
+            }
+        }
+
+        function showShortLinkResult(url) {
+            const randomCode = Math.random().toString(36).substring(2, 7);
+            const shortUrl = `${window.location.origin}/s/${randomCode}`;
+            const box = document.getElementById("resultBox");
+            box.innerText = `Short Link: ${shortUrl}`;
+            box.classList.remove("hidden");
+        }
+    </script>
+</body>
+</html>
